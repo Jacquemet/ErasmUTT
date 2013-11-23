@@ -1,0 +1,112 @@
+<ScrollView
+xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:paddingLeft="@dimen/activity_horizontal_margin"
+android:paddingRight="@dimen/activity_horizontal_margin"
+android:paddingTop="@dimen/activity_vertical_margin"
+android:paddingBottom="@dimen/activity_vertical_margin"
+android:background="@color/background_blue"
+tools:context=".LoginActivity"
+    >
+
+    <LinearLayout 
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+    android:orientation="vertical"
+ 	>
+
+    <ImageView
+        android:id="@+id/imageView_splashScreen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/logo_erasmutt"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="@dimen/field_vertical_margin" />
+    
+        <TextView
+        android:id="@+id/textView_mail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/textLabel_mail"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@android:color/white"
+        android:layout_marginTop="@dimen/field_vertical_margin"
+    	android:layout_marginBottom="@dimen/field_vertical_margin" />
+
+        <EditText
+            android:id="@+id/editText_mail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textEmailAddress"
+            android:background="@android:color/white" 
+            android:paddingTop="@dimen/field_vertical_padding"
+    		android:paddingBottom="@dimen/field_vertical_padding"
+			android:layout_marginTop="@dimen/field_vertical_margin"
+			android:layout_marginBottom="@dimen/field_vertical_margin"
+			>
+            <requestFocus />
+        </EditText>
+
+        <TextView
+            android:id="@+id/textView_password"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/textLabel_password"
+            android:textColor="@android:color/white"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_marginTop="@dimen/field_vertical_margin"
+    		android:layout_marginBottom="@dimen/field_vertical_margin" />
+
+        <EditText
+            android:id="@+id/editText_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:background="@android:color/white" 
+            android:inputType="textPassword"
+            android:paddingTop="@dimen/field_vertical_padding"
+    		android:paddingBottom="@dimen/field_vertical_padding"
+            android:layout_marginTop="@dimen/field_vertical_margin"
+			android:layout_marginBottom="@dimen/field_vertical_margin"
+             />
+
+        <Button
+            android:id="@+id/button_signIn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/textButton_signIn"
+            android:textColor="@android:color/white"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+			android:layout_marginBottom="@dimen/activity_vertical_margin"
+			android:background="@color/background_dark_blue"
+			 />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" 
+            android:layout_gravity="center_horizontal"
+            android:visibility="invisible"/>
+
+        <Button
+            android:id="@+id/button_createAccount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:background="@android:color/transparent"
+            android:textColor="@android:color/white"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="@string/text_createAccount"
+            android:textStyle="italic"
+             />
+    
+</LinearLayout>
+    
+    
+</ScrollView>
+
+

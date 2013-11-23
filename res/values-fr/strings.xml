@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ErasmUTT</string>
+
+     <!-- Titres des Activités -->
+     
+     <string name="title_activity_home">ErasmUTT</string>
+            
+     <!-- Titres des menus -->
+        
+    <string name="action_settings">Paramètres</string>
+	<string name="action_location">À proximité</string>
+	<string name="action_help">Aide</string>
+    <string name="action_logout">Se Déconnecter</string>
+    <string name="action_search">Rechercher</string>
+    
+    <!-- Autres -->
+    
+    <string name="textLabel_mail">Votre adresse E-mail : </string>
+	<string name="textLabel_password">Votre mot de passe : </string>
+	<string name="textButton_signIn">Se connecter</string>
+	<string name="text_createAccount">Créer un compte ErasmUTT</string>
+	
+    <string name="query_hint">Rechercher</string>
+    
+    <string-array name="text_menu_array">
+		<item>Accueil</item>
+        <item>Mon Compte</item>
+        <item>Mes Groupes</item>
+        <item>Mes Avis</item>
+    </string-array>
+
+    <string name="drawer_open">Ouvrir navigation drawer</string>
+    <string name="drawer_close">Fermer navigation drawer</string>
+    
+</resources>
