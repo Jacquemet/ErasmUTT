@@ -1,8 +1,12 @@
 package fr.utt.erasmutt;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -10,6 +14,7 @@ import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -20,6 +25,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 public class HomeActivity extends Activity {
 
@@ -31,6 +37,10 @@ public class HomeActivity extends Activity {
     private CharSequence mTitle;
     private String[] mTitles;
 
+    private Webservice ws = new Webservice();
+	private DataConnection dc = new DataConnection();
+	private String url = "";
+	 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,6 +88,12 @@ public class HomeActivity extends Activity {
         if (savedInstanceState == null) {
             selectItem(0);
         }
+        
+        Intent intent = getIntent();
+        Bundle bund = intent.getExtras();
+        
+        url= DataConnection.urlRoot+"connexion.php?typeConnexion=connecter&mail="+bund.getString("login")+"&password="+bund.getString("password");
+        ws.accessWebService(url,this);
     }
 
     @Override
@@ -205,4 +221,37 @@ public class HomeActivity extends Activity {
             return rootView;
         }
     }
+    
+ // Build hash set for list view
+  	 public void ListDrwaer(String jsonResult) {
+  		 AlertDialog.Builder builder = new AlertDialog.Builder(this);
+  		 try {
+  	            JSONObject jsonResponse = new JSONObject(jsonResult);
+
+  	            dc.setError(jsonResponse.getBoolean("error"));
+  	            dc.setMessage(jsonResponse.getString("message"));
+  	            if(!dc.getError()){
+	            	dc.setToken(jsonResponse.getString("token"));
+	  	            dc.setMail(jsonResponse.getString("mail"));
+	  	            dc.setLastname(jsonResponse.getString("lastname"));
+	  	            dc.setFirstname(jsonResponse.getString("firstname"));
+	  	            builder.setMessage("Bonjour : "+dc.firstname);
+	  	            builder.create().show();
+	
+	  	        }
+	  	        else{
+	  	            builder.setMessage(dc.message);
+	  	  		    builder.create().show();
+	  	  		    Intent intent = new Intent(this, LoginActivity.class);
+	  	  	        startActivity(intent);
+	  	      	}
+  	            
+  	            
+
+          } catch (JSONException e) {
+  	            Toast.makeText(getApplicationContext(), "Error" + e.toString(),
+  	            Toast.LENGTH_SHORT).show();
+  	    }
+  		
+  	 }
 }

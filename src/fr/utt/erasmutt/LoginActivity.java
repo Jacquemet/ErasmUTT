@@ -23,6 +23,8 @@ public class LoginActivity extends Activity {
     
     ProgressBar progBar = null;
     
+
+	 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -48,6 +50,8 @@ public class LoginActivity extends Activity {
 
 		        Bundle bundle = new Bundle();
 		        bundle.putString("token","");
+		        bundle.putString("login",login.getText().toString());
+		        bundle.putString("password",password.getText().toString());
 		        Intent intent = new Intent(v.getContext(), HomeActivity.class);
 		        intent.putExtras(bundle);
 		        startActivity(intent);
@@ -60,7 +64,6 @@ public class LoginActivity extends Activity {
 				//TODO : 
 			}
 		});
-		
 	}
 	
 	private void startLoading(){
@@ -85,5 +88,7 @@ public class LoginActivity extends Activity {
     	textViewPassword.setVisibility(View.VISIBLE);
 		
 	}
+	
+	
 	
 }
