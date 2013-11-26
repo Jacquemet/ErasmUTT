@@ -105,6 +105,7 @@
 			}
 			else{
 				$jsonArray["typeConnexion"]=$typeConnexionArray[2];
+				$jsonArray["error"]="true";
 				$jsonArray["message"]="erreur";
 				echo json_encode ($jsonArray);
 			}
@@ -128,11 +129,13 @@
 			
 			$jsonArray["typeConnexion"]="Ajouter";
 			$jsonArray["message"]="Ajout reussis";
+			$jsonArray["error"]="false";
 		}
 		else{
 			
 			$jsonArray["typeConnexion"]="Ajouter";
 			$jsonArray["message"]="mail deja existant";
+			$jsonArray["error"]="true";
 		}
 		echo json_encode ($jsonArray);
 	}
@@ -149,9 +152,11 @@
 			$jsonArray["firstname"]=$firstname;
 			$jsonArray["lastname"]=$lastname;
 			$jsonArray["pictureUser"]=$pictureUser;
+			$jsonArray["error"]="false";
 		}
 		else{
 			$jsonArray["message"]="Probleme token or mail";
+			$jsonArray["error"]="true";
 		}
 		echo json_encode ($jsonArray);
 	}
@@ -167,7 +172,8 @@
 			$jsonArray["token"]=$token;
 			$jsonArray["mail"]=$mail;
 			$jsonArray["firstname"]=$firstname;
-			$jsonArray["lastname"]=$lastname;	
+			$jsonArray["lastname"]=$lastname;
+			$jsonArray["error"]="false";			
 			return $jsonArray;
 	}
 
@@ -181,16 +187,17 @@
         if($res['nbUser'] ==  1){
         	//si il n'est pas banni
         	if($res['banned'] !=  1){
-        		//si nb tentative+1 est inférieur à 5?
+        		//si nb tentative+1 est inf�rieur � 5?
 				if(($res['nbTentative']+1) < 5 ) {
 					if(md5($password.md5(SALT)) == $res['pass']){
 						$jsonArray=seConnecter($db,$mail,$res['firstname'],$res['lastname'],$jsonArray);
 					}
 					else {
-						//Incrémente le nombre de tentative
+						//Incr�mente le nombre de tentative
 						$req=$db->prepare("update users set nbTentative =nbTentative+1 where mail = ?;");
 						$req->execute(array($mail));
 						$jsonArray["message"]="il n y a pas d utilisateurs avec ce couple login mot de passe";
+						$jsonArray["error"]="true";
 					}
 				}			
 				else{
@@ -199,7 +206,8 @@
 					$req=$db->prepare("update users set BannedDate ='".$date."', nbTentative = 0,banned=1 where mail = ?;");
 					$req->execute(array($mail));
 
-                    $jsonArray["message"]="Vous etes banni pour une durée de 5 minutes après avoir essaye de vous connecter 5 fois sans trouver le bon mot de passe";
+                    $jsonArray["message"]="Vous etes banni pour une dur�e de 5 minutes apr�s avoir essaye de vous connecter 5 fois sans trouver le bon mot de passe";
+					$jsonArray["error"]="true";
 
 				}
 			}
@@ -208,7 +216,8 @@
 				$duree = mktime() - $res['BannedDate'] ;
 				//si encore banni
 				if( $duree<300 ) {
-					$jsonArray["message"]='Vous êtes actuellement banni pour une durée de 5 minutes. Merci de réessayer ultérieurement ! il vous reste environ : '.floor(5-($duree/60)) .' min';
+					$jsonArray["message"]='Vous �tes actuellement banni pour une dur�e de 5 minutes. Merci de r�essayer ult�rieurement ! il vous reste environ : '.floor(5-($duree/60)) .' min';
+					$jsonArray["error"]="true";
 				}
 				else{
 					if(md5($password.md5(SALT)) == $res['pass']){
@@ -220,198 +229,19 @@
 						$req=$db->prepare("update users set nbTentative = nbTentative+1,banned=0 where mail = ?;");
 						$req->execute(array($mail));
 						$jsonArray["message"]="il n y a pas d utilisateurs avec ce couple login mot de passe";
+						$jsonArray["error"]="true";
 					}
 				}
 
 			}
 		}
 		else {
-			//Incrémente le nombre de tentative
+			//Incr�mente le nombre de tentative
 			$jsonArray["message"]="utilisateurs n existe pas";
+			$jsonArray["error"]="true";
 
 		}
 		echo json_encode ($jsonArray);
 	}
-		//si dejà banni?
-				/*if($res['estBanni'] !=  1){
-					//si nb tentative+1 est inférieur à 5?
-					if(($res['nbtentative']+1) < 5 ) {
-						if(md5($res['login'].$passUser.md5(SALT)) == $res['pass']){
-							$token = uniqid();
-							$req=$db->prepare("update clients set token ='$token', nbtentative=0, estBanni=0");
-							$req->execute();
-							$jsonArray["message"]="connexion reussie";
-                            $jsonArray["token"]=$token;
-							$jsonArray["username"]=$loginUser;
-							
-							$statement=$db->prepare("SELECT c.username, m.content, m.datepublication FROM messages m, clients c WHERE c.id = m.idClients LIMIT 0 , 30");
-							$statement->execute();
-							
-							while( $row =$statement->fetch(PDO::FETCH_ASSOC) ) {
-								$messageContent["login"]=$row["username"];
-								$messageContent["content"]=$row["content"];
-								$messageContent["datepublication"]=$row["datepublication"];
-								$messageArray[] = $messageContent;
-							}
-							$jsonArray["listMessage"]=$messageArray;
-							
-						} else {
-							//Incrémente le nombre de tentative
-							$req=$db->prepare("update clients set nbtentative =nbtentative+1");
-							$req->execute();
-                                                        $jsonArray["message"]="il n y a pas d utilisateurs avec ce couple login mot de passe";
-           
-						}
-					}
-					else{
-						$date=mktime();
-						echo("mktime = ".$date);
-						$req=$db->prepare("update clients set bannissement ='".$date."', nbtentative = 0,estBanni=1 ");
-						$req->execute();
-                                                $jsonArray["message"]="Vous êtes banni pour une durée de 5 minutes après avoir essayé de vous connecter 5 fois sans trouver le bon mot de passe";		
-					}
-				}
-				else{
-					$duree = mktime() - $res['bannissement'] ;
-					//si encore banni
-					if( $duree<300 ) {
-						$jsonArray["message"]='Vous êtes actuellement banni pour une durée de 5 minutes. Merci de réessayer ultérieurement ! il vous reste environ : '.floor(5-($duree/60)) .' min';
-					}
-					else{
-			
-						$req=$db->prepare("update clients set nbtentative = 0,estBanni=0 ");
-						$req->execute();
-						
-						if(md5($res['login'].$passUser.md5(SALT)) == $res['pass']){
-							$token = uniqid();
-							$req=$db->prepare("update clients set token ='$token', nbtentative=0, estBanni=0");
-							$req->execute();
-							$jsonArray["message"]="connexion reussie";
-							$jsonArray["token"]=$token;
-							$jsonArray["username"]=$loginUser;
-							
-							$statement=$db->prepare("SELECT c.username, m.content, m.datepublication FROM messages m, clients c WHERE c.id = m.idClients LIMIT 0 , 30");
-							$statement->execute();
-							
-							while( $row =$statement->fetch(PDO::FETCH_ASSOC) ) {
-								$messageContent["login"]=$row["username"];
-								$messageContent["content"]=$row["content"];
-								$messageContent["datepublication"]=$row["datepublication"];
-								$messageArray[] = $messageContent;
-							}
-							$jsonArray["listMessage"]=$messageArray;
-							
-						} else {
-							//Incrémente le nombre de tentative
-							$req=$db->prepare("update clients set nbtentative =nbtentative+1");
-							$req->execute();
-                                                        
-							$jsonArray["message"]='il n y a pas d utilisateurs avec ce couple login mot de passe';    
-						}
-					}
-				}
-				
-			}
-	}
-	
-    /*if(isset($_POST['login'])&&!empty($_POST['login'])){
-        
-        $loginUser = $_POST['login'];
-        if(isset($_POST['pass'])&&!empty($_POST['pass'])){
-            
-            $passUser = $_POST['pass'];
-            $statement=$db->prepare("SELECT COUNT(username) AS nbUser, username as login,password as pass, nbtentative, bannissement,estBanni FROM clients where username = ?;");
-            $statement->execute(array($loginUser));
-            
-            $res = $statement->fetch(PDO::FETCH_ASSOC);
-            if($res['nbUser'] ==  1){
-				//si dejà banni?
-				if($res['estBanni'] !=  1){
-					//si nb tentative+1 est inférieur à 5?
-					if(($res['nbtentative']+1) < 5 ) {
-						if(md5($res['login'].$passUser.md5(SALT)) == $res['pass']){
-							$token = uniqid();
-							$req=$db->prepare("update clients set token ='$token', nbtentative=0, estBanni=0");
-							$req->execute();
-							$jsonArray["message"]="connexion reussie";
-                            $jsonArray["token"]=$token;
-							$jsonArray["username"]=$loginUser;
-							
-							$statement=$db->prepare("SELECT c.username, m.content, m.datepublication FROM messages m, clients c WHERE c.id = m.idClients LIMIT 0 , 30");
-							$statement->execute();
-							
-							while( $row =$statement->fetch(PDO::FETCH_ASSOC) ) {
-								$messageContent["login"]=$row["username"];
-								$messageContent["content"]=$row["content"];
-								$messageContent["datepublication"]=$row["datepublication"];
-								$messageArray[] = $messageContent;
-							}
-							$jsonArray["listMessage"]=$messageArray;
-							
-						} else {
-							//Incrémente le nombre de tentative
-							$req=$db->prepare("update clients set nbtentative =nbtentative+1");
-							$req->execute();
-                                                        $jsonArray["message"]="il n y a pas d utilisateurs avec ce couple login mot de passe";
-           
-						}
-					}
-					else{
-						$date=mktime();
-						echo("mktime = ".$date);
-						$req=$db->prepare("update clients set bannissement ='".$date."', nbtentative = 0,estBanni=1 ");
-						$req->execute();
-                                                $jsonArray["message"]="Vous êtes banni pour une durée de 5 minutes après avoir essayé de vous connecter 5 fois sans trouver le bon mot de passe";		
-					}
-				}
-				else{
-					$duree = mktime() - $res['bannissement'] ;
-					//si encore banni
-					if( $duree<300 ) {
-						$jsonArray["message"]='Vous êtes actuellement banni pour une durée de 5 minutes. Merci de réessayer ultérieurement ! il vous reste environ : '.floor(5-($duree/60)) .' min';
-					}
-					else{
-			
-						$req=$db->prepare("update clients set nbtentative = 0,estBanni=0 ");
-						$req->execute();
-						
-						if(md5($res['login'].$passUser.md5(SALT)) == $res['pass']){
-							$token = uniqid();
-							$req=$db->prepare("update clients set token ='$token', nbtentative=0, estBanni=0");
-							$req->execute();
-							$jsonArray["message"]="connexion reussie";
-							$jsonArray["token"]=$token;
-							$jsonArray["username"]=$loginUser;
-							
-							$statement=$db->prepare("SELECT c.username, m.content, m.datepublication FROM messages m, clients c WHERE c.id = m.idClients LIMIT 0 , 30");
-							$statement->execute();
-							
-							while( $row =$statement->fetch(PDO::FETCH_ASSOC) ) {
-								$messageContent["login"]=$row["username"];
-								$messageContent["content"]=$row["content"];
-								$messageContent["datepublication"]=$row["datepublication"];
-								$messageArray[] = $messageContent;
-							}
-							$jsonArray["listMessage"]=$messageArray;
-							
-						} else {
-							//Incrémente le nombre de tentative
-							$req=$db->prepare("update clients set nbtentative =nbtentative+1");
-							$req->execute();
-                                                        
-							$jsonArray["message"]='il n y a pas d utilisateurs avec ce couple login mot de passe';    
-						}
-					}
-				}
-				
-			}
-			else{
-				$jsonArray["message"]="pas de login";
-			} 
-                        
-		}
-	}
-
-        echo json_encode ($jsonArray);*/
         
 ?>

@@ -33,6 +33,9 @@
     <string name="error_network">Network error, make sure you are connected and try again.</string>
     <string name="invalid_password">Couple login / password invalid, please try again</string>
     <string name="network_disabled">Network disabled, please make sure to enable it.</string>    
+    <string name="password_repeat_error">Error password, please make sure that the two password are the same</string>    
+    <string name="createAccountOK">Your account has been created</string>    
+    <string name="createAccountNOK">Error during the account creation</string>
     
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>

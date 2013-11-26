@@ -20,6 +20,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 public class HomeActivity extends Activity {
 
@@ -78,10 +79,7 @@ public class HomeActivity extends Activity {
         if (savedInstanceState == null) {
             selectItem(0);
         }
-        
-       	//TODO :
-        // Intent intent = getIntent();
-        // Bundle bund = intent.getExtras();
+        Toast.makeText(getApplicationContext(), "Bonjour "+Constants.user.getFirstname(), Toast.LENGTH_LONG).show();
         
     }
 

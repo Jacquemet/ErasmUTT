@@ -3,8 +3,8 @@ package fr.utt.erasmutt;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import fr.utt.erasmutt.networkConnection.JsonHttpCallback;
-import fr.utt.erasmutt.networkConnection.JsonHttpRequest;
+import fr.utt.erasmutt.networkConnection.HttpCallback;
+import fr.utt.erasmutt.networkConnection.HttpRequest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -32,7 +32,7 @@ public class LoginActivity extends Activity {
 
 	ProgressBar progBar = null;
 
-	private JsonHttpRequest request = null;
+	private HttpRequest request = null;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +55,7 @@ public class LoginActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				
-				request = new JsonHttpRequest(new JsonHttpCallback() {
+				request = new HttpRequest(new HttpCallback() {
 					
 					@Override
 					public Object call(JSONObject jsonResponse) {
@@ -64,10 +64,13 @@ public class LoginActivity extends Activity {
 							//TODO : Exploiter les données reçues
 							if (!jsonResponse.getBoolean("error")) {
 								
-								Bundle bundle = new Bundle();
-								bundle.putString("token", "");
+								Constants.user.setFirstname(jsonResponse.getString("firstname"));
+								Constants.user.setToken(jsonResponse.getString("token"));
+								Constants.user.setLastname(jsonResponse.getString("lastname"));
+								Constants.user.setMail(jsonResponse.getString("mail"));
+								Constants.user.setMessage(jsonResponse.getString("message"));
 								Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
-								intent.putExtras(bundle);
+								
 								startActivity(intent);
 								
 							} else {
