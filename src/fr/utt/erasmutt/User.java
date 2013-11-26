@@ -1,22 +1,13 @@
 package fr.utt.erasmutt;
 
-public class DataConnection {
+public class User {
 
-    boolean error;
     static String token;
-    static String urlRoot = "http://www.ws.kevin-larue.fr/"; 
     static String message;
     static String mail;
     static String firstname;
     static String lastname;
     
-    public boolean getError() {
-        return error;
-    }
-    public void setError(Boolean Error) {
-        error = Error;
-    }
-
     public String getToken() {
         return token;
     }

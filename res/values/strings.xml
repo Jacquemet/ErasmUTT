@@ -6,6 +6,7 @@
     <!-- Activity Titles -->
 
     <string name="title_activity_home">ErasmUTT</string>
+    <string name="title_activity_new_account">New Account</string>
 
     <!-- Menu Titles -->
     <string name="action_settings">Settings</string>
@@ -14,6 +15,7 @@
     <string name="action_logout">Sign out</string>
     <string name="action_search">Search</string>
 
+    
     <!-- Other -->
     <string name="textLabel_mail">Your E-mail address : </string>
     <string name="textLabel_password">Your password : </string>
@@ -28,9 +30,14 @@
         <item>My Review</item>
     </string-array>
 
+    <string name="error_network">Network error, make sure you are connected and try again.</string>
+    <string name="invalid_password">Couple login / password invalid, please try again</string>
+    <string name="network_disabled">Network disabled, please make sure to enable it.</string>    
+    
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
-    <string name="title_activity_new_account">NewAccountActivity</string>
+    
+    
     <string name="hello_world">Hello world!</string>
     <string name="repeatPassword">Repeat your password</string>
     <string name="firstname">"Your firstname : "</string>

@@ -1,12 +1,8 @@
 package fr.utt.erasmutt;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -14,7 +10,6 @@ import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -25,7 +20,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
-import android.widget.Toast;
 
 public class HomeActivity extends Activity {
 
@@ -37,10 +31,6 @@ public class HomeActivity extends Activity {
     private CharSequence mTitle;
     private String[] mTitles;
 
-    private Webservice ws = new Webservice();
-	private DataConnection dc = new DataConnection();
-	private String url = "";
-	 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,11 +79,10 @@ public class HomeActivity extends Activity {
             selectItem(0);
         }
         
-        Intent intent = getIntent();
-        Bundle bund = intent.getExtras();
+       	//TODO :
+        // Intent intent = getIntent();
+        // Bundle bund = intent.getExtras();
         
-        url= DataConnection.urlRoot+"connexion.php?typeConnexion=connecter&mail="+bund.getString("login")+"&password="+bund.getString("password");
-        ws.accessWebService(url,this);
     }
 
     @Override
@@ -223,7 +212,7 @@ public class HomeActivity extends Activity {
     }
     
  // Build hash set for list view
-  	 public void ListDrwaer(String jsonResult) {
+  	 /*public void ListDrwaer(String jsonResult) {
   		 AlertDialog.Builder builder = new AlertDialog.Builder(this);
   		 try {
   	            JSONObject jsonResponse = new JSONObject(jsonResult);
@@ -253,5 +242,5 @@ public class HomeActivity extends Activity {
   	            Toast.LENGTH_SHORT).show();
   	    }
   		
-  	 }
+  	 }*/
 }

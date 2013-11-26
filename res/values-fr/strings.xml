@@ -33,4 +33,8 @@
     <string name="drawer_open">Ouvrir navigation drawer</string>
     <string name="drawer_close">Fermer navigation drawer</string>
     
+    <string name="error_network">Erreur de réseau, assurez-vous que vous êtes connecté et essayez de nouveau.</string>
+    <string name="invalid_password">Couple login / mot de passe invalide, essayez de nouveau.</string>
+    <string name="network_disabled">Réseau désactivé, s il vous plaît assurez-vous de l activer.</string>    
+    
 </resources>
