@@ -7,6 +7,7 @@
 
     <string name="title_activity_home">ErasmUTT</string>
     <string name="title_activity_new_account">New Account</string>
+    <string name="title_activity_map">MapActivity</string>
 
     <!-- Menu Titles -->
     <string name="action_settings">Settings</string>
@@ -15,7 +16,6 @@
     <string name="action_logout">Sign out</string>
     <string name="action_search">Search</string>
 
-    
     <!-- Other -->
     <string name="textLabel_mail">Your E-mail address : </string>
     <string name="textLabel_password">Your password : </string>
@@ -32,15 +32,12 @@
 
     <string name="error_network">Network error, make sure you are connected and try again.</string>
     <string name="invalid_password">Couple login / password invalid, please try again</string>
-    <string name="network_disabled">Network disabled, please make sure to enable it.</string>    
-    <string name="password_repeat_error">Error password, please make sure that the two password are the same</string>    
-    <string name="createAccountOK">Your account has been created</string>    
+    <string name="network_disabled">Network disabled, please make sure to enable it.</string>
+    <string name="password_repeat_error">Error password, please make sure that the two password are the same</string>
+    <string name="createAccountOK">Your account has been created</string>
     <string name="createAccountNOK">Error during the account creation</string>
-    
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
-    
-    
     <string name="hello_world">Hello world!</string>
     <string name="repeatPassword">Repeat your password</string>
     <string name="firstname">"Your firstname : "</string>
@@ -48,5 +45,7 @@
     <string name="title_create_new_account">Create a new account</string>
     <string name="submit_label">Submit</string>
     <string name="cancel_label">Cancel</string>
+    
+    <string name="hello">Hello %1$s!</string>
 
 </resources>

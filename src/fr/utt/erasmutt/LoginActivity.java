@@ -3,6 +3,7 @@ package fr.utt.erasmutt;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import fr.utt.erasmutt.maps.MapActivity;
 import fr.utt.erasmutt.networkConnection.HttpCallback;
 import fr.utt.erasmutt.networkConnection.HttpRequest;
 import android.app.Activity;

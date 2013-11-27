@@ -3,21 +3,20 @@ package fr.utt.erasmutt;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import fr.utt.erasmutt.networkConnection.HttpCallback;
-import fr.utt.erasmutt.networkConnection.HttpRequest;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.os.Bundle;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
+import fr.utt.erasmutt.networkConnection.HttpCallback;
+import fr.utt.erasmutt.networkConnection.HttpRequest;
 
 public class NewAccountActivity extends Activity {
 

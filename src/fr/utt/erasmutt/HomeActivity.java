@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -79,7 +80,11 @@ public class HomeActivity extends Activity {
         if (savedInstanceState == null) {
             selectItem(0);
         }
-        Toast.makeText(getApplicationContext(), "Bonjour "+Constants.user.getFirstname(), Toast.LENGTH_LONG).show();
+        
+        //Toast qui confirme la connexion
+        Resources res = getResources();
+        String helloMessage = String.format(res.getString(R.string.hello), Constants.user.getFirstname());
+        Toast.makeText(getApplicationContext(), helloMessage, Toast.LENGTH_LONG).show();
         
     }
 
