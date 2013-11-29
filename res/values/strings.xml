@@ -36,7 +36,9 @@
     <string name="password_repeat_error">Error password, please make sure that the two password are the same</string>
     <string name="createAccountOK">Your account has been created</string>
     <string name="createAccountNOK">Error during the account creation</string>
-    <string name="drawer_open">Open navigation drawer</string>
+	<string name="setAccountOK">Your account has been modified</string>
+	<string name="setAccountNOK">Error during the account modification</string>    
+	<string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
     <string name="hello_world">Hello world!</string>
     <string name="repeatPassword">Repeat your password</string>
@@ -47,5 +49,10 @@
     <string name="cancel_label">Cancel</string>
     <string name="hello">Hello %1$s!</string>
     <string name="title_activity_activity_handler">ActivityHandlerActivity</string>
+	<string name="title_activity_user_desc">UserDescActivity</string>
+
+	<string name="desc_account">Your account</string>
+	<string name="set_label">Set</string>
+	
 
 </resources>

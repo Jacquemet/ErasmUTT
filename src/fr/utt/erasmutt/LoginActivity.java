@@ -69,7 +69,7 @@ public class LoginActivity extends Activity {
 								Constants.user.setLastname(jsonResponse.getString("lastname"));
 								Constants.user.setMail(jsonResponse.getString("mail"));
 								Constants.user.setMessage(jsonResponse.getString("message"));
-								Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+								Intent intent = new Intent(getApplicationContext(), UserDescActivity.class);
 								
 								startActivity(intent);
 								
