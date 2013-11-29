@@ -1,8 +1,12 @@
 package fr.utt.erasmutt;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import fr.utt.erasmutt.maps.MapActivity;
+import fr.utt.erasmutt.networkConnection.HttpCallback;
+import fr.utt.erasmutt.networkConnection.HttpRequest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -16,8 +20,6 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import fr.utt.erasmutt.networkConnection.HttpCallback;
-import fr.utt.erasmutt.networkConnection.HttpRequest;
 
 public class LoginActivity extends Activity {
 
@@ -33,6 +35,7 @@ public class LoginActivity extends Activity {
 	ProgressBar progBar = null;
 
 	private HttpRequest request = null;
+	private HttpRequest requestActivities = null;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -69,9 +72,12 @@ public class LoginActivity extends Activity {
 								Constants.user.setLastname(jsonResponse.getString("lastname"));
 								Constants.user.setMail(jsonResponse.getString("mail"));
 								Constants.user.setMessage(jsonResponse.getString("message"));
-								Intent intent = new Intent(getApplicationContext(), UserDescActivity.class);
 								
-								startActivity(intent);
+								loadActitivies();
+								
+								//Intent intent = new Intent(getApplicationContext(), MapActivity.class);
+								
+								//startActivity(intent);
 								
 							} else {
 								Toast.makeText(getApplicationContext(), R.string.invalid_password, Toast.LENGTH_LONG).show();
@@ -107,6 +113,69 @@ public class LoginActivity extends Activity {
 				startActivity(intent);
 			}
 		});
+	}
+	
+	private void loadActitivies(){
+		requestActivities = new HttpRequest(new HttpCallback() {
+			
+			@Override
+			public Object call(JSONObject jsonResponse) {
+
+				try {
+					//TODO : Exploiter les données reçues
+					if (!jsonResponse.getBoolean("error")) {
+
+						JSONArray jObject = jsonResponse.getJSONArray("listActivities");
+
+				        for (int i = 0; i < jObject.length(); i++) {
+
+				        	 ActivityForUser afu= new ActivityForUser();
+
+				             JSONObject menuObject = jObject.getJSONObject(i);
+
+				             afu.setId(Integer.parseInt(menuObject.getString("idActivity")));
+				  
+				             afu.setName(menuObject.getString("name"));
+				           
+				             afu.setDesc(menuObject.getString("desc"));
+			
+				             afu.setAverageMark(Double.parseDouble(menuObject.getString("averageMark")));
+				            
+				             afu.setLatitude(menuObject.getString("latitude"));
+				         
+				             afu.setLongitude(menuObject.getString("longitude"));
+				       
+				             afu.setWebsite(menuObject.getString("website"));
+
+				             afu.setFocusOn(Boolean.parseBoolean(menuObject.getString("focusOn")));
+
+				             afu.setPicture(menuObject.getString("picture"));
+
+				             Constants.tabActivityForUser.add(afu);
+	
+				        }
+						
+						Intent intent = new Intent(getApplicationContext(), MapActivity.class);
+						startActivity(intent);
+						
+					} else {
+						Toast.makeText(getApplicationContext(), R.string.invalid_password, Toast.LENGTH_LONG).show();
+						endLoading();
+					}
+				} catch (JSONException e) {
+					Toast.makeText(getApplicationContext(),"erreur parsage", Toast.LENGTH_LONG).show();
+					endLoading();
+				}
+				
+				return null;
+			}
+		});
+		
+		//On vérifie que la connexion au réseau est valide
+       
+    	requestActivities.execute(Constants.urlRoot+"activiesManager.php?typeActivies=lister&token="+Constants.user.getToken());
+	
+		
 	}
 
 	private void startLoading() {
