@@ -1,0 +1,137 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_blue"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context=".UserDescActivity" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <ImageView
+        	android:id="@+id/imageEditButtoun"
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:layout_gravity="right"
+        	android:src="@android:drawable/ic_menu_edit" />
+
+        <TextView
+            android:id="@+id/titleDescAccount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/desc_account"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@android:color/white"
+            android:paddingTop="@dimen/field_vertical_padding"
+    		android:paddingBottom="@dimen/field_vertical_padding"
+            android:layout_marginTop="@dimen/field_vertical_margin"
+			android:layout_marginBottom="@dimen/field_vertical_margin"
+             />
+
+        <TextView
+            android:id="@+id/textViewDescAccount_mail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/textLabel_mail"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@android:color/white" />
+
+        <EditText
+            android:id="@+id/editTextDescAccount_mail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/field_vertical_margin"
+            android:layout_marginTop="@dimen/field_vertical_margin"
+            android:background="@android:color/white"
+            android:ems="10"
+            android:inputType="text"
+            android:paddingBottom="@dimen/field_vertical_padding"
+            android:paddingTop="@dimen/field_vertical_padding" />
+
+        <TextView
+            android:id="@+id/textViewDescAccount_firstname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/firstname"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@android:color/white" />
+
+        <EditText
+            android:id="@+id/editTextDescAccount_firstname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/field_vertical_margin"
+            android:layout_marginTop="@dimen/field_vertical_margin"
+            android:background="@android:color/white"
+            android:ems="10"
+            android:inputType="text"
+            android:paddingBottom="@dimen/field_vertical_padding"
+            android:paddingTop="@dimen/field_vertical_padding" />
+
+        <TextView
+            android:id="@+id/textViewDescAccount_lastname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/lastname"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@android:color/white" />
+
+        <EditText
+            android:id="@+id/editTextDescAccount_lastname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/field_vertical_margin"
+            android:layout_marginTop="@dimen/field_vertical_margin"
+            android:background="@android:color/white"
+            android:ems="10"
+            android:inputType="text"
+            android:paddingBottom="@dimen/field_vertical_padding"
+            android:paddingTop="@dimen/field_vertical_padding" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal" >
+
+            <Button
+                android:id="@+id/buttonDescAccount_submit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/field_vertical_margin"
+                android:layout_weight="1"
+                android:background="@color/background_dark_blue"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+				android:layout_marginBottom="@dimen/activity_vertical_margin"
+                android:text="@string/set_label"
+                android:textColor="@android:color/white" />
+
+
+            <Button
+                android:id="@+id/buttonDescAccount_cancel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/field_vertical_margin"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+				android:layout_marginBottom="@dimen/activity_vertical_margin"
+                android:layout_weight="1"
+                android:background="@color/background_dark_blue"
+                android:text="@string/cancel_label"
+                android:textColor="@android:color/white" />
+        </LinearLayout>
+         <ProgressBar
+            android:id="@+id/progressDescBar"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" 
+            android:layout_gravity="center_horizontal"
+            android:visibility="invisible"/>
+    </LinearLayout>
+
+</ScrollView>

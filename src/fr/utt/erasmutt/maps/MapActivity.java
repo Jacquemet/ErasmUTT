@@ -2,13 +2,16 @@ package fr.utt.erasmutt.maps;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+
 
 import fr.utt.erasmutt.R;
 
@@ -18,11 +21,11 @@ public class MapActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_map);
-		
+		//Toast.makeText(getApplicationContext(), "mapActivity", Toast.LENGTH_LONG).show();
         // Get a handle to the Map Fragment
         GoogleMap map = ((MapFragment) getFragmentManager()
                 .findFragmentById(R.id.map)).getMap();
-
+        Log.v("MapActivity", "MapActivity 2 ");
         LatLng sydney = new LatLng(-33.867, 151.206);
 
         map.setMyLocationEnabled(true);

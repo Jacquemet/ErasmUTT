@@ -1,68 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="fr.utt.erasmutt"
-    android:versionCode="1"
-    android:versionName="1.0" >
+	package="fr.utt.erasmutt"
+	android:versionCode="1"
+	android:versionName="1.0" >
 
-    <uses-sdk
-        android:minSdkVersion="16"
-        android:targetSdkVersion="19" />
+	<uses-sdk
+		android:minSdkVersion="16"
+		android:targetSdkVersion="19" />
 
-    <uses-feature
-        android:glEsVersion="0x00020000"
-        android:required="true" />
+	<uses-feature
+		android:glEsVersion="0x00020000"
+		android:required="true" />
 
-    <permission
-        android:name="fr.utt.erasmutt.maps.permission.MAPS_RECEIVE"
-        android:protectionLevel="signature" />
+	<permission
+		android:name="fr.utt.erasmutt.permission.MAPS_RECEIVE"
+		android:protectionLevel="signature" />
 
-    <uses-permission android:name="fr.utt.erasmutt.maps.permission.MAPS_RECEIVE" />
+	<uses-permission android:name="fr.utt.erasmutt.permission.MAPS_RECEIVE" />
 
-    <!-- Permission pour utiliser la connexion internet -->
-    <uses-permission android:name="android.permission.INTERNET" />
-    <!-- Permission permettant de vérifier l'état de la connexion -->
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <!-- Permission pour stocker des données en cache de la map -->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+	<!-- Permission pour utiliser la connexion internet -->
+	<uses-permission android:name="android.permission.INTERNET" />
+	<!-- Permission permettant de vérifier l'état de la connexion -->
+	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+	<!-- Permission pour stocker des données en cache de la map -->
+	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+	<uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
+	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
-    <application
-        android:allowBackup="true"
-        android:icon="@drawable/ic_launcher_erasmutt"
-        android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
-        <meta-data
-            android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
-        <meta-data
-            android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyDIfspqlv_cJ1659pie-EymPBcXnTKNcpQ" />
+	<application
+		android:allowBackup="true"
+		android:icon="@drawable/ic_launcher_erasmutt"
+		android:label="@string/app_name"
+		android:theme="@style/AppTheme" >
+		<meta-data
+			android:name="com.google.android.gms.version"
+			android:value="@integer/google_play_services_version" />
+		<meta-data
+			android:name="com.google.android.maps.v2.API_KEY"
+			android:value="AIzaSyCUkrU5YSPQNuYUDVigAZhGuL7FWupDH-0" />
 
-        <activity
-            android:name="fr.utt.erasmutt.LoginActivity"
-            android:label="@string/app_name"
-            android:noHistory="true"
-            android:windowSoftInputMode="stateVisible|adjustUnspecified" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+		<!-- thibault key : AIzaSyDIfspqlv_cJ1659pie-EymPBcXnTKNcpQ -->
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name="fr.utt.erasmutt.HomeActivity"
-            android:label="@string/title_activity_home" >
-        </activity>
-        <activity
-            android:name="fr.utt.erasmutt.NewAccountActivity"
-            android:label="@string/title_activity_new_account" >
-        </activity>
-        <activity
-            android:name="fr.utt.erasmutt.maps.MapActivity"
-            android:label="@string/title_activity_map" >
-        </activity>
-    </application>
+		<activity
+			android:name="fr.utt.erasmutt.LoginActivity"
+			android:label="@string/app_name"
+			android:noHistory="true"
+			android:windowSoftInputMode="stateVisible|adjustUnspecified" >
+			<intent-filter>
+				<action android:name="android.intent.action.MAIN" />
+
+				<category android:name="android.intent.category.LAUNCHER" />
+			</intent-filter>
+		</activity>
+		<activity
+			android:name="fr.utt.erasmutt.HomeActivity"
+			android:label="@string/title_activity_home" >
+		</activity>
+		<activity
+			android:name="fr.utt.erasmutt.NewAccountActivity"
+			android:label="@string/title_activity_new_account" >
+		</activity>
+		<activity
+			android:name="fr.utt.erasmutt.maps.MapActivity"
+			android:label="@string/title_activity_map" >
+		</activity>
+		<activity
+			android:name="fr.utt.erasmutt.UserDescActivity"
+			android:label="@string/title_activity_user_desc" >
+		</activity>
+	</application>
 
 </manifest>
