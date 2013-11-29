@@ -4,12 +4,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import fr.utt.erasmutt.maps.MapActivity;
-import fr.utt.erasmutt.networkConnection.HttpCallback;
-import fr.utt.erasmutt.networkConnection.HttpRequest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -20,6 +18,9 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import fr.utt.erasmutt.model.ActivityForUser;
+import fr.utt.erasmutt.networkConnection.HttpCallback;
+import fr.utt.erasmutt.networkConnection.HttpRequest;
 
 public class LoginActivity extends Activity {
 
@@ -74,10 +75,6 @@ public class LoginActivity extends Activity {
 								Constants.user.setMessage(jsonResponse.getString("message"));
 								
 								loadActitivies();
-								
-								//Intent intent = new Intent(getApplicationContext(), MapActivity.class);
-								
-								//startActivity(intent);
 								
 							} else {
 								Toast.makeText(getApplicationContext(), R.string.invalid_password, Toast.LENGTH_LONG).show();
@@ -154,9 +151,18 @@ public class LoginActivity extends Activity {
 				             Constants.tabActivityForUser.add(afu);
 	
 				        }
+
+				        //Create an Intent which clear the back stack and launch the home activity
+						Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+						intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+				        
+						//Toast qui confirme la connexion
+				        Resources res = getResources();
+				        String helloMessage = String.format(res.getString(R.string.hello), Constants.user.getFirstname());
+				        Toast.makeText(getApplicationContext(), helloMessage, Toast.LENGTH_LONG).show();
 						
-						Intent intent = new Intent(getApplicationContext(), MapActivity.class);
-						startActivity(intent);
+				        //Start the activity
+				        startActivity(intent);
 						
 					} else {
 						Toast.makeText(getApplicationContext(), R.string.invalid_password, Toast.LENGTH_LONG).show();
@@ -172,7 +178,6 @@ public class LoginActivity extends Activity {
 		});
 		
 		//On vérifie que la connexion au réseau est valide
-       
     	requestActivities.execute(Constants.urlRoot+"activiesManager.php?typeActivies=lister&token="+Constants.user.getToken());
 	
 		

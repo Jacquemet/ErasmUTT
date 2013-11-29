@@ -1,14 +1,12 @@
 package fr.utt.erasmutt;
 
 
-import fr.utt.erasmutt.maps.MapActivity;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -25,7 +23,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
-import android.widget.Toast;
+import fr.utt.erasmutt.maps.MapActivity;
 
 public class HomeActivity extends FragmentActivity {
 
@@ -84,11 +82,6 @@ public class HomeActivity extends FragmentActivity {
         if (savedInstanceState == null) {
             selectItem(0);
         }
-        
-        //Toast qui confirme la connexion
-        Resources res = getResources();
-        String helloMessage = String.format(res.getString(R.string.hello), Constants.user.getFirstname());
-        Toast.makeText(getApplicationContext(), helloMessage, Toast.LENGTH_LONG).show();
         
     }
 

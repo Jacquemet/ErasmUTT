@@ -1,12 +1,15 @@
 package fr.utt.erasmutt.maps;
 
 import android.app.Activity;
+import android.graphics.drawable.ColorDrawable;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.view.Menu;
+import android.view.MenuItem;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -26,6 +29,9 @@ public class MapActivity extends Activity implements LocationListener{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_map);
 
+		getActionBar().setDisplayHomeAsUpEnabled(true);
+		getActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.background_blue)));
+		
         // Getting GoogleMap object from the fragment
 		map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
 
@@ -80,6 +86,17 @@ public class MapActivity extends Activity implements LocationListener{
 		return true;
 	}
 
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    switch (item.getItemId()) {
+	    // Respond to the action bar's Up/Home button
+	    case android.R.id.home:
+	        NavUtils.navigateUpFromSameTask(this);
+	        return true;
+	    }
+	    return super.onOptionsItemSelected(item);
+	}
+	
 	@Override
 	public void onLocationChanged(Location location) {
 		// TODO Auto-generated method stub

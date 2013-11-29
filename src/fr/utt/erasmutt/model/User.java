@@ -1,4 +1,4 @@
-package fr.utt.erasmutt;
+package fr.utt.erasmutt.model;
 
 public class User {
 

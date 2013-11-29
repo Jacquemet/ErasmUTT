@@ -59,7 +59,9 @@ public class NewAccountActivity extends Activity {
 								//TODO : Exploiter les données reçues
 								if (!jsonResponse.getBoolean("error")) {
 									
+									//Clear NewAccountActivity from the back stack and launch the current task of LoginActivity 
 									Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+									intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 									Toast.makeText(getApplicationContext(), R.string.createAccountOK, Toast.LENGTH_LONG).show();
 									startActivity(intent);
 									
@@ -94,7 +96,9 @@ public class NewAccountActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
+				//Clear NewAccountActivity from the back stack and launch the current task of LoginActivity 
 				Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 				startActivity(intent);
 			}
 		});
