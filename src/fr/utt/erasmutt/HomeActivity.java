@@ -1,13 +1,17 @@
 package fr.utt.erasmutt;
 
-import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentManager;
+
+import fr.utt.erasmutt.maps.MapActivity;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -23,7 +27,7 @@ import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Toast;
 
-public class HomeActivity extends Activity {
+public class HomeActivity extends FragmentActivity {
 
 	private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
@@ -122,6 +126,11 @@ public class HomeActivity extends Activity {
         // Handle action buttons
         switch(item.getItemId()) {
         
+        case R.id.action_location:
+			Intent intent = new Intent(getApplicationContext(), MapActivity.class); 
+            startActivity(intent);
+            return true;
+        
         case R.id.action_settings:
         	/*
             // create intent to perform web search for this planet
@@ -150,13 +159,33 @@ public class HomeActivity extends Activity {
     private void selectItem(int position) {
         // update the main content by replacing fragments
     	//TODO : À changer pour switcher avec des fragments multiple
-        Fragment fragment = new PopularActivitiesFragment();
-        Bundle args = new Bundle();
-        args.putInt(PopularActivitiesFragment.ARG_MENU_NUMBER, position);
-        fragment.setArguments(args);
+    	setupFragments();
+    	
+    	switch (position) {
+		case 0:
+			
+			break;
+		case 1:
+			
+			break;
+		case 2:
+			
+			break;
+		case 3:
+			
+			break;	
 
-        FragmentManager fragmentManager = getFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+		default:
+			break;
+		}
+    	
+        //Fragment fragment = new PopularActivitiesFragment();
+        //Bundle args = new Bundle();
+        //args.putInt(PopularActivitiesFragment.ARG_MENU_NUMBER, position);
+        //fragment.setArguments(args);
+
+        //FragmentManager fragmentManager = getSupportFragmentManager();
+        //fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
 
         // update selected item and title, then close the drawer
         mDrawerList.setItemChecked(position, true);
@@ -214,36 +243,29 @@ public class HomeActivity extends Activity {
         }
     }
     
- // Build hash set for list view
-  	 /*public void ListDrwaer(String jsonResult) {
-  		 AlertDialog.Builder builder = new AlertDialog.Builder(this);
-  		 try {
-  	            JSONObject jsonResponse = new JSONObject(jsonResult);
+	 // Setup the fragment to show here
+    private void setupFragments() {
+        final FragmentManager fm = getSupportFragmentManager();
+        
+        /*
+        this.stFragment = (SendTweetFragment) fm.findFragmentById(R.id.frag_new_tweet);
+        if (this.stFragment == null) {
+            this.stFragment = new SendTweetFragment();
+        }*/
 
-  	            dc.setError(jsonResponse.getBoolean("error"));
-  	            dc.setMessage(jsonResponse.getString("message"));
-  	            if(!dc.getError()){
-	            	dc.setToken(jsonResponse.getString("token"));
-	  	            dc.setMail(jsonResponse.getString("mail"));
-	  	            dc.setLastname(jsonResponse.getString("lastname"));
-	  	            dc.setFirstname(jsonResponse.getString("firstname"));
-	  	            builder.setMessage("Bonjour : "+dc.firstname);
-	  	            builder.create().show();
-	
-	  	        }
-	  	        else{
-	  	            builder.setMessage(dc.message);
-	  	  		    builder.create().show();
-	  	  		    Intent intent = new Intent(this, LoginActivity.class);
-	  	  	        startActivity(intent);
-	  	      	}
-  	            
-  	            
-
-          } catch (JSONException e) {
-  	            Toast.makeText(getApplicationContext(), "Error" + e.toString(),
-  	            Toast.LENGTH_SHORT).show();
-  	    }
-  		
-  	 }*/
+    }
+    
+    //Show fragment in parameters
+    private void showFragment(final Fragment fragment) {
+        if (fragment == null)
+            return;
+ 
+        final FragmentManager fm =  getSupportFragmentManager();
+        final FragmentTransaction ft = fm.beginTransaction();
+        // We can also animate the changing of fragment
+        ft.setCustomAnimations(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
+        ft.replace(R.id.content_frame, fragment);
+        ft.commit();
+    }
+    
 }

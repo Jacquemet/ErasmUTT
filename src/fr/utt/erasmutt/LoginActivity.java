@@ -3,9 +3,6 @@ package fr.utt.erasmutt;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import fr.utt.erasmutt.maps.MapActivity;
-import fr.utt.erasmutt.networkConnection.HttpCallback;
-import fr.utt.erasmutt.networkConnection.HttpRequest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -19,6 +16,8 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import fr.utt.erasmutt.networkConnection.HttpCallback;
+import fr.utt.erasmutt.networkConnection.HttpRequest;
 
 public class LoginActivity extends Activity {
 

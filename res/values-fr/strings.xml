@@ -24,7 +24,7 @@
     <string name="query_hint">Rechercher</string>
     
     <string-array name="text_menu_array">
-		<item>Accueil</item>
+		<item>Accueil ErasmUTT</item>
         <item>Mon Compte</item>
         <item>Mes Groupes</item>
         <item>Mes Avis</item>

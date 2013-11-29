@@ -24,7 +24,7 @@
     <string name="query_hint">Search</string>
 
     <string-array name="text_menu_array">
-        <item>Home</item>
+        <item>ErasmUTT Home</item>
         <item>My Account</item>
         <item>My Groups</item>
         <item>My Review</item>
@@ -45,7 +45,7 @@
     <string name="title_create_new_account">Create a new account</string>
     <string name="submit_label">Submit</string>
     <string name="cancel_label">Cancel</string>
-    
     <string name="hello">Hello %1$s!</string>
+    <string name="title_activity_activity_handler">ActivityHandlerActivity</string>
 
 </resources>
