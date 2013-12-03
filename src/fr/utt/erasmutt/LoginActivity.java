@@ -18,9 +18,9 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import fr.utt.erasmutt.model.ActivityForUser;
 import fr.utt.erasmutt.networkConnection.HttpCallback;
 import fr.utt.erasmutt.networkConnection.HttpRequest;
+import fr.utt.erasmutt.sqlite.model.Activities;
 
 public class LoginActivity extends Activity {
 
@@ -72,7 +72,6 @@ public class LoginActivity extends Activity {
 								Constants.user.setToken(jsonResponse.getString("token"));
 								Constants.user.setLastname(jsonResponse.getString("lastname"));
 								Constants.user.setMail(jsonResponse.getString("mail"));
-								Constants.user.setMessage(jsonResponse.getString("message"));
 								
 								loadActitivies();
 								
@@ -126,17 +125,17 @@ public class LoginActivity extends Activity {
 
 				        for (int i = 0; i < jObject.length(); i++) {
 
-				        	 ActivityForUser afu= new ActivityForUser();
+				        	 Activities afu= new Activities();
 
 				             JSONObject menuObject = jObject.getJSONObject(i);
 
-				             afu.setId(Integer.parseInt(menuObject.getString("idActivity")));
+				             afu.setIdActivity(Integer.parseInt(menuObject.getString("idActivity")));
 				  
 				             afu.setName(menuObject.getString("name"));
 				           
-				             afu.setDesc(menuObject.getString("desc"));
+				             afu.setDesciptionActivity(menuObject.getString("desc"));
 			
-				             afu.setAverageMark(Double.parseDouble(menuObject.getString("averageMark")));
+				             afu.setAverageMark(Float.parseFloat(menuObject.getString("averageMark")));
 				            
 				             afu.setLatitude(menuObject.getString("latitude"));
 				         
@@ -146,7 +145,7 @@ public class LoginActivity extends Activity {
 
 				             afu.setFocusOn(Boolean.parseBoolean(menuObject.getString("focusOn")));
 
-				             afu.setPicture(menuObject.getString("picture"));
+				             afu.setPictureActivity(menuObject.getString("picture"));
 
 				             Constants.tabActivityForUser.add(afu);
 	

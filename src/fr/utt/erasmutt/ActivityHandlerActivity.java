@@ -20,7 +20,7 @@ public class ActivityHandlerActivity extends FragmentActivity implements OnHeadl
 		setContentView(R.layout.activity_activity_handler);
 		
 		getActionBar().setDisplayHomeAsUpEnabled(true);
-		getActionBar().setTitle("Recherche de : " + getIntent().getExtras().getString("query"));
+		getActionBar().setTitle(R.string.title_activity_activity_handler + getIntent().getExtras().getString("query"));
 		
 	     // Check whether the activity is using the layout version with
         // the fragment_container FrameLayout. If so, we must add the first fragment
@@ -40,7 +40,7 @@ public class ActivityHandlerActivity extends FragmentActivity implements OnHeadl
             // pass the Intent's extras to the fragment as arguments
             firstFragment.setArguments(getIntent().getExtras());
 
-            // Add the fragment to the 'fragment_container' FrameLayout
+            // Add the fragment to the 'content_frame' FrameLayout
             getSupportFragmentManager().beginTransaction().add(R.id.content_frame, firstFragment).commit();
         }
         
@@ -48,11 +48,12 @@ public class ActivityHandlerActivity extends FragmentActivity implements OnHeadl
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.activity_handler, menu);
 		return true;
 	}
 	
+	
+	//Lorsque l'on sélectionne un élément on charge le détails de l'activité dans le Frame ou on actualise le contenu du fragment
 	@Override
 	public void onArticleSelected(int position) {
 	       // The user selected the headline of an article from the HeadlinesFragment
@@ -60,14 +61,14 @@ public class ActivityHandlerActivity extends FragmentActivity implements OnHeadl
         // Capture the article fragment from the activity layout
         DetailsActivityFragment articleFrag = (DetailsActivityFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_user_details);
 
+        //Si le détail de l'activité est présent alors on est dans un affichage tablette
         if (articleFrag != null) {
-            // If article frag is available, we're in two-pane layout...
-
             // Call a method in the ArticleFragment to update its content
             articleFrag.updateArticleView(position);
 
-        } else {
-            // If the frag is not available, we're in the one-pane layout and must swap frags...
+        }
+        //Sinon on est dans un affichage smartphone avec un framelayout
+        else {
 
             // Create fragment and give it an argument for the selected article
             DetailsActivityFragment newFragment = new DetailsActivityFragment();

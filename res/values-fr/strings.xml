@@ -8,7 +8,7 @@
     <string name="title_activity_home">ErasmUTT</string>
     <string name="title_activity_new_account">Nouveau Compte</string>
     <string name="title_activity_map">A proximité</string>
-    <string name="title_activity_activity_handler">ActivityHandlerActivity</string>
+    <string name="title_activity_activity_handler">Recherche de : </string>
 	<string name="title_activity_user_desc">Mon compte</string>
     
     <!-- Titres des menus -->

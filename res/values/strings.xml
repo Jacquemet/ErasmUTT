@@ -8,7 +8,7 @@
     <string name="title_activity_home">ErasmUTT</string>
     <string name="title_activity_new_account">New Account</string>
     <string name="title_activity_map">Nearby</string>
-    <string name="title_activity_activity_handler">ActivityHandlerActivity</string>
+    <string name="title_activity_activity_handler">Search for : </string>
 	<string name="title_activity_user_desc">My Account</string>
 
     <!-- Menu Titles -->

@@ -1,12 +1,11 @@
 package fr.utt.erasmutt.fragments.activities;
 
-import fr.utt.erasmutt.R;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import fr.utt.erasmutt.R;
 
 public class DetailsActivityFragment extends Fragment {
 
@@ -47,7 +46,7 @@ public class DetailsActivityFragment extends Fragment {
 	    }
 
 	    public void updateArticleView(int position) {
-	        TextView article = (TextView) getActivity().findViewById(R.id.fragment_user_details);
+	        //TextView article = (TextView) getActivity().findViewById(R.id.fragment_user_details);
 	        //article.setText(Ipsum.Articles[position]);
 	        mCurrentPosition = position;
 	    }

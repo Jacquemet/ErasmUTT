@@ -1,4 +1,4 @@
-package sqlite;
+package fr.utt.erasmutt.sqlite;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
