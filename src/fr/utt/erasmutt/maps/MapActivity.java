@@ -1,7 +1,6 @@
 package fr.utt.erasmutt.maps;
 
 import android.app.Activity;
-import android.graphics.drawable.ColorDrawable;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
@@ -30,7 +29,6 @@ public class MapActivity extends Activity implements LocationListener{
 		setContentView(R.layout.activity_map);
 
 		getActionBar().setDisplayHomeAsUpEnabled(true);
-		getActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.background_blue)));
 		
         // Getting GoogleMap object from the fragment
 		map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();

@@ -7,52 +7,62 @@
 
     <string name="title_activity_home">ErasmUTT</string>
     <string name="title_activity_new_account">New Account</string>
-    <string name="title_activity_map">MapActivity</string>
+    <string name="title_activity_map">Nearby</string>
+    <string name="title_activity_activity_handler">ActivityHandlerActivity</string>
+	<string name="title_activity_user_desc">My Account</string>
 
     <!-- Menu Titles -->
+    
     <string name="action_settings">Settings</string>
     <string name="action_location">Nearby</string>
     <string name="action_help">Help</string>
     <string name="action_logout">Sign out</string>
     <string name="action_search">Search</string>
 
-    <!-- Other -->
-    <string name="textLabel_mail">Your E-mail address : </string>
-    <string name="textLabel_password">Your password : </string>
-    <string name="textButton_signIn">Sign in</string>
-    <string name="text_createAccount">Sign up for ErasmUTT</string>
-    <string name="query_hint">Search</string>
-
-    <string-array name="text_menu_array">
+    <!-- Navigation Drawer Menu -->
+    
+   	<string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
+    
+        <string-array name="text_menu_array">
         <item>ErasmUTT Home</item>
         <item>My Account</item>
         <item>My Groups</item>
         <item>My Review</item>
     </string-array>
-
+    
+    <!-- Network -->
+    
     <string name="error_network">Network error, make sure you are connected and try again.</string>
-    <string name="invalid_password">Couple login / password invalid, please try again</string>
     <string name="network_disabled">Network disabled, please make sure to enable it.</string>
-    <string name="password_repeat_error">Error password, please make sure that the two password are the same</string>
-    <string name="createAccountOK">Your account has been created</string>
-    <string name="createAccountNOK">Error during the account creation</string>
-	<string name="setAccountOK">Your account has been modified</string>
-	<string name="setAccountNOK">Error during the account modification</string>    
-	<string name="drawer_open">Open navigation drawer</string>
-    <string name="drawer_close">Close navigation drawer</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="repeatPassword">Repeat your password</string>
+    	    
+    <!-- Account -->
+    
+    <string name="title_create_new_account">Create a new account</string>
+    	<string name="desc_account">Your account</string>
+    <string name="hello">Hello %1$s!</string>
+    
     <string name="firstname">"Your firstname : "</string>
     <string name="lastname">Your lastname :</string>
-    <string name="title_create_new_account">Create a new account</string>
-    <string name="submit_label">Submit</string>
-    <string name="cancel_label">Cancel</string>
-    <string name="hello">Hello %1$s!</string>
-    <string name="title_activity_activity_handler">ActivityHandlerActivity</string>
-	<string name="title_activity_user_desc">UserDescActivity</string>
+    <string name="textLabel_mail">Your E-mail address : </string>
+    <string name="textLabel_password">Your password : </string>
+    <string name="repeatPassword">Repeat your password</string>
+    <string name="textButton_signIn">Sign in</string>
+    <string name="text_createAccount">Sign up for ErasmUTT</string>
 
-	<string name="desc_account">Your account</string>
-	<string name="set_label">Set</string>
+	<string name="password_repeat_error">Error password, please make sure that the two password are the same</string>
+    <string name="invalid_password">Couple login / password invalid, please try again</string>
+	<string name="createAccountNOK">Error during the account creation</string>
+	<string name="setAccountNOK">Error during the account modification</string>   
+   
+    <string name="createAccountOK">Your account has been created</string>
+	<string name="setAccountOK">Your account has been modified</string>
+ 
+	<!-- Other -->
 	
+	<string name="set_label">Set</string>
+	<string name="submit_label">Submit</string>
+    <string name="cancel_label">Cancel</string>
+	<string name="query_hint">Search</string>
 
 </resources>

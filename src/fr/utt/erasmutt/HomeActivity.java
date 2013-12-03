@@ -1,17 +1,16 @@
 package fr.utt.erasmutt;
 
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -23,6 +22,10 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.SearchView.OnQueryTextListener;
+import android.widget.TextView;
+import android.widget.Toast;
+import fr.utt.erasmutt.fragments.UserDetailsFragment;
 import fr.utt.erasmutt.maps.MapActivity;
 
 public class HomeActivity extends FragmentActivity {
@@ -34,6 +37,8 @@ public class HomeActivity extends FragmentActivity {
     private CharSequence mDrawerTitle;
     private CharSequence mTitle;
     private String[] mTitles;
+    
+    private UserDetailsFragment userDetailsFrag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,8 +60,6 @@ public class HomeActivity extends FragmentActivity {
         // enable ActionBar app icon to behave as action to toggle nav drawer
         getActionBar().setDisplayHomeAsUpEnabled(true);
         getActionBar().setHomeButtonEnabled(true);
-        //Set a blue Background
-        getActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.background_blue)));
 
         // ActionBarDrawerToggle ties together the the proper interactions
         // between the sliding drawer and the action bar app icon
@@ -90,13 +93,56 @@ public class HomeActivity extends FragmentActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.home, menu);
         
-        MenuItem searchItem = menu.findItem(R.id.action_search);
-        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        // Associate searchable configuration with the SearchView
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        final MenuItem searchItem = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        
         searchView.setQueryHint(getString(R.string.query_hint));
         //TODO:Configure the search info and add any event listeners 
-        // Doc :  (https://developer.android.com/reference/android/widget/SearchView.html)
-
+        /** BULLSHIT Doc :  
+         * https://developer.android.com/guide/topics/ui/actionbar.html#ActionView
+         * https://developer.android.com/reference/android/widget/SearchView.html
+         * https://developer.android.com/guide/topics/search/search-dialog.html#SearchableConfiguration
+         * https://developer.android.com/training/search/setup.html#create-sa
+         * https://developer.android.com/guide/topics/search/searchable-config.html
+         * https://developer.android.com/guide/topics/search/index.html
+         */
         
+        //Transparent white HintTextColor 
+        int searchPlateId = searchView.getContext().getResources().getIdentifier("android:id/search_plate", null, null);
+        View searchPlate = searchView.findViewById(searchPlateId);
+        if (searchPlate!=null) {
+            int searchTextId = searchPlate.getContext().getResources().getIdentifier("android:id/search_src_text", null, null);
+            TextView searchText = (TextView) searchPlate.findViewById(searchTextId);
+            if (searchText!=null) {
+	            searchText.setHintTextColor(getResources().getColor(R.color.transparent_white));
+            }
+        }
+        
+        searchView.setIconifiedByDefault(false);
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        
+        //Action on the SearchView
+        searchView.setOnQueryTextListener(new OnQueryTextListener() {
+			
+			@Override
+			public boolean onQueryTextSubmit(String query) {
+				//On ferme la barre de recherhce et on lance l'activité qui affiche le résultat
+				searchItem.collapseActionView();
+	            Toast.makeText(getApplicationContext(),"COME ON !! " + query, Toast.LENGTH_LONG).show();
+				Intent intent = new Intent(getApplicationContext(), ActivityHandlerActivity.class);
+				intent.putExtra("query", query);
+				startActivity(intent);
+	            return false;
+			}
+			
+			@Override
+			public boolean onQueryTextChange(String newText) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+		});
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -125,17 +171,8 @@ public class HomeActivity extends FragmentActivity {
             return true;
         
         case R.id.action_settings:
-        	/*
-            // create intent to perform web search for this planet
-            Intent intent = new Intent(Intent.ACTION_WEB_SEARCH);
-            intent.putExtra(SearchManager.QUERY, getActionBar().getTitle());
-            // catch event that there's no activity to handle intent
-            if (intent.resolveActivity(getPackageManager()) != null) {
-                startActivity(intent);
-            } else {
-                Toast.makeText(this, R.string.app_not_available, Toast.LENGTH_LONG).show();
-            }*/
-            return true;
+
+        	return true;
         default:
             return super.onOptionsItemSelected(item);
         }
@@ -159,7 +196,9 @@ public class HomeActivity extends FragmentActivity {
 			
 			break;
 		case 1:
-			
+			//TODO : Check if the fragment is active
+				showFragment(userDetailsFrag);
+				
 			break;
 		case 2:
 			
@@ -238,13 +277,12 @@ public class HomeActivity extends FragmentActivity {
     
 	 // Setup the fragment to show here
     private void setupFragments() {
-        final FragmentManager fm = getSupportFragmentManager();
+        FragmentManager fm = getSupportFragmentManager();
         
-        /*
-        this.stFragment = (SendTweetFragment) fm.findFragmentById(R.id.frag_new_tweet);
-        if (this.stFragment == null) {
-            this.stFragment = new SendTweetFragment();
-        }*/
+        this.userDetailsFrag = (UserDetailsFragment) fm.findFragmentById(R.id.fragment_user_details);
+        if (this.userDetailsFrag == null) {
+            this.userDetailsFrag = new UserDetailsFragment();
+        }
 
     }
     
@@ -253,12 +291,8 @@ public class HomeActivity extends FragmentActivity {
         if (fragment == null)
             return;
  
-        final FragmentManager fm =  getSupportFragmentManager();
-        final FragmentTransaction ft = fm.beginTransaction();
-        // We can also animate the changing of fragment
-        ft.setCustomAnimations(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
-        ft.replace(R.id.content_frame, fragment);
-        ft.commit();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
     }
     
 }

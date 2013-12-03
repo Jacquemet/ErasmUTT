@@ -1,26 +1,31 @@
-package fr.utt.erasmutt;
+package fr.utt.erasmutt.fragments;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.view.Menu;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.Toast;
+import fr.utt.erasmutt.Constants;
+import fr.utt.erasmutt.LoginActivity;
+import fr.utt.erasmutt.R;
 import fr.utt.erasmutt.networkConnection.HttpCallback;
 import fr.utt.erasmutt.networkConnection.HttpRequest;
 
-public class UserDetailsActivity extends Activity {
+public class UserDetailsFragment extends Fragment {
 
 	EditText mail = null;
 	EditText firstname = null;
@@ -32,19 +37,18 @@ public class UserDetailsActivity extends Activity {
 	ProgressBar progBar = null;
 	private HttpRequest requestSetUser = null;
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_user_details);
-		getActionBar().hide();
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		ScrollView sv = (ScrollView) inflater.inflate(R.layout.fragment_user_details, container, false);
 		
-		mail = (EditText) findViewById(R.id.editTextDescAccount_mail);
-		firstname = (EditText) findViewById(R.id.editTextDescAccount_firstname);
-		lastname = (EditText) findViewById(R.id.editTextDescAccount_lastname);
-		buttonSubmit = (Button) findViewById(R.id.buttonDescAccount_submit);
-		buttonCancel = (Button) findViewById(R.id.buttonDescAccount_cancel);
-		imgEdit = (ImageView) findViewById(R.id.imageEditButtoun);
 		
-		progBar = (ProgressBar) findViewById(R.id.progressDescBar);
+		mail = (EditText) sv.findViewById(R.id.editTextDescAccount_mail);
+		firstname = (EditText) sv.findViewById(R.id.editTextDescAccount_firstname);
+		lastname = (EditText) sv.findViewById(R.id.editTextDescAccount_lastname);
+		buttonSubmit = (Button) sv.findViewById(R.id.buttonDescAccount_submit);
+		buttonCancel = (Button) sv.findViewById(R.id.buttonDescAccount_cancel);
+		imgEdit = (ImageView) sv.findViewById(R.id.imageEditButtoun);
+		
+		progBar = (ProgressBar) sv.findViewById(R.id.progressDescBar);
 		
 		mail.setText(Constants.user.getMail());
 		firstname.setText(Constants.user.getFirstname());
@@ -96,16 +100,16 @@ public class UserDetailsActivity extends Activity {
 								Constants.user.setLastname(lastname.getText().toString());
 								Constants.user.setMail(mail.getText().toString());
 								
-								Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+								Intent intent = new Intent(getActivity().getApplicationContext(), LoginActivity.class);
 								progBar.setVisibility(View.INVISIBLE);
-								Toast.makeText(getApplicationContext(), R.string.setAccountOK, Toast.LENGTH_LONG).show();
+								Toast.makeText(getActivity().getApplicationContext(), R.string.setAccountOK, Toast.LENGTH_LONG).show();
 								startActivity(intent);
 								
 							} else {
-								Toast.makeText(getApplicationContext(), R.string.setAccountNOK, Toast.LENGTH_LONG).show();
+								Toast.makeText(getActivity().getApplicationContext(), R.string.setAccountNOK, Toast.LENGTH_LONG).show();
 							}
 						} catch (JSONException e) {
-							Toast.makeText(getApplicationContext(), R.string.error_network, Toast.LENGTH_LONG).show();
+							Toast.makeText(getActivity().getApplicationContext(), R.string.error_network, Toast.LENGTH_LONG).show();
 						}
 						
 						return null;
@@ -113,7 +117,7 @@ public class UserDetailsActivity extends Activity {
 				});
 				
 				//On vérifie que la connexion au réseau est valide
-		        ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+		        ConnectivityManager connMgr = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
 		        NetworkInfo activeInfo = connMgr.getActiveNetworkInfo();
 		        
 		        if (activeInfo != null && activeInfo.isConnected()) {
@@ -126,19 +130,14 @@ public class UserDetailsActivity extends Activity {
 					buttonCancel.setEnabled(false);
 					progBar.setVisibility(View.VISIBLE);
 		        }else {
-		        	Toast.makeText(getApplicationContext(), R.string.network_disabled, Toast.LENGTH_LONG).show();
+		        	Toast.makeText(getActivity().getApplicationContext(), R.string.network_disabled, Toast.LENGTH_LONG).show();
 		        }
 			}
 			
 			
 		});
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.user_details, menu);
-		return true;
+		
+		return sv;
 	}
 
 }

@@ -101,6 +101,23 @@
 			}
 			
 		}
+		//rechercher une activite
+		else if($typeActivities == $typeActivitiesArray[3]){
+			if(isset($_GET['token'])&&!empty($_GET['token'])){
+				$token = $_GET['token'];
+				if(isset($_GET['query'])&&!empty($_GET['query'])){
+					$query = $_GET['query'];
+					searchActivite($db,$token,$messageArray);
+				}				
+			}
+			else{
+				$jsonArray["typeActivities"]=$typeActivitiesArray[3];
+				$jsonArray["error"]="true";
+				$jsonArray["message"]="erreur";
+				echo json_encode ($jsonArray);
+			}
+			
+		}
 		
 	}
 	
@@ -178,6 +195,39 @@
 				$messageArray[] = $messageContent;
 			}
 			$jsonArray["listActivities"]=$messageArray;
+			
+		}
+		else{
+			$jsonArray["message"]="erreur de token";
+			$jsonArray["error"]="true";
+		}
+		echo json_encode ($jsonArray);
+	}
+	
+		function searchActivite($db,$token,$messageArray,$query){
+			
+		$stmt= $db->prepare("SELECT COUNT(idUser) AS nbUser FROM users where token= '$token';");
+        $stmt->execute(array($token));
+		$res = $stmt->fetch(PDO::FETCH_ASSOC);
+		$jsonArray["typeActivities"]="search";
+		if($res['nbUser'] ==  1){
+			$statement=$db->prepare("SELECT * FROM activities where = '*$query*'");
+			$statement->execute($query);
+			$jsonArray["message"]="searchOK";
+			$jsonArray["error"]="false";
+			while( $row =$statement->fetch(PDO::FETCH_ASSOC) ) {
+				$messageContent["idActivity"]=$row["idActivity"];
+				$messageContent["name"]=$row["name"];
+				$messageContent["desc"]=$row["descriptionActivity"];
+				$messageContent["picture"]=$row["pictureActivity"];
+				$messageContent["averageMark"]=$row["averageMark"];
+				$messageContent["longitude"]=$row["longitude"];
+				$messageContent["latitude"]=$row["latitude"];
+				$messageContent["website"]=$row["website"];
+				$messageContent["focusOn"]=$row["focusOn"];
+				$messageArray[] = $messageContent;
+			}
+			$jsonArray["resultActivities"]=$messageArray;
 			
 		}
 		else{

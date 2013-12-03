@@ -1,55 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <string name="app_name">ErasmUTT</string>
 
-     <!-- Titres des Activités -->
-     
-     <string name="title_activity_home">ErasmUTT</string>
-            
-     <!-- Titres des menus -->
-        
+    <!-- Titres des Activités -->
+
+    <string name="title_activity_home">ErasmUTT</string>
+    <string name="title_activity_new_account">Nouveau Compte</string>
+    <string name="title_activity_map">A proximité</string>
+    <string name="title_activity_activity_handler">ActivityHandlerActivity</string>
+	<string name="title_activity_user_desc">Mon compte</string>
+    
+    <!-- Titres des menus -->
+
     <string name="action_settings">Paramètres</string>
-	<string name="action_location">À proximité</string>
-	<string name="action_help">Aide</string>
+    <string name="action_location">À proximité</string>
+    <string name="action_help">Aide</string>
     <string name="action_logout">Se Déconnecter</string>
     <string name="action_search">Rechercher</string>
-    
-    <!-- Autres -->
-    
-    <string name="textLabel_mail">Votre adresse E-mail : </string>
-	<string name="textLabel_password">Votre mot de passe : </string>
-	<string name="textButton_signIn">Se connecter</string>
-	<string name="text_createAccount">Créer un compte ErasmUTT</string>
-	
-    <string name="query_hint">Rechercher</string>
-    
+
+    <!-- Navigation Drawer Menu -->
+
+    <string name="drawer_open">Ouvrir navigation drawer</string>
+    <string name="drawer_close">Fermer navigation drawer</string>
+
     <string-array name="text_menu_array">
-		<item>Accueil ErasmUTT</item>
+        <item>ErasmUTT</item>
         <item>Mon Compte</item>
         <item>Mes Groupes</item>
         <item>Mes Avis</item>
     </string-array>
 
-    <string name="drawer_open">Ouvrir navigation drawer</string>
-    <string name="drawer_close">Fermer navigation drawer</string>
-    
+    <!-- Réseau -->
+
     <string name="error_network">Erreur de réseau, assurez-vous que vous êtes connecté et essayez de nouveau.</string>
-    <string name="invalid_password">Couple login / mot de passe invalide, essayez de nouveau.</string>
-    <string name="network_disabled">"Réseau désactivé, s'il vous plaît assurez-vous de l'activer."</string>    
-    <string name="password_repeat_error">"Erreur mot de passe, s'il vous plait assurez-vous que les mots de passes soit les mêmes"</string>
-    <string name="createAccountOK">Votre compte a été créé"</string>
+    <string name="network_disabled">"Réseau désactivé, s'il vous plaît assurez-vous de l'activer."</string>
     <string name="createAccountNOK">Erreur lors de la création du compte</string>
-    <string name="setAccountOK">Votre compte a été modifié</string>
-	<string name="setAccountNOK">Erreur lors de la modification de votre compte</string>
-    
+
+    <!-- Compte -->
+
+    <string name="title_create_new_account">Creer un compte</string>
+    <string name="hello">Bonjour %1$s!</string>
+    <string name="desc_account">Votre compte</string>
+    <string name="textLabel_mail">Votre adresse E-mail : </string>
+    <string name="textLabel_password">Votre mot de passe : </string>
+    <string name="textButton_signIn">Se connecter</string>
+    <string name="text_createAccount">Créer un compte ErasmUTT</string>
     <string name="repeatPassword">Repeter votre password</string>
     <string name="firstname">Votre prenom : </string>
     <string name="lastname">Votre nom :</string>
-    <string name="title_create_new_account">Creer un compte</string>
+    <string name="createAccountOK">Votre compte a été créé"</string>
+    <string name="setAccountOK">Votre compte a été modifié</string>
+    <string name="invalid_password">Couple login / mot de passe invalide, essayez de nouveau.</string>
+    <string name="password_repeat_error">"Erreur mot de passe, s'il vous plait assurez-vous que les mots de passes soit les mêmes"</string>
+    <string name="setAccountNOK">Erreur lors de la modification de votre compte</string>
+
+    <!-- Autres -->
+
     <string name="submit_label">Envoyer</string>
     <string name="cancel_label">Annuler</string>
-    
-    <string name="hello">Bonjour %1$s!</string>
-    <string name="desc_account">Votre compte</string>
+    <string name="query_hint">Rechercher</string>
     <string name="set_label">Modifier</string>
+
 </resources>

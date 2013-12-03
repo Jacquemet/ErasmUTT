@@ -36,12 +36,15 @@
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
+<!--         <meta-data
+            android:name="android.app.default_searchable"
+            android:value=".ActivityHandlerActivity" />--> 
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyDIfspqlv_cJ1659pie-EymPBcXnTKNcpQ" />
 
-<!-- thibault key : AIzaSyDIfspqlv_cJ1659pie-EymPBcXnTKNcpQ -->
-<!-- Kevin key : AIzaSyCUkrU5YSPQNuYUDVigAZhGuL7FWupDH-0 -->
+        <!-- thibault key : AIzaSyDIfspqlv_cJ1659pie-EymPBcXnTKNcpQ -->
+        <!-- Kevin key : AIzaSyCUkrU5YSPQNuYUDVigAZhGuL7FWupDH-0 -->
 
         <activity
             android:name="fr.utt.erasmutt.LoginActivity"
@@ -70,11 +73,18 @@
         <activity
             android:name="fr.utt.erasmutt.ActivityHandlerActivity"
             android:label="@string/title_activity_activity_handler" >
+<!--            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.app.default_searchable"
+                android:value="@xml/searchable" />-->  
         </activity>
-		<activity
-			android:name="fr.utt.erasmutt.UserDetailsActivity"
-			android:label="@string/title_activity_user_desc" >
-		</activity>
+        <activity
+            android:name="fr.utt.erasmutt.fragments.UserDetailsFragment"
+            android:label="@string/title_activity_user_desc" >
+        </activity>
     </application>
 
 </manifest>
