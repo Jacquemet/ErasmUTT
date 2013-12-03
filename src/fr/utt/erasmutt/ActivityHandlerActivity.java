@@ -1,21 +1,15 @@
 package fr.utt.erasmutt;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
 import android.view.Menu;
-import android.widget.Toast;
+import fr.utt.erasmutt.fragments.activities.DetailsActivityFragment;
 import fr.utt.erasmutt.fragments.activities.ListActivityFragment;
-import fr.utt.erasmutt.networkConnection.HttpCallback;
+import fr.utt.erasmutt.fragments.activities.ListActivityFragment.OnHeadlineSelectedListener;
 import fr.utt.erasmutt.networkConnection.HttpRequest;
 
-public class ActivityHandlerActivity extends FragmentActivity {
+public class ActivityHandlerActivity extends FragmentActivity implements OnHeadlineSelectedListener{
 
 	HttpRequest requestSearch;
 	String[] titleActivity;
@@ -25,16 +19,31 @@ public class ActivityHandlerActivity extends FragmentActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_activity_handler);
 		
-		//On vérifie que la connexion au réseau est valide
-        ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeInfo = connMgr.getActiveNetworkInfo();
-        if (activeInfo != null && activeInfo.isConnected()) {
-        	loadActitivies();
-        } else {
-        	Toast.makeText(getApplicationContext(), R.string.network_disabled, Toast.LENGTH_LONG).show();
-        }
+		getActionBar().setDisplayHomeAsUpEnabled(true);
+		getActionBar().setTitle("Recherche de : " + getIntent().getExtras().getString("query"));
 		
+	     // Check whether the activity is using the layout version with
+        // the fragment_container FrameLayout. If so, we must add the first fragment
+        if (findViewById(R.id.content_frame) != null) {
 
+            // However, if we're being restored from a previous state,
+            // then we don't need to do anything and should return or else
+            // we could end up with overlapping fragments.
+            if (savedInstanceState != null) {
+                return;
+            }
+
+            // Create an instance of ExampleFragment
+            ListActivityFragment firstFragment = new ListActivityFragment();
+
+            // In case this activity was started with special instructions from an Intent,
+            // pass the Intent's extras to the fragment as arguments
+            firstFragment.setArguments(getIntent().getExtras());
+
+            // Add the fragment to the 'fragment_container' FrameLayout
+            getSupportFragmentManager().beginTransaction().add(R.id.content_frame, firstFragment).commit();
+        }
+        
 	}
 
 	@Override
@@ -44,84 +53,37 @@ public class ActivityHandlerActivity extends FragmentActivity {
 		return true;
 	}
 	
-	private void loadActitivies(){
-		requestSearch = new HttpRequest(new HttpCallback() {
-			
-			@Override
-			public Object call(JSONObject jsonResponse) {
+	@Override
+	public void onArticleSelected(int position) {
+	       // The user selected the headline of an article from the HeadlinesFragment
 
-				try {
-					//TODO : Exploiter les données reçues
-					if (!jsonResponse.getBoolean("error")) {
+        // Capture the article fragment from the activity layout
+        DetailsActivityFragment articleFrag = (DetailsActivityFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_user_details);
 
-						JSONArray jObject = jsonResponse.getJSONArray("listActivities");
+        if (articleFrag != null) {
+            // If article frag is available, we're in two-pane layout...
 
-				        for (int i = 0; i < jObject.length(); i++) {
-				        	 JSONObject menuObject = jObject.getJSONObject(i);
-				        	 titleActivity[i] = menuObject.getString("name");
-				        }
-						displayList();
-					} else {
-						
-					}
-				} catch (JSONException e) {
-					Toast.makeText(getApplicationContext(),"erreur parsage", Toast.LENGTH_LONG).show();
-				}
-				
-				return null;
-			}
-		});
-		
-		requestSearch.execute(Constants.urlRoot+"activiesManager.php?typeActivies=lister&token="+Constants.user.getToken());
-	
-		
-	}
+            // Call a method in the ArticleFragment to update its content
+            articleFrag.updateArticleView(position);
 
-	
-	private void displayList() {
-		
-	     // Check whether the activity is using the layout version with
-        // the fragment_container FrameLayout. If so, we must add the first fragment
-        if (findViewById(R.id.content_frame) != null) {
+        } else {
+            // If the frag is not available, we're in the one-pane layout and must swap frags...
 
-            // However, if we're being restored from a previous state,
-            // then we don't need to do anything and should return or else
-            // we could end up with overlapping fragments.
-            // if (savedInstanceState != null) {
-            //    return;
-            //}
+            // Create fragment and give it an argument for the selected article
+            DetailsActivityFragment newFragment = new DetailsActivityFragment();
+            Bundle args = new Bundle();
+            args.putInt(DetailsActivityFragment.ARG_POSITION, position);
+            newFragment.setArguments(args);
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
-            // Create an instance of ExampleFragment
-            ListActivityFragment firstFragment = new ListActivityFragment();
+            // Replace whatever is in the fragment_container view with this fragment,
+            // and add the transaction to the back stack so the user can navigate back
+            transaction.replace(R.id.content_frame, newFragment);
+            transaction.addToBackStack(null);
 
-            // In case this activity was started with special instructions from an Intent,
-            // pass the Intent's extras to the fragment as arguments
-            firstFragment.setArguments(getIntent().getExtras());
-            Bundle bundle = new Bundle();
-            bundle.putStringArray("titleActivity", titleActivity);
-            firstFragment.setArguments(bundle);
-
-            // Add the fragment to the 'fragment_container' FrameLayout
-            getSupportFragmentManager().beginTransaction().add(R.id.content_frame, firstFragment).commit();
-        }
-        
+            // Commit the transaction
+            transaction.commit();
+        }		
 	}
 	
-/*    @Override
-    protected void onNewIntent(Intent intent) {
-    	setIntent(intent);
-        handleIntent(intent);
-    }
-
-    private void handleIntent(Intent intent) {
-
-        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-            String query = intent.getStringExtra(SearchManager.QUERY);
-            //use the query to search your data somehow
-            Toast.makeText(getApplicationContext(),"Query : "+query, Toast.LENGTH_LONG).show();
-        }
-    }
-*/
-
-
 }

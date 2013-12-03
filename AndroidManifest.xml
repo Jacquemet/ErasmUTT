@@ -36,9 +36,6 @@
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-<!--         <meta-data
-            android:name="android.app.default_searchable"
-            android:value=".ActivityHandlerActivity" />--> 
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyDIfspqlv_cJ1659pie-EymPBcXnTKNcpQ" />
@@ -72,14 +69,8 @@
         </activity>
         <activity
             android:name="fr.utt.erasmutt.ActivityHandlerActivity"
-            android:label="@string/title_activity_activity_handler" >
-<!--            <intent-filter>
-                <action android:name="android.intent.action.SEARCH" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.app.default_searchable"
-                android:value="@xml/searchable" />-->  
+            android:label="@string/title_activity_activity_handler"
+            android:parentActivityName="fr.utt.erasmutt.LoginActivity" >
         </activity>
         <activity
             android:name="fr.utt.erasmutt.fragments.UserDetailsFragment"

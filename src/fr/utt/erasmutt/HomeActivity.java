@@ -24,7 +24,6 @@ import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.SearchView.OnQueryTextListener;
 import android.widget.TextView;
-import android.widget.Toast;
 import fr.utt.erasmutt.fragments.UserDetailsFragment;
 import fr.utt.erasmutt.maps.MapActivity;
 
@@ -130,7 +129,6 @@ public class HomeActivity extends FragmentActivity {
 			public boolean onQueryTextSubmit(String query) {
 				//On ferme la barre de recherhce et on lance l'activité qui affiche le résultat
 				searchItem.collapseActionView();
-	            Toast.makeText(getApplicationContext(),"COME ON !! " + query, Toast.LENGTH_LONG).show();
 				Intent intent = new Intent(getApplicationContext(), ActivityHandlerActivity.class);
 				intent.putExtra("query", query);
 				startActivity(intent);

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -12,8 +13,6 @@ import fr.utt.erasmutt.R;
 public class ListActivityFragment extends ListFragment{
 
     OnHeadlineSelectedListener mCallback;
-
-    String[] titleActivity;
     
     // The container Activity must implement this interface so the frag can deliver messages
     public interface OnHeadlineSelectedListener {
@@ -30,7 +29,12 @@ public class ListActivityFragment extends ListFragment{
                 android.R.layout.simple_list_item_activated_1 : android.R.layout.simple_list_item_1;
 
         Bundle bundle = getArguments();
-        titleActivity = bundle.getStringArray("titleActivity");
+        Log.d("QUERYYYYYYYYYY", bundle.getString("query").toString());
+        
+        String[] titleActivity = {
+                "Article One",
+                "Article Two"
+            };
         
         // Create an array adapter for the list view, using the Ipsum headlines array
         setListAdapter(new ArrayAdapter<String>(getActivity(), layout, titleActivity));
@@ -56,8 +60,7 @@ public class ListActivityFragment extends ListFragment{
         try {
             mCallback = (OnHeadlineSelectedListener) activity;
         } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement OnHeadlineSelectedListener");
+            throw new ClassCastException(activity.toString() + " must implement OnHeadlineSelectedListener");
         }
     }
 
