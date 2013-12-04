@@ -20,7 +20,7 @@ public class ActivityHandlerActivity extends FragmentActivity implements OnHeadl
 		setContentView(R.layout.activity_activity_handler);
 		
 		getActionBar().setDisplayHomeAsUpEnabled(true);
-		getActionBar().setTitle(R.string.title_activity_activity_handler + getIntent().getExtras().getString("query"));
+		getActionBar().setTitle(getResources().getString(R.string.title_activity_activity_handler) +" "+ getIntent().getExtras().getString("query"));
 		
 	     // Check whether the activity is using the layout version with
         // the fragment_container FrameLayout. If so, we must add the first fragment

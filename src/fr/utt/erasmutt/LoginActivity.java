@@ -76,6 +76,8 @@ public class LoginActivity extends Activity {
 								Constants.user.setLastname(jsonResponse.getString("lastname"));
 								Constants.user.setMail(jsonResponse.getString("mail"));
 								
+								//TODO : Vérifier que le User n'existe pas déjà 
+								//db.isExistUser(idUser);
 								db.addUser(Constants.user);
 								db.getUser();
 								
@@ -131,29 +133,24 @@ public class LoginActivity extends Activity {
 
 				        for (int i = 0; i < jObject.length(); i++) {
 
+				        	JSONObject menuObject = jObject.getJSONObject(i);
+
 				        	 Activities afu= new Activities();
-
-				             JSONObject menuObject = jObject.getJSONObject(i);
-
 				             afu.setIdActivity(Integer.parseInt(menuObject.getString("idActivity")));
-				  
 				             afu.setName(menuObject.getString("name"));
-				           
 				             afu.setDesciptionActivity(menuObject.getString("desc"));
-			
 				             afu.setAverageMark(Float.parseFloat(menuObject.getString("averageMark")));
-				            
 				             afu.setLatitude(menuObject.getString("latitude"));
-				         
 				             afu.setLongitude(menuObject.getString("longitude"));
-				       
 				             afu.setWebsite(menuObject.getString("website"));
-
 				             afu.setFocusOn(Boolean.parseBoolean(menuObject.getString("focusOn")));
-
 				             afu.setPictureActivity(menuObject.getString("picture"));
-				             
-				             db.addActivity(afu);
+				        	
+				        	if(!db.isExistActivity(Integer.parseInt(menuObject.getString("idActivity")))) {
+					             db.addActivity(afu);
+				        	} else {
+				        		db.updateActivity(afu);
+				        	}
 				            
 				        }
 

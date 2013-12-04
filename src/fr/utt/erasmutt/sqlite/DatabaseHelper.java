@@ -196,7 +196,29 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	        //return user;
 	    }
 
-
+	 public Boolean isExistUser(int idUser){
+		 
+	        // 1. get reference to readable DB
+	        SQLiteDatabase db = this.getReadableDatabase();
+	 
+	        // 1. build the query
+	        String query = "SELECT  * FROM users where idUSer = " + idUser;
+	 
+	        // 2. get reference to writable DB
+	        Cursor cursor = db.rawQuery(query, null);
+	 
+	        // 3. if we got results get the first one
+	        if (cursor != null) {
+	        	db.close();
+	        	 return true;
+	        }
+	        else {
+	        	db.close();
+	        	return false;
+	        }
+	 
+	    }
+	 
 	 //---------------------------------------------------------------------
 	 
 	    /**
@@ -222,6 +244,29 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	        db.insert("activities", // table
 	                null, //nullColumnHack
 	                values); // key/value -> keys = column names/ values = column values
+	 
+	        // 4. close
+	        db.close();
+	    }
+	 	
+	 	//TODO : 
+	 	public void updateActivity(Activities activity){
+	        // 1. get reference to writable DB
+	        SQLiteDatabase db = this.getWritableDatabase();
+	 
+	        // 2. create ContentValues to add key "column"/value
+	        ContentValues values = new ContentValues();
+	        values.put("name", activity.getName()); 
+	        values.put("descriptionActivity", activity.getDesciptionActivity()); 
+	        values.put("pictureActivity", activity.getPictureActivity()); 
+	        values.put("averageMark", activity.getAverageMark()); 
+	        values.put("longitude", activity.getLongitude()); 
+	        values.put("latitude", activity.getLatitude()); 
+	        values.put("website", activity.getWebsite()); 
+	        values.put("focusOn", activity.getFocusOn()); 
+	 
+	        // 3. insert
+	        db.update("activities", values, "idActivity = ? ", new String[] {String.valueOf(activity.getIdActivity())});
 	 
 	        // 4. close
 	        db.close();
@@ -259,4 +304,26 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	        // return books
 	        return activities;
 	    }
+	 	
+		 public Boolean isExistActivity(int idActivity){
+			 
+		        // 1. get reference to readable DB
+		        SQLiteDatabase db = this.getReadableDatabase();
+		 
+		        // 1. build the query
+		        String query = "SELECT  * FROM activities where idActivity = " + idActivity;
+		 
+		        // 2. get reference to writable DB
+		        Cursor cursor = db.rawQuery(query, null);
+		 
+		        // 3. if we got results get the first one
+		        if (cursor != null && cursor.getCount()!=0) {
+		        	db.close();
+		        	 return true;
+		        }
+		        else {
+		        	db.close();
+		        	return false;
+		        }
+		    }
 }
