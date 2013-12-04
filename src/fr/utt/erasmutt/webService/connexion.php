@@ -2,10 +2,10 @@
 	//Changement de zone pour la date
 	date_default_timezone_set('Europe/Paris');
 
-	//connection Ã  la BD
-    $login="thikev";
-    $pass="if262012";
-    $dbname="mysql:dbname=erasmutt;host=localhost";
+	//connection à la BD
+    $login="**";
+    $pass="**";
+    $dbname="mysql:dbname=***;host=***";
     
 	$typeConnexionArray=array("ajouter","modifier","connecter");
 	
@@ -13,10 +13,10 @@
 	
     try {
         $db = new PDO($dbname, $login, $pass);
-        echo("connexion Ã  la base reussie <br/>");
+        //echo("connexion à la base reussie <br/>");
     } 
     catch (PDOException $e) {
-        print "Connexion impossible : " . $e->getMessage() . "<br/>";
+       // print "Connexion impossible : " . $e->getMessage() . "<br/>";
         die();
     }
 
@@ -179,7 +179,7 @@
 
 
 	function connexionUtilisateur($db,$password,$mail){
-		$statementConnexion=$db->prepare("SELECT COUNT(idUser) AS nbUser, firstname, banned, BannedDate, nbTentative, lastname, mail as login,password as pass FROM users where mail = ?;");
+		$statementConnexion=$db->prepare("SELECT COUNT(idUser) AS nbUser, idUser,firstname, banned, BannedDate, nbTentative, lastname, mail as login,password as pass FROM users where mail = ?;");
         $statementConnexion->execute(array($mail));    
         $res = $statementConnexion->fetch(PDO::FETCH_ASSOC);
 		$jsonArray["typeConnexion"]="Connecter";
@@ -190,6 +190,7 @@
         		//si nb tentative+1 est inférieur à 5?
 				if(($res['nbTentative']+1) < 5 ) {
 					if(md5($password.md5(SALT)) == $res['pass']){
+						$jsonArray["idUser"]=$res['idUser'];
 						$jsonArray=seConnecter($db,$mail,$res['firstname'],$res['lastname'],$jsonArray);
 					}
 					else {
@@ -223,6 +224,7 @@
 					if(md5($password.md5(SALT)) == $res['pass']){
 						$req=$db->prepare("update users set nbTentative = 0,banned=0 where mail = ?;");
 						$req->execute(array($mail));
+						$jsonArray["idUser"]=$res['idUser'];
 						$jsonArray=seConnecter($db,$mail,$res['firstname'],$res['lastname'],$jsonArray);
 					}
 					else{
@@ -243,5 +245,6 @@
 		}
 		echo json_encode ($jsonArray);
 	}
+
         
 ?>

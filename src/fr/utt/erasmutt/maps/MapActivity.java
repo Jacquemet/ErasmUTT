@@ -1,7 +1,9 @@
 package fr.utt.erasmutt.maps;
 
+import java.io.InputStream;
 import java.util.List;
 
+import android.R.integer;
 import android.app.Activity;
 import android.location.Criteria;
 import android.location.Location;
@@ -15,17 +17,17 @@ import android.view.MenuItem;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import fr.utt.erasmutt.Constants;
 import fr.utt.erasmutt.R;
 import fr.utt.erasmutt.sqlite.DatabaseHelper;
 import fr.utt.erasmutt.sqlite.model.Activities;
 
 public class MapActivity extends Activity implements LocationListener{
 	LatLng myPosition;
-	LatLng positionResto1;
+	LatLng positiontest;
 	GoogleMap map;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -75,10 +77,11 @@ public class MapActivity extends Activity implements LocationListener{
 		List<Activities> listActivityUser= db.getAllActivities();
 		for(int i=0 ; i<listActivityUser.size() ; i++) { 
 			String name =listActivityUser.get(i).getName();
-			LatLng position= new LatLng(Double.parseDouble(listActivityUser.get(i).getLatitude()),Double.parseDouble(Constants.tabActivityForUser.get(i).getLongitude()));
+			LatLng position= new LatLng(Double.parseDouble(listActivityUser.get(i).getLatitude()),Double.parseDouble(listActivityUser.get(i).getLongitude()));
+			positiontest = position;
 			map.addMarker(new MarkerOptions().position(position).title(name));
 		}
-		
+		map.moveCamera(CameraUpdateFactory.newLatLngZoom(positiontest, 13));		
 	}
 	
 
@@ -123,6 +126,8 @@ public class MapActivity extends Activity implements LocationListener{
 		// TODO Auto-generated method stub
 		
 	}
+	
+	
 	
 
 

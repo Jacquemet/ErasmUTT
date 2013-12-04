@@ -3,6 +3,9 @@ package fr.utt.erasmutt.fragments.activities;
 import java.util.List;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
@@ -10,6 +13,8 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
+import fr.utt.erasmutt.HomeActivity;
+import fr.utt.erasmutt.LoginActivity;
 import fr.utt.erasmutt.R;
 import fr.utt.erasmutt.sqlite.DatabaseHelper;
 import fr.utt.erasmutt.sqlite.model.Activities;
@@ -39,7 +44,18 @@ public class ListActivityFragment extends ListFragment{
         DatabaseHelper db = new DatabaseHelper(getActivity());
         listActivity = db.getSearchableActivities(bundle.getString("query").toString());
         if(listActivity.size()==0){
-        	Toast.makeText(getActivity(), R.string.searchEmpty, Toast.LENGTH_LONG).show();
+        	 AlertDialog.Builder boite;
+             boite = new AlertDialog.Builder(getActivity());
+             boite.setTitle(R.string.searchEmpty);
+             boite.setMessage(R.string.searchEmpty);
+             boite.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                 public void onClick(DialogInterface dialog, int which) {
+                	 Intent intent = new Intent(getActivity(), HomeActivity.class);
+						intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+						startActivity(intent);
+                 } 
+             });
+             boite.show();
         }
         else{
 		    String[] titleActivity = new String[listActivity.size()];

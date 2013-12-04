@@ -70,7 +70,7 @@ public class LoginActivity extends Activity {
 						try {
 							//TODO : Exploiter les données reçues
 							if (!jsonResponse.getBoolean("error")) {
-								
+								Constants.user.setIdUser(Integer.parseInt(jsonResponse.getString("idUser")));
 								Constants.user.setFirstname(jsonResponse.getString("firstname"));
 								Constants.user.setToken(jsonResponse.getString("token"));
 								Constants.user.setLastname(jsonResponse.getString("lastname"));
@@ -79,7 +79,11 @@ public class LoginActivity extends Activity {
 								//TODO : Vérifier que le User n'existe pas déjà 
 								//db.isExistUser(idUser);
 								db.addUser(Constants.user);
-								db.getUser();
+								if(!db.isExistUser(Constants.user.getIdUser())) {
+						             db.addUser(Constants.user);
+					        	} else {
+					        		db.updateUser(Constants.user);
+					        	}
 								
 								loadActitivies();
 								
@@ -162,7 +166,7 @@ public class LoginActivity extends Activity {
 				        Resources res = getResources();
 				        String helloMessage = String.format(res.getString(R.string.hello), Constants.user.getFirstname());
 				        Toast.makeText(getApplicationContext(), helloMessage, Toast.LENGTH_LONG).show();
-						
+				        endLoading();
 				        //Start the activity
 				        startActivity(intent);
 						

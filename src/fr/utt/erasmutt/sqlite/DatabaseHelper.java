@@ -153,6 +153,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
  
         // 2. create ContentValues to add key "column"/value
         ContentValues values = new ContentValues();
+        values.put("idUser", user.getIdUser());
         values.put("firstname", user.getFirstname()); 
         values.put("lastname", user.getLastname()); 
         values.put("mail", user.getMail()); 
@@ -167,34 +168,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
     }
 	
-	 public void getUser(){
-		 
-	        // 1. get reference to readable DB
-	        SQLiteDatabase db = this.getReadableDatabase();
+	 public void updateUser(User user){
+	        // 1. get reference to writable DB
+	        SQLiteDatabase db = this.getWritableDatabase();
 	 
-	        // 1. build the query
-	        String query = "SELECT  * FROM users";
+	        // 2. create ContentValues to add key "column"/value
+	        ContentValues values = new ContentValues();
+	        values.put("idUser", user.getIdUser());
+	        values.put("firstname", user.getFirstname()); 
+	        values.put("lastname", user.getLastname()); 
+	        values.put("mail", user.getMail()); 
+	        values.put("token", user.getToken());
 	 
-	        // 2. get reference to writable DB
-	        Cursor cursor = db.rawQuery(query, null);
+	        // 3. insert
+	        db.update("users", values, "idUser = ? ", new String[] {String.valueOf(user.getIdUser())});
 	 
-	        // 3. if we got results get the first one
-	        if (cursor != null)
-	            cursor.moveToFirst();
-	 
-	        // 4. build book object
-	        /*Book book = new Book();
-	        book.setId(Integer.parseInt(cursor.getString(0)));
-	        book.setTitle(cursor.getString(1));
-	        book.setAuthor(cursor.getString(2));*/
-	 
-	        Log.v("user id", cursor.getString(0));
-	        Log.v("user firstname", cursor.getString(1));
-	        Log.v("user lastname", cursor.getString(2));
-	 
-	        // 5. return book
-	        //return user;
-	    }
+	        // 4. close
+	        db.close();
+    }
 
 	 public Boolean isExistUser(int idUser){
 		 
@@ -356,7 +347,70 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		                activities.add(act);
 		            } while (cursor.moveToNext());
 		        }
-		        // return books
+		        // return act
 		        return activities;
-		    } 
+		    }
+		 
+		 	public Activities getActivitiesById(Integer idAct) {
+		        		  
+		        // 1. build the query
+		        String query = "SELECT  * FROM activities where idActivity ="+idAct;
+		  
+		        // 2. get reference to writable DB
+		        SQLiteDatabase db = this.getWritableDatabase();
+		        Cursor cursor = db.rawQuery(query, null);
+		  
+		        // 3. go over each row, build act and add it to list
+		        Activities act = null;
+		        if (cursor.moveToFirst()) {
+		            do {
+		            	act = new Activities();
+		            	act.setIdActivity(Integer.parseInt(cursor.getString(0)));
+		            	act.setName(cursor.getString(1));
+		                act.setDesciptionActivity(cursor.getString(2));
+		                act.setPictureActivity(cursor.getString(3));
+		                act.setAverageMark(Float.parseFloat(cursor.getString(4)));
+		                act.setLongitude(cursor.getString(5));
+		                act.setLatitude(cursor.getString(6));
+		                act.setWebsite(cursor.getString(7));
+		                act.setFocusOn(Boolean.parseBoolean(cursor.getString(8)));
+		            } while (cursor.moveToNext());
+		        }
+		        // return act
+		        return act;
+		    }
+		 
+		 	
+		 	public List<Activities> getFocusOnActivities() {
+		        List<Activities> activities = new LinkedList<Activities>();
+		  
+		        // 1. build the query
+		        String query = "SELECT * FROM activities where focusOn = true";
+		  
+		        // 2. get reference to writable DB
+		        SQLiteDatabase db = this.getWritableDatabase();
+		        Cursor cursor = db.rawQuery(query, null);
+		  
+		        // 3. go over each row, build book and add it to list
+		        Activities act = null;
+		        if (cursor.moveToFirst()) {
+		            do {
+		            	act = new Activities();
+		            	act.setIdActivity(Integer.parseInt(cursor.getString(0)));
+		            	act.setName(cursor.getString(1));
+		                act.setDesciptionActivity(cursor.getString(2));
+		                act.setPictureActivity(cursor.getString(3));
+		                act.setAverageMark(Float.parseFloat(cursor.getString(4)));
+		                act.setLongitude(cursor.getString(5));
+		                act.setLatitude(cursor.getString(6));
+		                act.setWebsite(cursor.getString(7));
+		                act.setFocusOn(Boolean.parseBoolean(cursor.getString(8)));
+		  
+		                // Add act to acts
+		                activities.add(act);
+		            } while (cursor.moveToNext());
+		        }
+		        // return act
+		        return activities;
+		    }
 }
