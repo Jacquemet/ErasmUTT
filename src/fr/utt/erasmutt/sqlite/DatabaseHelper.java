@@ -208,7 +208,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	        Cursor cursor = db.rawQuery(query, null);
 	 
 	        // 3. if we got results get the first one
-	        if (cursor != null) {
+	        if (cursor != null && cursor.getCount()!=0) {
 	        	db.close();
 	        	 return true;
 	        }
@@ -306,24 +306,57 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	    }
 	 	
 		 public Boolean isExistActivity(int idActivity){
-			 
-		        // 1. get reference to readable DB
-		        SQLiteDatabase db = this.getReadableDatabase();
 		 
+	        // 1. get reference to readable DB
+	        SQLiteDatabase db = this.getReadableDatabase();
+	 
+	        // 1. build the query
+	        String query = "SELECT  * FROM activities where idActivity = " + idActivity;
+	 
+	        // 2. get reference to writable DB
+	        Cursor cursor = db.rawQuery(query, null);
+	 
+	        // 3. if we got results get the first one
+	        if (cursor != null && cursor.getCount()!=0) {
+	        	db.close();
+	        	 return true;
+	        }
+	        else {
+	        	db.close();
+	        	return false;
+	        }
+	    }
+		 
+		 public List<Activities> getSearchableActivities(String search) {
+		        List<Activities> activities = new LinkedList<Activities>();
+		  
 		        // 1. build the query
-		        String query = "SELECT  * FROM activities where idActivity = " + idActivity;
-		 
+		        String query = "SELECT  * FROM activities where name like '%"+search+"%'";
+		  
 		        // 2. get reference to writable DB
+		        SQLiteDatabase db = this.getWritableDatabase();
 		        Cursor cursor = db.rawQuery(query, null);
-		 
-		        // 3. if we got results get the first one
-		        if (cursor != null && cursor.getCount()!=0) {
-		        	db.close();
-		        	 return true;
+		  
+		        // 3. go over each row, build book and add it to list
+		        Activities act = null;
+		        if (cursor.moveToFirst()) {
+		            do {
+		            	act = new Activities();
+		            	act.setIdActivity(Integer.parseInt(cursor.getString(0)));
+		            	act.setName(cursor.getString(1));
+		                act.setDesciptionActivity(cursor.getString(2));
+		                act.setPictureActivity(cursor.getString(3));
+		                act.setAverageMark(Float.parseFloat(cursor.getString(4)));
+		                act.setLongitude(cursor.getString(5));
+		                act.setLatitude(cursor.getString(6));
+		                act.setWebsite(cursor.getString(7));
+		                act.setFocusOn(Boolean.parseBoolean(cursor.getString(8)));
+		  
+		                // Add book to books
+		                activities.add(act);
+		            } while (cursor.moveToNext());
 		        }
-		        else {
-		        	db.close();
-		        	return false;
-		        }
-		    }
+		        // return books
+		        return activities;
+		    } 
 }

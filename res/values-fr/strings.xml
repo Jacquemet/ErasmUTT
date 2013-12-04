@@ -54,7 +54,7 @@
     <string name="invalid_password">Couple login / mot de passe invalide, essayez de nouveau.</string>
     <string name="password_repeat_error">"Erreur mot de passe, s'il vous plait assurez-vous que les mots de passes soit les mêmes"</string>
     <string name="setAccountNOK">Erreur lors de la modification de votre compte</string>
-
+	<string name="searchEmpty">Pas de resultat pour cette recherche</string>
     <!-- Autres -->
 
     <string name="submit_label">Envoyer</string>

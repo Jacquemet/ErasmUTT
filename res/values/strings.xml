@@ -54,7 +54,8 @@
     <string name="invalid_password">Couple login / password invalid, please try again</string>
 	<string name="createAccountNOK">Error during the account creation</string>
 	<string name="setAccountNOK">Error during the account modification</string>   
-   
+    <string name="searchEmpty">No result for this search</string>
+	
     <string name="createAccountOK">Your account has been created</string>
 	<string name="setAccountOK">Your account has been modified</string>
  

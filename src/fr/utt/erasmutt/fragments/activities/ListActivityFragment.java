@@ -6,10 +6,10 @@ import android.app.Activity;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 import fr.utt.erasmutt.R;
 import fr.utt.erasmutt.sqlite.DatabaseHelper;
 import fr.utt.erasmutt.sqlite.model.Activities;
@@ -33,19 +33,25 @@ public class ListActivityFragment extends ListFragment{
                 android.R.layout.simple_list_item_activated_1 : android.R.layout.simple_list_item_1;
 
         Bundle bundle = getArguments();
-        Log.d("QUERYYYYYYYYYY", bundle.getString("query").toString());
         
         List<Activities> listActivity;
         
         DatabaseHelper db = new DatabaseHelper(getActivity());
-        listActivity = db.getAllActivities();
-        String[] titleActivity = new String[listActivity.size()];
-        for(int i=0 ; i<listActivity.size() ; i++){
-        	titleActivity[i]= listActivity.get(i).getName();
+        listActivity = db.getSearchableActivities(bundle.getString("query").toString());
+        if(listActivity.size()==0){
+        	Toast.makeText(getActivity(), R.string.searchEmpty, Toast.LENGTH_LONG).show();
         }
-        Log.v("activityclist",titleActivity.toString());
-        // Create an array adapter for the list view, using the Ipsum headlines array
-        setListAdapter(new ArrayAdapter<String>(getActivity(), layout, titleActivity));
+        else{
+		    String[] titleActivity = new String[listActivity.size()];
+		    for(int i=0 ; i<listActivity.size() ; i++){
+		    	titleActivity[i]= listActivity.get(i).getName();
+		    	
+		    }
+		    // Create an array adapter for the list view, using the Ipsum headlines array
+	        setListAdapter(new ArrayAdapter<String>(getActivity(), layout, titleActivity));
+        }
+        
+       
     }
 
     @Override

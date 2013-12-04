@@ -1,5 +1,7 @@
 package fr.utt.erasmutt.maps;
 
+import java.util.List;
+
 import android.app.Activity;
 import android.location.Criteria;
 import android.location.Location;
@@ -18,6 +20,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import fr.utt.erasmutt.Constants;
 import fr.utt.erasmutt.R;
+import fr.utt.erasmutt.sqlite.DatabaseHelper;
+import fr.utt.erasmutt.sqlite.model.Activities;
 
 public class MapActivity extends Activity implements LocationListener{
 	LatLng myPosition;
@@ -67,10 +71,11 @@ public class MapActivity extends Activity implements LocationListener{
 
 	}
 	public void addActivitiesCloseToUser(){
-		
-		for(int i=0 ; i<Constants.tabActivityForUser.size() ; i++) { 
-			String name = Constants.tabActivityForUser.get(i).getName();
-			LatLng position= new LatLng(Double.parseDouble(Constants.tabActivityForUser.get(i).getLatitude()),Double.parseDouble(Constants.tabActivityForUser.get(i).getLongitude()));
+		DatabaseHelper db = new DatabaseHelper(getApplicationContext());
+		List<Activities> listActivityUser= db.getAllActivities();
+		for(int i=0 ; i<listActivityUser.size() ; i++) { 
+			String name =listActivityUser.get(i).getName();
+			LatLng position= new LatLng(Double.parseDouble(listActivityUser.get(i).getLatitude()),Double.parseDouble(Constants.tabActivityForUser.get(i).getLongitude()));
 			map.addMarker(new MarkerOptions().position(position).title(name));
 		}
 		

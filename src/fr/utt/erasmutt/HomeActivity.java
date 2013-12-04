@@ -39,7 +39,6 @@ public class HomeActivity extends FragmentActivity {
     private String[] mTitles;
     
     private UserDetailsFragment userDetailsFrag;
-    private ListActivityFragment listActivityFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
