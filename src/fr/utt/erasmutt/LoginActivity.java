@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import fr.utt.erasmutt.networkConnection.HttpCallback;
 import fr.utt.erasmutt.networkConnection.HttpRequest;
+import fr.utt.erasmutt.sqlite.DatabaseHelper;
 import fr.utt.erasmutt.sqlite.model.Activities;
 
 public class LoginActivity extends Activity {
@@ -38,6 +39,7 @@ public class LoginActivity extends Activity {
 	private HttpRequest request = null;
 	private HttpRequest requestActivities = null;
 	
+	private	DatabaseHelper db;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -53,7 +55,8 @@ public class LoginActivity extends Activity {
 		buttonNewAccount = (Button) findViewById(R.id.button_createAccount);
 		progBar = (ProgressBar) findViewById(R.id.progressBar);
 
-        	
+        db = new DatabaseHelper(this);
+        
 		buttonSignIn.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -72,6 +75,9 @@ public class LoginActivity extends Activity {
 								Constants.user.setToken(jsonResponse.getString("token"));
 								Constants.user.setLastname(jsonResponse.getString("lastname"));
 								Constants.user.setMail(jsonResponse.getString("mail"));
+								
+								db.addUser(Constants.user);
+								db.getUser();
 								
 								loadActitivies();
 								
@@ -146,9 +152,9 @@ public class LoginActivity extends Activity {
 				             afu.setFocusOn(Boolean.parseBoolean(menuObject.getString("focusOn")));
 
 				             afu.setPictureActivity(menuObject.getString("picture"));
-
-				             Constants.tabActivityForUser.add(afu);
-	
+				             
+				             db.addActivity(afu);
+				            
 				        }
 
 				        //Create an Intent which clear the back stack and launch the home activity

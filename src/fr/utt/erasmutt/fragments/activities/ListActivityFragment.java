@@ -1,5 +1,7 @@
 package fr.utt.erasmutt.fragments.activities;
 
+import java.util.List;
+
 import android.app.Activity;
 import android.os.Build;
 import android.os.Bundle;
@@ -9,6 +11,8 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import fr.utt.erasmutt.R;
+import fr.utt.erasmutt.sqlite.DatabaseHelper;
+import fr.utt.erasmutt.sqlite.model.Activities;
 
 public class ListActivityFragment extends ListFragment{
 
@@ -31,11 +35,15 @@ public class ListActivityFragment extends ListFragment{
         Bundle bundle = getArguments();
         Log.d("QUERYYYYYYYYYY", bundle.getString("query").toString());
         
-        String[] titleActivity = {
-                "Article One",
-                "Article Two"
-            };
+        List<Activities> listActivity;
         
+        DatabaseHelper db = new DatabaseHelper(getActivity());
+        listActivity = db.getAllActivities();
+        String[] titleActivity = new String[listActivity.size()];
+        for(int i=0 ; i<listActivity.size() ; i++){
+        	titleActivity[i]= listActivity.get(i).getName();
+        }
+        Log.v("activityclist",titleActivity.toString());
         // Create an array adapter for the list view, using the Ipsum headlines array
         setListAdapter(new ArrayAdapter<String>(getActivity(), layout, titleActivity));
     }

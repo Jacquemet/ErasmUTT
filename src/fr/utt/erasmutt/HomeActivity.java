@@ -25,6 +25,7 @@ import android.widget.SearchView;
 import android.widget.SearchView.OnQueryTextListener;
 import android.widget.TextView;
 import fr.utt.erasmutt.fragments.UserDetailsFragment;
+import fr.utt.erasmutt.fragments.activities.ListActivityFragment;
 import fr.utt.erasmutt.maps.MapActivity;
 
 public class HomeActivity extends FragmentActivity {
@@ -38,6 +39,7 @@ public class HomeActivity extends FragmentActivity {
     private String[] mTitles;
     
     private UserDetailsFragment userDetailsFrag;
+    private ListActivityFragment listActivityFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -199,7 +201,7 @@ public class HomeActivity extends FragmentActivity {
 				
 			break;
 		case 2:
-			
+			//showFragment(listActivityFragment);
 			break;
 		case 3:
 			
@@ -281,6 +283,11 @@ public class HomeActivity extends FragmentActivity {
         if (this.userDetailsFrag == null) {
             this.userDetailsFrag = new UserDetailsFragment();
         }
+        
+       /* this.listActivityFragment = (ListActivityFragment) fm.findFragmentById(R.id.list_activity_frag);
+        if (this.listActivityFragment == null) {
+            this.listActivityFragment = new ListActivityFragment();
+        }*/
 
     }
     
