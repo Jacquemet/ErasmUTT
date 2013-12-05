@@ -17,7 +17,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.location.Criteria;
@@ -34,7 +33,6 @@ import android.view.MenuItem;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
@@ -51,10 +49,6 @@ public class MapActivity extends Activity implements LocationListener{
 	Polyline line;
 	Context context;
 	
-	 // Static LatLng
-    LatLng startLatLng = new LatLng(30.707104, 76.690749);
-    LatLng endLatLng = new LatLng(30.721419, 76.730017);
-    
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -109,9 +103,9 @@ public class MapActivity extends Activity implements LocationListener{
 		}
 		
 		
-		String urlTopass = makeURL(startLatLng.latitude,
-                startLatLng.longitude, endLatLng.latitude,
-                endLatLng.longitude);
+		String urlTopass = makeURL(myPosition.latitude,
+                myPosition.longitude, positiontest.latitude,
+                positiontest.longitude);
         new connectAsyncTask(urlTopass).execute();
 	}
 	
@@ -160,7 +154,7 @@ public class MapActivity extends Activity implements LocationListener{
 	
 	
 	private class connectAsyncTask extends AsyncTask<Void, Void, String> {
-	    private ProgressDialog progressDialog;
+	    //private ProgressDialog progressDialog;
 	    String url;
 
 	    connectAsyncTask(String urlPass) {
@@ -171,10 +165,10 @@ public class MapActivity extends Activity implements LocationListener{
 	    protected void onPreExecute() {
 	        // TODO Auto-generated method stub
 	        super.onPreExecute();
-	        progressDialog = new ProgressDialog(context);
+	        /*progressDialog = new ProgressDialog(getApplicationContext());
 	        progressDialog.setMessage("Fetching route, Please wait...");
 	        progressDialog.setIndeterminate(true);
-	        progressDialog.show();
+	        progressDialog.show();*/
 	    }
 
 	    @Override
@@ -187,7 +181,7 @@ public class MapActivity extends Activity implements LocationListener{
 	    @Override
 	    protected void onPostExecute(String result) {
 	        super.onPostExecute(result);
-	        progressDialog.hide();
+	        //progressDialog.hide();
 	        if (result != null) {
 	            drawPath(result);
 	        }
