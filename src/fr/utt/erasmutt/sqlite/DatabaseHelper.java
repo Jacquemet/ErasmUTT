@@ -193,7 +193,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	        SQLiteDatabase db = this.getReadableDatabase();
 	 
 	        // 1. build the query
-	        String query = "SELECT  * FROM users where idUSer = " + idUser;
+	        String query = "SELECT * FROM users where idUSer = " + idUser;
 	 
 	        // 2. get reference to writable DB
 	        Cursor cursor = db.rawQuery(query, null);

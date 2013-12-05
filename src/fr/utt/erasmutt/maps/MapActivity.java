@@ -17,7 +17,10 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.location.Criteria;
 import android.location.Location;
@@ -32,8 +35,10 @@ import android.view.MenuItem;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
@@ -44,10 +49,10 @@ import fr.utt.erasmutt.sqlite.model.Activities;
 
 public class MapActivity extends Activity implements LocationListener{
 	LatLng myPosition;
-	LatLng positiontest;
 	GoogleMap map;
 	Polyline line;
 	Context context;
+	String urlTopass;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +66,7 @@ public class MapActivity extends Activity implements LocationListener{
 
         // Enabling MyLocation Layer of Google Map
 		map.setMyLocationEnabled(true);
-
+	
         // Getting LocationManager object from System Service LOCATION_SERVICE
         LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
@@ -73,20 +78,10 @@ public class MapActivity extends Activity implements LocationListener{
 
         // Getting Current Location
         Location location = locationManager.getLastKnownLocation(provider);
-
+        //Location location = map.getMyLocation();
+        context = this;
         if(location!=null){
-	        // Getting latitude of the current location
-	        double latitude = location.getLatitude();
-	
-	        // Getting longitude of the current location
-	        double longitude = location.getLongitude();
-	
-	        // Creating a LatLng object for the current location
-	
-	         myPosition = new LatLng(latitude, longitude);
-	         
-	         map.moveCamera(CameraUpdateFactory.newLatLngZoom(myPosition, 13));
-	         
+	        onLocationChanged(location);
 	         addActivitiesCloseToUser();
 	         
         }
@@ -98,15 +93,31 @@ public class MapActivity extends Activity implements LocationListener{
 		for(int i=0 ; i<listActivityUser.size() ; i++) { 
 			String name =listActivityUser.get(i).getName();
 			LatLng position= new LatLng(Double.parseDouble(listActivityUser.get(i).getLatitude()),Double.parseDouble(listActivityUser.get(i).getLongitude()));
-			positiontest = position;
 			map.addMarker(new MarkerOptions().position(position).title(name).snippet(listActivityUser.get(i).getDesciptionActivity()));
 		}
-		
-		
-		String urlTopass = makeURL(myPosition.latitude,
-                myPosition.longitude, positiontest.latitude,
-                positiontest.longitude);
-        new connectAsyncTask(urlTopass).execute();
+		map.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+			@Override
+			public void onInfoWindowClick(Marker marker) {
+				AlertDialog.Builder boite;
+	             boite = new AlertDialog.Builder(context);
+	             boite.setTitle(R.string.searchRoute);
+	             boite.setMessage(getString(R.string.searchRouteDescription)+" "+ marker.getTitle());
+	             urlTopass = makeURL(myPosition.latitude,
+			                myPosition.longitude, marker.getPosition().latitude,
+			                marker.getPosition().longitude);
+	             boite.setPositiveButton(R.string.query_hint, new DialogInterface.OnClickListener() {
+	                 public void onClick(DialogInterface dialog, int which) { 
+	 			        new connectAsyncTask(urlTopass).execute(); 
+	                 } 
+	             });
+	             boite.setNegativeButton(R.string.cancel_label, new DialogInterface.OnClickListener() {
+	                 public void onClick(DialogInterface dialog, int which) { 
+	 			        dialog.dismiss();
+	                 } 
+	             });
+	             boite.show(); 
+			}
+		});
 	}
 	
 
@@ -130,8 +141,19 @@ public class MapActivity extends Activity implements LocationListener{
 	
 	@Override
 	public void onLocationChanged(Location location) {
-		// TODO Auto-generated method stub
-		
+		// TODO Auto-generated method stub		
+		// Getting latitude of the current location
+        double latitude = location.getLatitude();
+
+        // Getting longitude of the current location
+        double longitude = location.getLongitude();
+
+        // Creating a LatLng object for the current location
+
+         myPosition = new LatLng(latitude, longitude);
+         
+         map.moveCamera(CameraUpdateFactory.newLatLngZoom(myPosition, 13));
+         //map.addMarker(new MarkerOptions().position(myPosition).title("me"));
 	}
 
 	@Override
@@ -154,7 +176,7 @@ public class MapActivity extends Activity implements LocationListener{
 	
 	
 	private class connectAsyncTask extends AsyncTask<Void, Void, String> {
-	    //private ProgressDialog progressDialog;
+	    private ProgressDialog progressDialog;
 	    String url;
 
 	    connectAsyncTask(String urlPass) {
@@ -165,10 +187,12 @@ public class MapActivity extends Activity implements LocationListener{
 	    protected void onPreExecute() {
 	        // TODO Auto-generated method stub
 	        super.onPreExecute();
-	        /*progressDialog = new ProgressDialog(getApplicationContext());
-	        progressDialog.setMessage("Fetching route, Please wait...");
+	        progressDialog = new ProgressDialog(context);
+	        progressDialog.setMessage(getString(R.string.fetching_route));
 	        progressDialog.setIndeterminate(true);
-	        progressDialog.show();*/
+	        Log.v("onPre","here");
+	        progressDialog.show();
+	        Log.v("onPre","after");
 	    }
 
 	    @Override
@@ -181,7 +205,7 @@ public class MapActivity extends Activity implements LocationListener{
 	    @Override
 	    protected void onPostExecute(String result) {
 	        super.onPostExecute(result);
-	        //progressDialog.hide();
+	        progressDialog.dismiss();
 	        if (result != null) {
 	            drawPath(result);
 	        }
@@ -254,11 +278,9 @@ public class MapActivity extends Activity implements LocationListener{
     public void drawPath(String result) {
         if (line != null) {
             map.clear();
+            addActivitiesCloseToUser();
+            
         }
-        /*map.addMarker(new MarkerOptions().position(endLatLng).icon(
-                BitmapDescriptorFactory.fromResource(R.drawable.redpin_marker)));
-        map.addMarker(new MarkerOptions().position(startLatLng).icon(
-                BitmapDescriptorFactory.fromResource(R.drawable.redpin_marker)));*/
         try {
             // Tranform the string into a json object
             final JSONObject json = new JSONObject(result);

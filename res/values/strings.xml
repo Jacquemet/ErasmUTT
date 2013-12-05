@@ -30,6 +30,11 @@
         <item>My Groups</item>
         <item>My Review</item>
     </string-array>
+    <!-- Map -->
+    <string name="fetching_route">Fetching route, Please wait ...</string>
+    <string name="searchRoute">Search route ?</string>
+    <string name="searchRouteDescription">Would you like to search a route from your current location to :</string>
+    
     
     <!-- Network -->
     

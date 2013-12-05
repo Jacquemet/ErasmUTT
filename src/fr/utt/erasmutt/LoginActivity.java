@@ -77,8 +77,6 @@ public class LoginActivity extends Activity {
 								Constants.user.setMail(jsonResponse.getString("mail"));
 								
 								//TODO : Vérifier que le User n'existe pas déjà 
-								//db.isExistUser(idUser);
-								db.addUser(Constants.user);
 								if(!db.isExistUser(Constants.user.getIdUser())) {
 						             db.addUser(Constants.user);
 					        	} else {
