@@ -25,7 +25,6 @@ import android.widget.SearchView;
 import android.widget.SearchView.OnQueryTextListener;
 import android.widget.TextView;
 import fr.utt.erasmutt.fragments.UserDetailsFragment;
-import fr.utt.erasmutt.fragments.activities.ListActivityFragment;
 import fr.utt.erasmutt.maps.MapActivity;
 
 public class HomeActivity extends FragmentActivity {
@@ -37,6 +36,8 @@ public class HomeActivity extends FragmentActivity {
     private CharSequence mDrawerTitle;
     private CharSequence mTitle;
     private String[] mTitles;
+    
+    private int fragmentPosition = 0;
     
     private UserDetailsFragment userDetailsFrag;
 
@@ -189,6 +190,9 @@ public class HomeActivity extends FragmentActivity {
         // update the main content by replacing fragments
     	//TODO : À changer pour switcher avec des fragments multiple
     	setupFragments();
+    	
+    	//Save the selected position
+    	fragmentPosition = position;
     	
     	switch (position) {
 		case 0:

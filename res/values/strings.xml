@@ -64,8 +64,22 @@
     <string name="createAccountOK">Your account has been created</string>
 	<string name="setAccountOK">Your account has been modified</string>
  
+	<!-- Activity Details -->
+	
+	<string name="labelAddressActivity">Address : </string>
+	<string name="labelDescriptionActivity">Description : </string>
+	<string name="labelWebsite">Website : </string>
+	<string name="labelRating">Average mark : </string>
+	
+	<plurals name="labelNumberReview">
+        <item quantity="zero">%1$s reviews</item>
+        <item quantity="one">%1$s review</item>
+        <item quantity="other">%1$s reviews</item>
+    </plurals>
+	
 	<!-- Other -->
 	
+	<string name="app_not_available">Sorry, there\'s no web browser available</string>
 	<string name="set_label">Set</string>
 	<string name="submit_label">Submit</string>
     <string name="cancel_label">Cancel</string>

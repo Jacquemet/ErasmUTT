@@ -73,7 +73,7 @@ public class ActivityHandlerActivity extends FragmentActivity implements OnHeadl
             // Create fragment and give it an argument for the selected article
             DetailsActivityFragment newFragment = new DetailsActivityFragment();
             Bundle args = new Bundle();
-            args.putInt(DetailsActivityFragment.ARG_POSITION, position);
+            args.putInt(DetailsActivityFragment.ARG_ID_ACTIVITY, position);
             newFragment.setArguments(args);
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
