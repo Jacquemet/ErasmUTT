@@ -59,7 +59,7 @@ public class ActivityHandlerActivity extends FragmentActivity implements OnHeadl
 	       // The user selected the headline of an article from the HeadlinesFragment
 
         // Capture the article fragment from the activity layout
-        DetailsActivityFragment articleFrag = (DetailsActivityFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_user_details);
+        DetailsActivityFragment articleFrag = (DetailsActivityFragment) getSupportFragmentManager().findFragmentById(R.id.details_activity_frag);
 
         //Si le détail de l'activité est présent alors on est dans un affichage tablette
         if (articleFrag != null) {

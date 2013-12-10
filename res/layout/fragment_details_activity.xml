@@ -72,26 +72,18 @@
             android:id="@+id/labelWebsite"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/field_vertical_margin"
             android:text="@string/labelWebsite"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:layout_marginRight="@dimen/field_vertical_margin" />
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <TextView
             android:id="@+id/linkWebsite"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/background_light_blue"
             android:layout_marginLeft="@dimen/field_vertical_margin"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/background_light_blue" />
     </LinearLayout>
-
-    <TextView
-        android:id="@+id/labelRating"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/field_vertical_margin"
-        android:text="@string/labelRating"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -99,15 +91,24 @@
         android:layout_marginTop="@dimen/field_vertical_margin"
         android:orientation="horizontal" >
 
-        <RatingBar
-            android:id="@+id/averageRatingBarActivity"
+        <TextView
+            android:id="@+id/labelRating"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="@string/labelRating"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <RatingBar
+            android:id="@+id/averageRatingBarActivity"
+            style="@style/customRatingBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/field_vertical_margin"
+            android:layout_marginRight="@dimen/field_vertical_margin"
             android:isIndicator="true"
             android:numStars="5"
             android:rating="3.7"
-            android:stepSize="0.5"
-             />
+            android:stepSize="0.5" />
 
         <TextView
             android:id="@+id/labelNumberReview"

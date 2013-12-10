@@ -108,7 +108,8 @@
                 android:layout_weight="1"
                 android:background="@color/background_dark_blue"
                 android:text="@string/set_label"
-                android:textColor="@android:color/white" />
+                android:textColor="@android:color/white"
+                android:visibility="invisible" />
 
             <Button
                 android:id="@+id/buttonDescAccount_cancel"
@@ -120,7 +121,8 @@
                 android:layout_weight="1"
                 android:background="@color/background_dark_blue"
                 android:text="@string/cancel_label"
-                android:textColor="@android:color/white" />
+                android:textColor="@android:color/white"
+                android:visibility="invisible" />
         </LinearLayout>
 
         <ProgressBar

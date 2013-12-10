@@ -37,6 +37,7 @@ public class ListActivityFragment extends ListFragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		//TODO :  Bug à résoudre dans un affcihage tablette
 		Bundle bundle = getArguments();
 		List<Activities> listActivity;
 		
@@ -72,7 +73,7 @@ public class ListActivityFragment extends ListFragment {
 
 			// For the simple adapter, specify which columns go into which views
 			String[] fromColumns = {"idActivity","nameActivity"};
-			int[] toViews = { R.id.idActivities, R.id.nameListActivities }; 
+			int[] toViews = { R.id.idActivities, R.id.nameListActivities}; 
 
 			// Create an adapter with the require parameters 
 			mAdapter = new SimpleAdapter(getActivity(), aList, R.layout.fragment_list_activity, fromColumns, toViews);
@@ -106,8 +107,7 @@ public class ListActivityFragment extends ListFragment {
 		try {
 			mCallback = (OnHeadlineSelectedListener) activity;
 		} catch (ClassCastException e) {
-			throw new ClassCastException(activity.toString()
-					+ " must implement OnHeadlineSelectedListener");
+			throw new ClassCastException(activity.toString()+ " must implement OnHeadlineSelectedListener");
 		}
 	}
 

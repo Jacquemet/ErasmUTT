@@ -4,7 +4,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
-import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -20,10 +19,10 @@ import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.Toast;
 import fr.utt.erasmutt.Constants;
-import fr.utt.erasmutt.LoginActivity;
 import fr.utt.erasmutt.R;
 import fr.utt.erasmutt.networkConnection.HttpCallback;
 import fr.utt.erasmutt.networkConnection.HttpRequest;
+import fr.utt.erasmutt.sqlite.DatabaseHelper;
 
 public class UserDetailsFragment extends Fragment {
 
@@ -35,11 +34,16 @@ public class UserDetailsFragment extends Fragment {
 	Button buttonCancel = null;
 	ImageView imgEdit = null;
 	ProgressBar progBar = null;
+	
+	DatabaseHelper db;
+	
 	private HttpRequest requestSetUser = null;
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		ScrollView sv = (ScrollView) inflater.inflate(R.layout.fragment_user_details, container, false);
 		
+		db = new DatabaseHelper(getActivity());
 		
 		mail = (EditText) sv.findViewById(R.id.editTextDescAccount_mail);
 		firstname = (EditText) sv.findViewById(R.id.editTextDescAccount_firstname);
@@ -57,8 +61,6 @@ public class UserDetailsFragment extends Fragment {
 		mail.setEnabled(false);
 		firstname.setEnabled(false);
 		lastname.setEnabled(false);
-		buttonSubmit.setEnabled(false);
-		buttonCancel.setEnabled(false);
 		
 		imgEdit.setOnClickListener(new OnClickListener() {
 
@@ -67,8 +69,14 @@ public class UserDetailsFragment extends Fragment {
 				mail.setEnabled(!mail.isEnabled());
 				firstname.setEnabled(!firstname.isEnabled());
 				lastname.setEnabled(!lastname.isEnabled());
-				buttonSubmit.setEnabled(!buttonSubmit.isEnabled());
-				buttonCancel.setEnabled(!buttonCancel.isEnabled());
+				
+				if(buttonSubmit.getVisibility() == View.VISIBLE) {
+					buttonSubmit.setVisibility(View.INVISIBLE);
+					buttonCancel.setVisibility(View.INVISIBLE);
+				} else {
+					buttonSubmit.setVisibility(View.VISIBLE);
+					buttonCancel.setVisibility(View.VISIBLE);
+				}
 			}
 		});
 		
@@ -79,6 +87,7 @@ public class UserDetailsFragment extends Fragment {
 				mail.setText(Constants.user.getMail());
 				firstname.setText(Constants.user.getFirstname());
 				lastname.setText(Constants.user.getLastname());
+				
 			}
 		});
 		
@@ -93,18 +102,21 @@ public class UserDetailsFragment extends Fragment {
 					public Object call(JSONObject jsonResponse) {
 		
 						try {
-							//TODO : Exploiter les données reçues
 							if (!jsonResponse.getBoolean("error")) {
 								
+								//User constant update
 								Constants.user.setFirstname(firstname.getText().toString());
 								Constants.user.setLastname(lastname.getText().toString());
 								Constants.user.setMail(mail.getText().toString());
 								
-								Intent intent = new Intent(getActivity().getApplicationContext(), LoginActivity.class);
-								progBar.setVisibility(View.INVISIBLE);
-								Toast.makeText(getActivity().getApplicationContext(), R.string.setAccountOK, Toast.LENGTH_LONG).show();
-								startActivity(intent);
+								//Update of user in database
+								db.updateUser(Constants.user);
 								
+								progBar.setVisibility(View.INVISIBLE);
+								buttonSubmit.setVisibility(View.INVISIBLE);
+								buttonCancel.setVisibility(View.INVISIBLE);
+								
+								Toast.makeText(getActivity().getApplicationContext(), R.string.setAccountOK, Toast.LENGTH_LONG).show();
 							} else {
 								Toast.makeText(getActivity().getApplicationContext(), R.string.setAccountNOK, Toast.LENGTH_LONG).show();
 							}
@@ -126,8 +138,6 @@ public class UserDetailsFragment extends Fragment {
 		        	mail.setEnabled(false);
 					firstname.setEnabled(false);
 					lastname.setEnabled(false);
-					buttonSubmit.setEnabled(false);
-					buttonCancel.setEnabled(false);
 					progBar.setVisibility(View.VISIBLE);
 		        }else {
 		        	Toast.makeText(getActivity().getApplicationContext(), R.string.network_disabled, Toast.LENGTH_LONG).show();

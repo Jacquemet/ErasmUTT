@@ -100,7 +100,7 @@ public class DetailsActivityFragment extends Fragment {
 	       
 	        
 	        averageRatingBarActivity =  (RatingBar) getActivity().findViewById(R.id.averageRatingBarActivity);
-	        averageRatingBarActivity.setRating(activityDetails.getAverageMark());
+	        //averageRatingBarActivity.setRating(activityDetails.getAverageMark());
 	        
 	        labelNumberReview =  (TextView) getActivity().findViewById(R.id.labelNumberReview);
 	        
