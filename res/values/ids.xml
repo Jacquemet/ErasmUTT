@@ -3,4 +3,7 @@
         <item
         type="id"
         name="fragment_user_details" />
+        <item
+        type="id"
+        name="fragment_popular_activities" />
 </resources>

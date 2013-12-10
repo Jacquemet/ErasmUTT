@@ -64,4 +64,13 @@ public class User {
     public void setLastname(String Lastname) {
     	lastname = Lastname;
     }
+    
+    public void logout(){
+    	idUser=0;
+    	picture="";
+    	firstname="";
+    	lastname="";
+    	token="";
+    	mail="";    	
+    }
 }

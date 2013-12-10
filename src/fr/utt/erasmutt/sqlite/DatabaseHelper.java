@@ -3,6 +3,7 @@ package fr.utt.erasmutt.sqlite;
 import java.util.LinkedList;
 import java.util.List;
 
+import fr.utt.erasmutt.Constants;
 import fr.utt.erasmutt.sqlite.model.Activities;
 import fr.utt.erasmutt.sqlite.model.User;
 import android.content.ContentValues;
@@ -120,6 +121,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+		// TODO Auto-generated method stub
 		// Drop older books table if existed
 		dropTables(db);
  
@@ -208,7 +210,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	        }
 	 
 	    }
+	 public void userLogout(){
+		 SQLiteDatabase db = this.getWritableDatabase();
+		 
+	        // 2. create ContentValues to add key "column"/value
+	        ContentValues values = new ContentValues();
+	        values.put("token", "");
 	 
+	        // 3. insert
+	        db.update("users", values, "idUser = ? ", new String[] {String.valueOf(Constants.user.getIdUser())});
+	 
+	        // 4. close
+	        db.close();
+		 
+	 }
 	 //---------------------------------------------------------------------
 	 
 	    /**

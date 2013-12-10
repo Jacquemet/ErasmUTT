@@ -93,7 +93,7 @@ public class MapActivity extends Activity implements LocationListener{
 		for(int i=0 ; i<listActivityUser.size() ; i++) { 
 			String name =listActivityUser.get(i).getName();
 			LatLng position= new LatLng(Double.parseDouble(listActivityUser.get(i).getLatitude()),Double.parseDouble(listActivityUser.get(i).getLongitude()));
-			map.addMarker(new MarkerOptions().position(position).title(name).snippet(listActivityUser.get(i).getDesciptionActivity()));
+			map.addMarker(new MarkerOptions().position(position).title(name).snippet(listActivityUser.get(i).getDesciptionActivity().substring(0, 15)+" ..."));
 		}
 		map.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
 			@Override
@@ -152,7 +152,7 @@ public class MapActivity extends Activity implements LocationListener{
 
          myPosition = new LatLng(latitude, longitude);
          
-         map.moveCamera(CameraUpdateFactory.newLatLngZoom(myPosition, 13));
+         map.moveCamera(CameraUpdateFactory.newLatLngZoom(myPosition, 4));
          //map.addMarker(new MarkerOptions().position(myPosition).title("me"));
 	}
 
@@ -190,9 +190,7 @@ public class MapActivity extends Activity implements LocationListener{
 	        progressDialog = new ProgressDialog(context);
 	        progressDialog.setMessage(getString(R.string.fetching_route));
 	        progressDialog.setIndeterminate(true);
-	        Log.v("onPre","here");
 	        progressDialog.show();
-	        Log.v("onPre","after");
 	    }
 
 	    @Override

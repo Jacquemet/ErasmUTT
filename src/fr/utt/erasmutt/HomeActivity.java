@@ -1,10 +1,10 @@
 package fr.utt.erasmutt;
 
-
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
@@ -22,10 +22,13 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.Toast;
 import android.widget.SearchView.OnQueryTextListener;
 import android.widget.TextView;
+import fr.utt.erasmutt.fragments.PopularActivitiesFragment;
 import fr.utt.erasmutt.fragments.UserDetailsFragment;
 import fr.utt.erasmutt.maps.MapActivity;
+import fr.utt.erasmutt.sqlite.DatabaseHelper;
 
 public class HomeActivity extends FragmentActivity {
 
@@ -40,12 +43,14 @@ public class HomeActivity extends FragmentActivity {
     private int fragmentPosition = 0;
     
     private UserDetailsFragment userDetailsFrag;
-
+    private PopularActivitiesFragment popularActivities;
+    private DatabaseHelper db;
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-
+        db = new DatabaseHelper(getApplicationContext());
         mTitle = mDrawerTitle = getTitle();
         mTitles = getResources().getStringArray(R.array.text_menu_array);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -173,6 +178,23 @@ public class HomeActivity extends FragmentActivity {
         case R.id.action_settings:
 
         	return true;
+        case R.id.action_help:
+        	String url = "https://github.com/Jacquemet/ErasmUTT";
+        	Intent i = new Intent(Intent.ACTION_VIEW);
+        	i.setData(Uri.parse(url));
+        	startActivity(i);
+        	return true;	
+        case R.id.action_logout:
+        	db.userLogout();
+        	String goodbyeMessage = String.format(getString(R.string.GoodBye), Constants.user.getFirstname());
+        	Constants.user.logout();
+        	Intent  intentLogout = new Intent(getApplicationContext(),LoginActivity.class);
+        	intentLogout.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        	
+        	Toast.makeText(getApplicationContext(), goodbyeMessage, Toast.LENGTH_LONG).show();
+        	startActivity(intentLogout);
+        	
+        	return true;
         default:
             return super.onOptionsItemSelected(item);
         }
@@ -196,7 +218,7 @@ public class HomeActivity extends FragmentActivity {
     	
     	switch (position) {
 		case 0:
-			
+			showFragment(popularActivities);
 			break;
 		case 1:
 			//TODO : Check if the fragment is active
@@ -253,30 +275,6 @@ public class HomeActivity extends FragmentActivity {
         mDrawerToggle.onConfigurationChanged(newConfig);
     }
 
-    /**
-     * Fragment that appears in the "content_frame", shows a planet
-     */
-    public static class PopularActivitiesFragment extends Fragment {
-        public static final String ARG_MENU_NUMBER = "menu_number";
-
-        public PopularActivitiesFragment() {
-            // Empty constructor required for fragment subclasses
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_popular_activities, container, false);
-            /*int i = getArguments().getInt(ARG_PLANET_NUMBER);
-            String planet = getResources().getStringArray(R.array.planets_array)[i];
-
-            int imageId = getResources().getIdentifier(planet.toLowerCase(Locale.getDefault()),
-                            "drawable", getActivity().getPackageName());
-            ((ImageView) rootView.findViewById(R.id.image)).setImageResource(imageId);
-            getActivity().setTitle(planet);*/
-            return rootView;
-        }
-    }
     
 	 // Setup the fragment to show here
     private void setupFragments() {
@@ -285,6 +283,10 @@ public class HomeActivity extends FragmentActivity {
         this.userDetailsFrag = (UserDetailsFragment) fm.findFragmentById(R.id.fragment_user_details);
         if (this.userDetailsFrag == null) {
             this.userDetailsFrag = new UserDetailsFragment();
+        }
+        this.popularActivities = (PopularActivitiesFragment) fm.findFragmentById(R.id.fragment_popular_activities);
+        if (this.popularActivities == null) {
+        	this.popularActivities = new PopularActivitiesFragment();
         }
         
        /* this.listActivityFragment = (ListActivityFragment) fm.findFragmentById(R.id.list_activity_frag);

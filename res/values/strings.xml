@@ -46,6 +46,7 @@
     <string name="title_create_new_account">Create a new account</string>
     	<string name="desc_account">Your account</string>
     <string name="hello">Hello %1$s!</string>
+    <string name="GoodBye">See you soon %1$s!</string>
     
     <string name="firstname">"Your firstname : "</string>
     <string name="lastname">Your lastname :</string>
