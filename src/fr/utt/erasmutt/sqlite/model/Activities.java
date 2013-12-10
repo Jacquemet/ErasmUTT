@@ -10,6 +10,7 @@ public class Activities {
 	private String longitude;
 	private String latitude;
 	private String website;
+	private String address;
 	private Boolean focusOn;
 	
 	public Activities() {
@@ -102,6 +103,13 @@ public class Activities {
 
 	public void setFocusOn(Boolean focusOn) {
 		this.focusOn = focusOn;
+	}
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String Address) {
+		this.address = Address;
 	}
 	
 }

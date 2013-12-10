@@ -150,6 +150,7 @@ public class LoginActivity extends Activity {
 				             afu.setWebsite(menuObject.getString("website"));
 				             afu.setFocusOn(Boolean.parseBoolean(menuObject.getString("focusOn")));
 				             afu.setPictureActivity(menuObject.getString("picture"));
+				             afu.setPictureActivity(menuObject.getString("address"));
 				        	
 				        	if(!db.isExistActivity(Integer.parseInt(menuObject.getString("idActivity")))) {
 					             db.addActivity(afu);

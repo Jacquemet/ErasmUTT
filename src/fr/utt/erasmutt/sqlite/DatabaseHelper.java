@@ -244,6 +244,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	        values.put("latitude", activity.getLatitude()); 
 	        values.put("website", activity.getWebsite()); 
 	        values.put("focusOn", activity.getFocusOn()); 
+	        values.put("address", activity.getAddress()); 
 	 
 	        // 3. insert
 	        db.insert("activities", // table
@@ -269,7 +270,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	        values.put("latitude", activity.getLatitude()); 
 	        values.put("website", activity.getWebsite()); 
 	        values.put("focusOn", activity.getFocusOn()); 
-	 
+	        values.put("address", activity.getAddress()); 
+	        
 	        // 3. insert
 	        db.update("activities", values, "idActivity = ? ", new String[] {String.valueOf(activity.getIdActivity())});
 	 
@@ -301,7 +303,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	                act.setLatitude(cursor.getString(6));
 	                act.setWebsite(cursor.getString(7));
 	                act.setFocusOn(Boolean.parseBoolean(cursor.getString(8)));
-	  
+	                act.setAddress(cursor.getString(9)); 
 	                // Add book to books
 	                activities.add(act);
 	            } while (cursor.moveToNext());
