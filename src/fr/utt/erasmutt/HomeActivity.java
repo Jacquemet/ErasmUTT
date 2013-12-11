@@ -12,19 +12,17 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
-import android.widget.Toast;
 import android.widget.SearchView.OnQueryTextListener;
 import android.widget.TextView;
+import android.widget.Toast;
 import fr.utt.erasmutt.fragments.PopularActivitiesFragment;
 import fr.utt.erasmutt.fragments.UserDetailsFragment;
 import fr.utt.erasmutt.maps.MapActivity;
@@ -179,10 +177,16 @@ public class HomeActivity extends FragmentActivity {
 
         	return true;
         case R.id.action_help:
-        	String url = "https://github.com/Jacquemet/ErasmUTT";
+        	
         	Intent i = new Intent(Intent.ACTION_VIEW);
-        	i.setData(Uri.parse(url));
-        	startActivity(i);
+        	i.setData(Uri.parse(Constants.urlHelp));
+        	
+            if (i.resolveActivity(getPackageManager()) != null) {
+            	startActivity(i);
+            } else {
+                Toast.makeText(this, R.string.app_not_available, Toast.LENGTH_LONG).show();
+            }
+        	
         	return true;	
         case R.id.action_logout:
         	db.userLogout();

@@ -3,8 +3,11 @@ package fr.utt.erasmutt.sqlite;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.google.android.gms.internal.r;
+
 import fr.utt.erasmutt.Constants;
 import fr.utt.erasmutt.sqlite.model.Activities;
+import fr.utt.erasmutt.sqlite.model.Review;
 import fr.utt.erasmutt.sqlite.model.User;
 import android.content.ContentValues;
 import android.content.Context;
@@ -49,7 +52,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "longitude TEXT, "+
                 "latitude TEXT, "+
                 "website TEXT, "+
-                "focusOn INTEGER )";
+                "focusOn INTEGER, "+
+                "address TEXT)";
        
         String CREATE_GROUPS_TABLE="CREATE TABLE groups("+
         		  "idGroup INTEGER PRIMARY KEY AUTOINCREMENT,"+
@@ -77,7 +81,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         
         String CREATE_REVIEW_TABLE ="CREATE TABLE review ("+
         		"idReview INTEGER PRIMARY KEY AUTOINCREMENT,"+
-        		"idUSer INTEGER,"+
+        		"idUser INTEGER,"+
         		"idActivity INTEGER,"+
         		"title TEXT,"+
         		"description TEXT,"+
@@ -194,7 +198,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	        SQLiteDatabase db = this.getReadableDatabase();
 	 
 	        // 1. build the query
-	        String query = "SELECT * FROM users where idUSer = " + idUser;
+	        String query = "SELECT * FROM users where idUser = " + idUser;
 	 
 	        // 2. get reference to writable DB
 	        Cursor cursor = db.rawQuery(query, null);
@@ -358,6 +362,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		                act.setLatitude(cursor.getString(6));
 		                act.setWebsite(cursor.getString(7));
 		                act.setFocusOn(Boolean.parseBoolean(cursor.getString(8)));
+		                act.setAddress(cursor.getString(9)); 
 		  
 		                // Add book to books
 		                activities.add(act);
@@ -390,6 +395,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		                act.setLatitude(cursor.getString(6));
 		                act.setWebsite(cursor.getString(7));
 		                act.setFocusOn(Boolean.parseBoolean(cursor.getString(8)));
+		                act.setAddress(cursor.getString(9)); 
 		            } while (cursor.moveToNext());
 		        }
 		        // return act
@@ -421,6 +427,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		                act.setLatitude(cursor.getString(6));
 		                act.setWebsite(cursor.getString(7));
 		                act.setFocusOn(Boolean.parseBoolean(cursor.getString(8)));
+		                act.setAddress(cursor.getString(9)); 
 		  
 		                // Add act to acts
 		                activities.add(act);
@@ -429,4 +436,142 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		        // return act
 		        return activities;
 		    }
+		 	
+			 //---------------------------------------------------------------------
+			 
+		    /**
+		     * CRUD operations (create "add", read "get", update, delete) Review
+		     */
+
+			
+			public void addReview(Review review){
+		        Log.d("review", review.toString());
+		        // 1. get reference to writable DB
+		        SQLiteDatabase db = this.getWritableDatabase();
+		 
+		        // 2. create ContentValues to add key "column"/value
+		        ContentValues values = new ContentValues();
+		        values.put("idReview", review.getIdReview());
+		        values.put("idUser", review.getIdUser()); 
+		        values.put("idActivity", review.getIdActivity()); 
+		        values.put("title", review.getTitle()); 
+		        values.put("description", review.getDescription()); 
+		        values.put("mark", review.getMark());
+		        values.put("date", review.getDateTime());
+		        values.put("language", review.getLanguage());
+		 
+		        // 3. insert
+		        db.insert("review", // table
+		                null, //nullColumnHack
+		                values); // key/value -> keys = column names/ values = column values
+		 
+		        // 4. close
+		        db.close();
+		    }
+			
+			 public void updateReview(Review review){
+			        // 1. get reference to writable DB
+			        SQLiteDatabase db = this.getWritableDatabase();
+			 
+			        // 2. create ContentValues to add key "column"/value
+			        ContentValues values = new ContentValues();
+			        values.put("idReview", review.getIdReview());
+			        values.put("idUser", review.getIdUser()); 
+			        values.put("idActivity", review.getIdActivity()); 
+			        values.put("title", review.getTitle()); 
+			        values.put("description", review.getDescription()); 
+			        values.put("mark", review.getMark());
+			        values.put("date", review.getDateTime());
+			        values.put("language", review.getLanguage());
+			 
+			        // 3. insert
+			        db.update("review", values, "idReview = ? ", new String[] {String.valueOf(review.getIdReview())});
+			 
+			        // 4. close
+			        db.close();
+		    }
+
+			 public Boolean isExistReview(int idReview){
+				 
+			        // 1. get reference to readable DB
+			        SQLiteDatabase db = this.getReadableDatabase();
+			 
+			        // 1. build the query
+			        String query = "SELECT * FROM review where idReview = " + idReview;
+			 
+			        // 2. get reference to writable DB
+			        Cursor cursor = db.rawQuery(query, null);
+			 
+			        // 3. if we got results get the first one
+			        if (cursor != null && cursor.getCount()!=0) {
+			        	db.close();
+			        	 return true;
+			        }
+			        else {
+			        	db.close();
+			        	return false;
+			        }
+			 
+			    }
+			 
+			 	public Review getReviewById(Integer idReview) {
+	        		  
+			        // 1. build the query
+			        String query = "SELECT  * FROM review where idReview ="+idReview;
+			  
+			        // 2. get reference to writable DB
+			        SQLiteDatabase db = this.getWritableDatabase();
+			        Cursor cursor = db.rawQuery(query, null);
+			  
+			        // 3. go over each row, build act and add it to list
+			        Review rv = null;
+			        if (cursor.moveToFirst()) {
+			            do {
+			            	rv = new Review();
+			            	rv.setIdReview(Integer.parseInt(cursor.getString(0)));
+			            	rv.setIdUser(Integer.parseInt(cursor.getString(1)));
+			            	rv.setIdActivity(Integer.parseInt(cursor.getString(2)));
+			            	rv.setTitle(cursor.getString(3));
+			            	rv.setDescription(cursor.getString(4));
+			            	rv.setMark(Float.parseFloat(cursor.getString(5)));
+			            	rv.setDateTime(cursor.getString(6));
+			            	rv.setLanguage(cursor.getString(7));
+			            	
+			            } while (cursor.moveToNext());
+			        }
+			        // return act
+			        return rv;
+			    }
+			 	
+			 	public List<Review> getReviewsByActivity(int idActivity) {
+			        List<Review> reviews = new LinkedList<Review>();
+			  
+			        // 1. build the query
+			        String query = "SELECT  * FROM review WHERE idActivty = " + idActivity;
+			  
+			        // 2. get reference to writable DB
+			        SQLiteDatabase db = this.getWritableDatabase();
+			        Cursor cursor = db.rawQuery(query, null);
+			  
+			        // 3. go over each row, build book and add it to list
+			        Review rv = null;
+			        if (cursor.moveToFirst()) {
+			            do {
+			            	rv = new Review();
+			            	rv.setIdReview(Integer.parseInt(cursor.getString(0)));
+			            	rv.setIdUser(Integer.parseInt(cursor.getString(1)));
+			            	rv.setIdActivity(Integer.parseInt(cursor.getString(2)));
+			            	rv.setTitle(cursor.getString(3));
+			            	rv.setDescription(cursor.getString(4));
+			            	rv.setMark(Float.parseFloat(cursor.getString(5)));
+			            	rv.setDateTime(cursor.getString(6));
+			            	rv.setLanguage(cursor.getString(7));
+			            	
+			                // Add review to books
+			                reviews.add(rv);
+			            } while (cursor.moveToNext());
+			        }
+			        // return reviews
+			        return reviews;
+			    }
 }

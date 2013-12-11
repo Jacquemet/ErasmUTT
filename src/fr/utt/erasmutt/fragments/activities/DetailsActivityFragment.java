@@ -75,6 +75,9 @@ public class DetailsActivityFragment extends Fragment {
 	        
 	        titleActivity = (TextView) getActivity().findViewById(R.id.titleActivityDetails);
 	        titleActivity.setText(activityDetails.getName());
+
+	        valueAddress = (TextView) getActivity().findViewById(R.id.valueAddressActivity);
+	        valueAddress.setText(activityDetails.getAddress());
 	        
 	        valueDescription = (TextView) getActivity().findViewById(R.id.valueDescription);
 	        valueDescription.setText(activityDetails.getDesciptionActivity());	   
@@ -97,7 +100,6 @@ public class DetailsActivityFragment extends Fragment {
 		            }
 				}
 			});
-	       
 	        
 	        averageRatingBarActivity =  (RatingBar) getActivity().findViewById(R.id.averageRatingBarActivity);
 	        //averageRatingBarActivity.setRating(activityDetails.getAverageMark());

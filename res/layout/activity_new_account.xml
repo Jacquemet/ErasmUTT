@@ -52,7 +52,7 @@
             android:layout_marginTop="@dimen/field_vertical_margin"
             android:background="@android:color/white"
             android:ems="10"
-            android:inputType="text"
+            android:inputType="textEmailAddress"
             android:paddingBottom="@dimen/field_vertical_padding"
             android:paddingTop="@dimen/field_vertical_padding" />
 
@@ -112,7 +112,7 @@
             android:layout_marginTop="@dimen/field_vertical_margin"
             android:background="@android:color/white"
             android:ems="10"
-            android:inputType="text"
+            android:inputType="textPersonName"
             android:paddingBottom="@dimen/field_vertical_padding"
             android:paddingTop="@dimen/field_vertical_padding" />
 
@@ -132,7 +132,7 @@
             android:layout_marginTop="@dimen/field_vertical_margin"
             android:background="@android:color/white"
             android:ems="10"
-            android:inputType="text"
+            android:inputType="textPersonName"
             android:paddingBottom="@dimen/field_vertical_padding"
             android:paddingTop="@dimen/field_vertical_padding" />
 
