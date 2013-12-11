@@ -64,10 +64,10 @@
     <string name="GoodBye">À bientôt %1$s!</string>
     	<!-- Activity Details -->
 	
-	<string name="labelAddressActivity">Address : </string>
+	<string name="labelAddressActivity">Adresse : </string>
 	<string name="labelDescriptionActivity">Description : </string>
-	<string name="labelWebsite">Website : </string>
-	<string name="labelRating">Average mark : </string>
+	<string name="labelWebsite">Site Web : </string>
+	<string name="labelRating">Note moyenne : </string>
 	
 	<plurals name="labelNumberReview">
         <item quantity="one">%1$s avis</item>

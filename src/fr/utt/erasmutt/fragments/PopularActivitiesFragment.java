@@ -60,7 +60,7 @@ public class PopularActivitiesFragment extends Fragment{
 							Log.v("call ", "callback done");
 							
 							Bitmap b = BitmapFactory.decodeByteArray( imgbyte,  0,imgbyte.length);
-							photo[indice].setImageBitmap(Bitmap.createScaledBitmap(b, 200, 200, false));
+							photo[indice].setImageBitmap(Bitmap.createScaledBitmap(b, 300, 300, false));
 							act.get(indice).setPictureActivity(imgbyte);
 							db.updateImageActivity(act.get(indice));
 							indice++;
@@ -73,7 +73,7 @@ public class PopularActivitiesFragment extends Fragment{
 	        	  Log.v(" Loading Image ", "--Charger image depuis la bd--");
 	        	  photo[i] = new ImageView(getActivity());
 	        	  Bitmap b = BitmapFactory.decodeByteArray( act.get(i).getPictureActivity(),  0,act.get(i).getPictureActivity().length);
-				  photo[indice].setImageBitmap(Bitmap.createScaledBitmap(b, 200, 200, false));
+				  photo[indice].setImageBitmap(Bitmap.createScaledBitmap(b, 300, 300, false));
 	        	  indice++;
 	          }
 	          
@@ -96,8 +96,13 @@ public class PopularActivitiesFragment extends Fragment{
 		     	linearHor.setOrientation(LinearLayout.HORIZONTAL);
 		     	  
 			  }
-			 
-			 linearVer.addView(photo[j]);
+			  
+			  int dimen = getResources().getDimensionPixelSize(R.dimen.field_vertical_margin);
+			  
+			  LinearLayout.LayoutParams paramsImage = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+			  paramsImage.setMargins(0, dimen, 0, 0);
+			  photo[j].setLayoutParams(paramsImage);
+			  linearVer.addView(photo[j]);
 			 
 			 linearVer.setBackgroundColor(getResources().getColor(R.color.background_white));
 			 
@@ -115,7 +120,6 @@ public class PopularActivitiesFragment extends Fragment{
 			 linearVer.addView(ratingBar);
 			 
 			 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT,1f);
-			 int dimen = getResources().getDimensionPixelSize(R.dimen.field_vertical_margin);
 			 
 			 //Set padding if it's the first element, we reduce all the margins except the left one
 			 if(j%2 == 0)

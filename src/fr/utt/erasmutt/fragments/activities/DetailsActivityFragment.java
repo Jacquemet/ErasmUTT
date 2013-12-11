@@ -87,7 +87,7 @@ public class DetailsActivityFragment extends Fragment {
 						public Object call(byte[] imgbyte) {
 							
 							Bitmap b = BitmapFactory.decodeByteArray( imgbyte,  0,imgbyte.length);
-							imageActivity.setImageBitmap(Bitmap.createScaledBitmap(b, 200, 200, false));
+							imageActivity.setImageBitmap(Bitmap.createScaledBitmap(b, 300, 300, false));
 							activityDetails.setPictureActivity(imgbyte);
 							db.updateImageActivity(activityDetails);
 							
@@ -97,7 +97,7 @@ public class DetailsActivityFragment extends Fragment {
 	          }
 	          else if(activityDetails.getPictureActivity()!=null){
 	        	  Bitmap b = BitmapFactory.decodeByteArray(activityDetails.getPictureActivity(), 0, activityDetails.getPictureActivity().length);
-	        	  imageActivity.setImageBitmap(Bitmap.createScaledBitmap(b, 200, 200, false));
+	        	  imageActivity.setImageBitmap(Bitmap.createScaledBitmap(b, 300, 300, false));
 	          }
 	        
 	        //Title ActionBar update with the name of the selected element
