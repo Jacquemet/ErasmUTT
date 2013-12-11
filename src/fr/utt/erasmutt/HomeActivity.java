@@ -10,6 +10,7 @@ import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
@@ -25,10 +26,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 import fr.utt.erasmutt.fragments.PopularActivitiesFragment;
 import fr.utt.erasmutt.fragments.UserDetailsFragment;
+import fr.utt.erasmutt.fragments.activities.DetailsActivityFragment;
 import fr.utt.erasmutt.maps.MapActivity;
 import fr.utt.erasmutt.sqlite.DatabaseHelper;
 
-public class HomeActivity extends FragmentActivity {
+public class HomeActivity extends FragmentActivity implements OnHeadlineSelectedListener{
 
 	private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
@@ -240,24 +242,17 @@ public class HomeActivity extends FragmentActivity {
 			break;
 		}
     	
-        //Fragment fragment = new PopularActivitiesFragment();
-        //Bundle args = new Bundle();
-        //args.putInt(PopularActivitiesFragment.ARG_MENU_NUMBER, position);
-        //fragment.setArguments(args);
-
-        //FragmentManager fragmentManager = getSupportFragmentManager();
-        //fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
-
-        // update selected item and title, then close the drawer
         mDrawerList.setItemChecked(position, true);
         setTitle(mTitles[position]);
         mDrawerLayout.closeDrawer(mDrawerList);
     }
 
+    
+    
     @Override
     public void setTitle(CharSequence title) {
-        mTitle = title;
-        getActionBar().setTitle(mTitle);
+    	mTitle = title;
+    	getActionBar().setTitle(mTitle);
     }
 
     /**
@@ -308,5 +303,24 @@ public class HomeActivity extends FragmentActivity {
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
     }
+
+    //Load a fragment when we select a focusOn Activity
+	@Override
+	public void onArticleSelected(int position) {
+
+        // Create fragment and give it an argument for the selected article
+        DetailsActivityFragment newFragment = new DetailsActivityFragment();
+        Bundle args = new Bundle();
+        args.putInt(DetailsActivityFragment.ARG_ID_ACTIVITY, position);
+        newFragment.setArguments(args);
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+
+        // Replace whatever is in the fragment_container view with this fragment,
+        // and add the transaction to the back stack so the user can navigate back
+        transaction.replace(R.id.content_frame, newFragment);
+        transaction.addToBackStack(null);
+        // Commit the transaction
+        transaction.commit();
+	}
     
 }

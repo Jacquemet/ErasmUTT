@@ -1,24 +1,11 @@
 package fr.utt.erasmutt.fragments;
 
-import java.io.BufferedInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.List;
 
-import org.apache.http.util.ByteArrayBuffer;
-
-import fr.utt.erasmutt.R;
-import fr.utt.erasmutt.networkConnection.HttpCallbackByte;
-import fr.utt.erasmutt.sqlite.DatabaseHelper;
-import fr.utt.erasmutt.sqlite.model.Activities;
 import android.app.ActionBar.LayoutParams;
+import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.opengl.Visibility;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -30,9 +17,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
-import android.widget.TableLayout;
 import android.widget.TextView;
-import android.widget.Toast;
+import fr.utt.erasmutt.OnHeadlineSelectedListener;
+import fr.utt.erasmutt.R;
+import fr.utt.erasmutt.networkConnection.HttpCallbackByte;
+import fr.utt.erasmutt.networkConnection.RetreiveImgTask;
+import fr.utt.erasmutt.sqlite.DatabaseHelper;
+import fr.utt.erasmutt.sqlite.model.Activities;
 
 public class PopularActivitiesFragment extends Fragment{
 
@@ -44,6 +35,8 @@ public class PopularActivitiesFragment extends Fragment{
 	LinearLayout linearHor; 
 	LinearLayout linearVer; 
 	
+	OnHeadlineSelectedListener selectedActivityCallback;
+	
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -51,8 +44,6 @@ public class PopularActivitiesFragment extends Fragment{
     	db= new DatabaseHelper(getActivity());
     	LinearLayout ll = (LinearLayout) inflater.inflate(R.layout.fragment_popular_activities, container, false);
     	ll.setBackgroundColor(getResources().getColor(R.color.background_grey));
-		
-    	
     	
     	act = db.getFocusOnActivities();
 		  
@@ -93,10 +84,12 @@ public class PopularActivitiesFragment extends Fragment{
 		  
 	      linearHor.setOrientation(LinearLayout.HORIZONTAL);
 	      
-		  for(int j=0;j<4;j++){
+	      //For all the focus Activities
+		  for(int j=0;j<act.size();j++){
 			  linearVer = new LinearLayout(getActivity());
 			  linearVer.setOrientation(LinearLayout.VERTICAL);
 			  linearVer.setGravity(Gravity.CENTER);
+			  // We create a horizontal linearLayout every two elements 
 			  if(j%2==0 && j!=0){
 				ll.addView(linearHor);
 				linearHor = new LinearLayout(getActivity());
@@ -122,7 +115,15 @@ public class PopularActivitiesFragment extends Fragment{
 			 linearVer.addView(ratingBar);
 			 
 			 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT,1f);
-			 params.setMargins(10, 10, 10, 10);
+			 int dimen = getResources().getDimensionPixelSize(R.dimen.field_vertical_margin);
+			 
+			 //Set padding if it's the first element, we reduce all the margins except the left one
+			 if(j%2 == 0)
+				 params.setMargins(dimen,dimen/2,dimen/2,dimen/2);
+			 // Else if it's the second element, we reduce all the margins except the Right one
+			 else
+				 params.setMargins(dimen/2,dimen/2,dimen,dimen/2);
+			 
 			 linearVer.setLayoutParams(params);
 			 linearVer.setTag(act.get(j).getIdActivity());
 			 
@@ -131,8 +132,8 @@ public class PopularActivitiesFragment extends Fragment{
 				@Override
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
-					Toast.makeText(getActivity(), "test "+v.getTag() , Toast.LENGTH_LONG).show();
-					
+					//Toast.makeText(getActivity(), "test "+v.getTag() , Toast.LENGTH_LONG).show();
+					selectedActivityCallback.onArticleSelected(Integer.valueOf(v.getTag().toString()));
 				}
 			});
 			 
@@ -144,47 +145,18 @@ public class PopularActivitiesFragment extends Fragment{
         
     }
     
-    private byte[] getLogoImage(String url){
-	     try {
-	             URL imageUrl = new URL(url);
-	             URLConnection ucon = imageUrl.openConnection();
-	             InputStream is = ucon.getInputStream();
-	             BufferedInputStream bis = new BufferedInputStream(is);
-	             ByteArrayBuffer baf = new ByteArrayBuffer(500);
-	             int current = 0;
-	             while ((current = bis.read()) != -1) {
-	                     baf.append((byte) current);
-	             }
-	             Log.v("getLogoImage Fin de url : ",url);
-	             return baf.toByteArray();
-	     } catch (Exception e) {
-	             Log.v("ImageManager", "Error: " + e.toString());
-	     }
-	     return null;
+    
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+
+		// This makes sure that the container activity has implemented
+		// the callback interface. If not, it throws an exception.
+		try {
+			selectedActivityCallback = (OnHeadlineSelectedListener) activity;
+		} catch (ClassCastException e) {
+			throw new ClassCastException(activity.toString()+ " must implement OnHeadlineSelectedListener");
+		}
 	}
-	
-	
-	class RetreiveImgTask extends AsyncTask<String, Void, byte[]> {
-
-	    private Exception exception;
-
-	    HttpCallbackByte callback;
-	
-	    RetreiveImgTask(HttpCallbackByte Callback) {
-	        callback = Callback;	        
-	    }
-	    
-		protected byte[] doInBackground(String... params) {
-	        try {
-	            return getLogoImage(params[0]);
-	        } catch (Exception e) {
-	            this.exception = e;
-	            return null;
-	        }
-	    }
-
-	    protected void onPostExecute(byte[] tabImg) {
-	    	this.callback.call(tabImg);
-	    }
-	}
+    
 }

@@ -3,16 +3,21 @@ package fr.utt.erasmutt.fragments.activities;
 import android.app.SearchManager;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import fr.utt.erasmutt.R;
+import fr.utt.erasmutt.networkConnection.HttpCallbackByte;
+import fr.utt.erasmutt.networkConnection.RetreiveImgTask;
 import fr.utt.erasmutt.sqlite.DatabaseHelper;
 import fr.utt.erasmutt.sqlite.model.Activities;
 
@@ -21,8 +26,11 @@ public class DetailsActivityFragment extends Fragment {
 	    public final static String ARG_ID_ACTIVITY = "position";
 	    int mCurrentPosition = -1;
 	    
+	    DatabaseHelper db;
+	    
 	    private Activities activityDetails;
 	    
+	    private ImageView imageActivity;
 	    private TextView titleActivity;
 	    private TextView valueAddress;
 	    private TextView valueDescription;
@@ -67,8 +75,30 @@ public class DetailsActivityFragment extends Fragment {
 	    //Update the view with the position placed in parameters
 	    public void updateArticleView(int position) {
 	       
-	        DatabaseHelper db = new DatabaseHelper(getActivity());
+	    	db = new DatabaseHelper(getActivity());
 	        activityDetails = db.getActivitiesById(position);
+	        
+	        imageActivity = (ImageView) getActivity().findViewById(R.id.imageViewAcivityDetails);
+
+	        if(activityDetails.getPictureActivityString()!="" && activityDetails.getPictureActivity()==null){
+		        	 
+	         	 new RetreiveImgTask(new HttpCallbackByte() {
+						@Override
+						public Object call(byte[] imgbyte) {
+							
+							Bitmap b = BitmapFactory.decodeByteArray( imgbyte,  0,imgbyte.length);
+							imageActivity.setImageBitmap(Bitmap.createScaledBitmap(b, 200, 200, false));
+							activityDetails.setPictureActivity(imgbyte);
+							db.updateImageActivity(activityDetails);
+							
+							return null;
+						}
+					}).execute(activityDetails.getPictureActivityString()); 	
+	          }
+	          else if(activityDetails.getPictureActivity()!=null){
+	        	  Bitmap b = BitmapFactory.decodeByteArray(activityDetails.getPictureActivity(), 0, activityDetails.getPictureActivity().length);
+	        	  imageActivity.setImageBitmap(Bitmap.createScaledBitmap(b, 200, 200, false));
+	          }
 	        
 	        //Title ActionBar update with the name of the selected element
 	    	getActivity().getActionBar().setTitle(activityDetails.getName());
@@ -102,7 +132,7 @@ public class DetailsActivityFragment extends Fragment {
 			});
 	        
 	        averageRatingBarActivity =  (RatingBar) getActivity().findViewById(R.id.averageRatingBarActivity);
-	        //averageRatingBarActivity.setRating(activityDetails.getAverageMark());
+	        averageRatingBarActivity.setRating(activityDetails.getAverageMark());
 	        
 	        labelNumberReview =  (TextView) getActivity().findViewById(R.id.labelNumberReview);
 	        

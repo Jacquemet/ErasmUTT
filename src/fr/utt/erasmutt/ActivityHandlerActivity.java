@@ -6,7 +6,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.Menu;
 import fr.utt.erasmutt.fragments.activities.DetailsActivityFragment;
 import fr.utt.erasmutt.fragments.activities.ListActivityFragment;
-import fr.utt.erasmutt.fragments.activities.ListActivityFragment.OnHeadlineSelectedListener;
 import fr.utt.erasmutt.networkConnection.HttpRequest;
 
 public class ActivityHandlerActivity extends FragmentActivity implements OnHeadlineSelectedListener{

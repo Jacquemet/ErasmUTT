@@ -15,6 +15,7 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import fr.utt.erasmutt.HomeActivity;
+import fr.utt.erasmutt.OnHeadlineSelectedListener;
 import fr.utt.erasmutt.R;
 import fr.utt.erasmutt.sqlite.DatabaseHelper;
 import fr.utt.erasmutt.sqlite.model.Activities;
@@ -25,13 +26,6 @@ public class ListActivityFragment extends ListFragment {
 
 	// This is the Adapter being used to display the list's data
 	SimpleAdapter mAdapter;
-
-	// The container Activity must implement this interface so the frag can
-	// deliver messages
-	public interface OnHeadlineSelectedListener {
-		/** Called by HeadlinesFragment when a list item is selected */
-		public void onArticleSelected(int position);
-	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
