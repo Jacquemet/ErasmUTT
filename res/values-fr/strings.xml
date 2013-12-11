@@ -10,6 +10,7 @@
     <string name="title_activity_map">A proximité</string>
     <string name="title_activity_activity_handler">Recherche de : </string>
 	<string name="title_activity_user_desc">Mon compte</string>
+    <string name="title_popular_activities">Activités populaires</string>
     
     <!-- Titres des menus -->
 

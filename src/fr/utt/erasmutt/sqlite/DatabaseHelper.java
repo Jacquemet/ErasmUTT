@@ -3,8 +3,6 @@ package fr.utt.erasmutt.sqlite;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.google.android.gms.internal.r;
-
 import fr.utt.erasmutt.Constants;
 import fr.utt.erasmutt.sqlite.model.Activities;
 import fr.utt.erasmutt.sqlite.model.Review;
@@ -47,13 +45,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "idActivity INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "name TEXT, "+
                 "descriptionActivity TEXT, "+
-                "pictureActivity TEXT, "+
+                "pictureActivity BLOB, "+
                 "averageMark REAL, "+
                 "longitude TEXT, "+
                 "latitude TEXT, "+
                 "website TEXT, "+
-                "focusOn INTEGER, "+
-                "address TEXT)";
+                "focusOn INTEGER,"+
+                "address TEXT, "+
+                "pictureActivityString TEXT)";
        
         String CREATE_GROUPS_TABLE="CREATE TABLE groups("+
         		  "idGroup INTEGER PRIMARY KEY AUTOINCREMENT,"+
@@ -249,7 +248,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	        values.put("website", activity.getWebsite()); 
 	        values.put("focusOn", activity.getFocusOn()); 
 	        values.put("address", activity.getAddress()); 
-	 
+	        values.put("pictureActivityString", activity.getPictureActivityString());
 	        // 3. insert
 	        db.insert("activities", // table
 	                null, //nullColumnHack
@@ -275,7 +274,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	        values.put("website", activity.getWebsite()); 
 	        values.put("focusOn", activity.getFocusOn()); 
 	        values.put("address", activity.getAddress()); 
-	        
+	        values.put("pictureActivityString", activity.getPictureActivityString());
+	        // 3. insert
+	        db.update("activities", values, "idActivity = ? ", new String[] {String.valueOf(activity.getIdActivity())});
+	 
+	        // 4. close
+	        db.close();
+	    }
+	 	
+	 	public void updateImageActivity(Activities activity){
+	        // 1. get reference to writable DB
+	        SQLiteDatabase db = this.getWritableDatabase();
+	        ContentValues values = new ContentValues();
+	       
+	        values.put("pictureActivity", activity.getPictureActivity());
 	        // 3. insert
 	        db.update("activities", values, "idActivity = ? ", new String[] {String.valueOf(activity.getIdActivity())});
 	 
@@ -301,14 +313,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	            	act.setIdActivity(Integer.parseInt(cursor.getString(0)));
 	            	act.setName(cursor.getString(1));
 	                act.setDesciptionActivity(cursor.getString(2));
-	                act.setPictureActivity(cursor.getString(3));
+	                act.setPictureActivity(cursor.getBlob(3));
 	                act.setAverageMark(Float.parseFloat(cursor.getString(4)));
 	                act.setLongitude(cursor.getString(5));
 	                act.setLatitude(cursor.getString(6));
 	                act.setWebsite(cursor.getString(7));
-	                act.setFocusOn(Boolean.parseBoolean(cursor.getString(8)));
+	                act.setFocusOn(Integer.parseInt(cursor.getString(8)));
 	                act.setAddress(cursor.getString(9)); 
-	                // Add book to books
+	                act.setPictureActivityString(cursor.getString(10));
+	         
 	                activities.add(act);
 	            } while (cursor.moveToNext());
 	        }
@@ -356,15 +369,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		            	act.setIdActivity(Integer.parseInt(cursor.getString(0)));
 		            	act.setName(cursor.getString(1));
 		                act.setDesciptionActivity(cursor.getString(2));
-		                act.setPictureActivity(cursor.getString(3));
+		                act.setPictureActivity(cursor.getBlob(3));
 		                act.setAverageMark(Float.parseFloat(cursor.getString(4)));
 		                act.setLongitude(cursor.getString(5));
 		                act.setLatitude(cursor.getString(6));
 		                act.setWebsite(cursor.getString(7));
-		                act.setFocusOn(Boolean.parseBoolean(cursor.getString(8)));
+		                act.setFocusOn(Integer.parseInt(cursor.getString(8)));
 		                act.setAddress(cursor.getString(9)); 
-		  
-		                // Add book to books
+		                act.setPictureActivityString(cursor.getString(10));
 		                activities.add(act);
 		            } while (cursor.moveToNext());
 		        }
@@ -389,13 +401,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		            	act.setIdActivity(Integer.parseInt(cursor.getString(0)));
 		            	act.setName(cursor.getString(1));
 		                act.setDesciptionActivity(cursor.getString(2));
-		                act.setPictureActivity(cursor.getString(3));
+		                act.setPictureActivity(cursor.getBlob(3));
 		                act.setAverageMark(Float.parseFloat(cursor.getString(4)));
 		                act.setLongitude(cursor.getString(5));
 		                act.setLatitude(cursor.getString(6));
 		                act.setWebsite(cursor.getString(7));
-		                act.setFocusOn(Boolean.parseBoolean(cursor.getString(8)));
+		                act.setFocusOn(Integer.parseInt(cursor.getString(8)));
 		                act.setAddress(cursor.getString(9)); 
+		                act.setPictureActivityString(cursor.getString(10));
 		            } while (cursor.moveToNext());
 		        }
 		        // return act
@@ -407,7 +420,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		        List<Activities> activities = new LinkedList<Activities>();
 		  
 		        // 1. build the query
-		        String query = "SELECT * FROM activities where focusOn = true";
+		        String query = "SELECT * FROM activities where focusOn = 1";
 		  
 		        // 2. get reference to writable DB
 		        SQLiteDatabase db = this.getWritableDatabase();
@@ -421,23 +434,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		            	act.setIdActivity(Integer.parseInt(cursor.getString(0)));
 		            	act.setName(cursor.getString(1));
 		                act.setDesciptionActivity(cursor.getString(2));
-		                act.setPictureActivity(cursor.getString(3));
+		                act.setPictureActivity(cursor.getBlob(3));
 		                act.setAverageMark(Float.parseFloat(cursor.getString(4)));
 		                act.setLongitude(cursor.getString(5));
 		                act.setLatitude(cursor.getString(6));
 		                act.setWebsite(cursor.getString(7));
-		                act.setFocusOn(Boolean.parseBoolean(cursor.getString(8)));
-		                act.setAddress(cursor.getString(9)); 
-		  
+		                act.setFocusOn(Integer.parseInt(cursor.getString(8)));
+		                act.setAddress(cursor.getString(9));
+		                act.setPictureActivityString(cursor.getString(10));
+		                
 		                // Add act to acts
 		                activities.add(act);
 		            } while (cursor.moveToNext());
 		        }
+		        
 		        // return act
 		        return activities;
 		    }
-		 	
-			 //---------------------------------------------------------------------
+//---------------------------------------------------------------------
 			 
 		    /**
 		     * CRUD operations (create "add", read "get", update, delete) Review

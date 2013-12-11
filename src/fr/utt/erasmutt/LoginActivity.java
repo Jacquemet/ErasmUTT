@@ -1,5 +1,12 @@
 package fr.utt.erasmutt;
 
+import java.io.BufferedInputStream;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
+import java.sql.Blob;
+
+import org.apache.http.util.ByteArrayBuffer;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -10,6 +17,7 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -21,6 +29,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import fr.utt.erasmutt.networkConnection.HttpCallback;
+import fr.utt.erasmutt.networkConnection.HttpCallbackByte;
 import fr.utt.erasmutt.networkConnection.HttpRequest;
 import fr.utt.erasmutt.sqlite.DatabaseHelper;
 import fr.utt.erasmutt.sqlite.model.Activities;
@@ -42,9 +51,10 @@ public class LoginActivity extends Activity {
 	private HttpRequest request = null;
 	private HttpRequest requestActivities = null;
 	private HttpRequest requestReviews = null;
-
-	private DatabaseHelper db;
-
+	
+	private	DatabaseHelper db;
+	
+	private Activities afu;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -60,142 +70,125 @@ public class LoginActivity extends Activity {
 		buttonNewAccount = (Button) findViewById(R.id.button_createAccount);
 		progBar = (ProgressBar) findViewById(R.id.progressBar);
 
-		db = new DatabaseHelper(this);
-
+        db = new DatabaseHelper(this);
+        
 		buttonSignIn.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-
+				
 				request = new HttpRequest(new HttpCallback() {
-
+					
 					@Override
 					public Object call(JSONObject jsonResponse) {
 
 						try {
-							// TODO : Exploiter les données reçues
+							//TODO : Exploiter les données reçues
 							if (!jsonResponse.getBoolean("error")) {
-								Constants.user.setIdUser(Integer
-										.parseInt(jsonResponse
-												.getString("idUser")));
-								Constants.user.setFirstname(jsonResponse
-										.getString("firstname"));
-								Constants.user.setToken(jsonResponse
-										.getString("token"));
-								Constants.user.setLastname(jsonResponse
-										.getString("lastname"));
-								Constants.user.setMail(jsonResponse
-										.getString("mail"));
-
-								// TODO : Vérifier que le User n'existe pas déjà
-								if (!db.isExistUser(Constants.user.getIdUser())) {
-									db.addUser(Constants.user);
-								} else {
-									db.updateUser(Constants.user);
-								}
-
+								Constants.user.setIdUser(Integer.parseInt(jsonResponse.getString("idUser")));
+								Constants.user.setFirstname(jsonResponse.getString("firstname"));
+								Constants.user.setToken(jsonResponse.getString("token"));
+								Constants.user.setLastname(jsonResponse.getString("lastname"));
+								Constants.user.setMail(jsonResponse.getString("mail"));
+								
+								//TODO : Vérifier que le User n'existe pas déjà 
+								if(!db.isExistUser(Constants.user.getIdUser())) {
+						             db.addUser(Constants.user);
+					        	} else {
+					        		db.updateUser(Constants.user);
+					        	}
+								
 								loadActitivies();
-
+								
 							} else {
-								Toast.makeText(getApplicationContext(),
-										R.string.invalid_password,
-										Toast.LENGTH_LONG).show();
+								Toast.makeText(getApplicationContext(), R.string.invalid_password, Toast.LENGTH_LONG).show();
 								endLoading();
 							}
 						} catch (JSONException e) {
-							Toast.makeText(getApplicationContext(),
-									R.string.error_network, Toast.LENGTH_LONG)
-									.show();
+							Toast.makeText(getApplicationContext(), R.string.error_network, Toast.LENGTH_LONG).show();
 							endLoading();
 						}
-
+						
 						return null;
 					}
 				});
-
-				// On vérifie que la connexion au réseau est valide
-				ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-				NetworkInfo activeInfo = connMgr.getActiveNetworkInfo();
-
-				if (activeInfo != null && activeInfo.isConnected()) {
-					startLoading();
-					final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-					imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-					request.execute(Constants.urlRoot
-							+ "connexion.php?typeConnexion=connecter&mail="
-							+ login.getText().toString() + "&password="
-							+ password.getText().toString());
-				} else {
-					Toast.makeText(getApplicationContext(),
-							R.string.network_disabled, Toast.LENGTH_LONG)
-							.show();
-				}
+				
+				//On vérifie que la connexion au réseau est valide
+		        ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+		        NetworkInfo activeInfo = connMgr.getActiveNetworkInfo();
+		        
+		        if (activeInfo != null && activeInfo.isConnected()) {
+		        	startLoading();
+		        	final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+		        	imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+		        	request.execute(Constants.urlRoot+"connexion.php?typeConnexion=connecter&mail="+login.getText().toString()+"&password="+password.getText().toString());
+		        }else {
+		        	Toast.makeText(getApplicationContext(), R.string.network_disabled, Toast.LENGTH_LONG).show();
+		        }
 			}
 		});
 
-		// Action sur le bouton de création d'un nouveau compte
+        // Action sur le bouton de création d'un nouveau compte
 		buttonNewAccount.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Intent intent = new Intent(getApplicationContext(),
-						NewAccountActivity.class);
+				Intent intent = new Intent(getApplicationContext(), NewAccountActivity.class);
 				startActivity(intent);
 			}
 		});
 	}
-
-	private void loadActitivies() {
+	
+	private void loadActitivies(){
 		requestActivities = new HttpRequest(new HttpCallback() {
-
+			
 			@Override
 			public Object call(JSONObject jsonResponse) {
 
 				try {
-					// TODO : Exploiter les données reçues
-					JSONArray jObject = jsonResponse
-							.getJSONArray("listActivities");
+					//TODO : Exploiter les données reçues
+					if (!jsonResponse.getBoolean("error")) {
 
-					for (int i = 0; i < jObject.length(); i++) {
+						JSONArray jObject = jsonResponse.getJSONArray("listActivities");
 
-						JSONObject menuObject = jObject.getJSONObject(i);
+				        for (int i = 0; i < jObject.length(); i++) {
 
-						Activities afu = new Activities();
-						afu.setIdActivity(Integer.parseInt(menuObject
-								.getString("idActivity")));
-						afu.setName(menuObject.getString("name"));
-						afu.setDesciptionActivity(menuObject.getString("desc"));
-						afu.setAverageMark(Float.parseFloat(menuObject
-								.getString("averageMark")));
-						afu.setLatitude(menuObject.getString("latitude"));
-						afu.setLongitude(menuObject.getString("longitude"));
-						afu.setWebsite(menuObject.getString("website"));
-						afu.setFocusOn(Boolean.parseBoolean(menuObject
-								.getString("focusOn")));
-						afu.setPictureActivity(menuObject.getString("picture"));
-						afu.setAddress(menuObject.getString("address"));
+				        	JSONObject menuObject = jObject.getJSONObject(i);
 
-						if (!db.isExistActivity(Integer.parseInt(menuObject
-								.getString("idActivity")))) {
-							db.addActivity(afu);
-						} else {
-							db.updateActivity(afu);
-						}
-						
+				        	 afu= new Activities();
+				             afu.setIdActivity(Integer.parseInt(menuObject.getString("idActivity")));
+				             afu.setName(menuObject.getString("name"));
+				             afu.setDesciptionActivity(menuObject.getString("desc"));
+				             afu.setAverageMark(Float.parseFloat(menuObject.getString("averageMark")));
+				             afu.setLatitude(menuObject.getString("latitude"));
+				             afu.setLongitude(menuObject.getString("longitude"));
+				             afu.setWebsite(menuObject.getString("website"));
+				             afu.setFocusOn(Integer.parseInt(menuObject.getString("focusOn")));
+				             afu.setAddress(menuObject.getString("address"));
+				             afu.setPictureActivityString(menuObject.getString("picture"));
+				             afu.setPictureActivity(null);
+				            				           
+				             afu.setAddress(menuObject.getString("address"));
+				        	
+				        	if(!db.isExistActivity(Integer.parseInt(menuObject.getString("idActivity")))) {
+					             db.addActivity(afu);
+				        	} else {
+				        		db.updateActivity(afu);
+				        	}
+				            
+				        }
+						loadReviews();
 					}
-					loadReviews();
-
 				} catch (JSONException e) {
-					Toast.makeText(getApplicationContext(), "erreur parsage",Toast.LENGTH_LONG).show();
+					Toast.makeText(getApplicationContext(),"erreur parsage", Toast.LENGTH_LONG).show();
 					endLoading();
 				}
-
+				
 				return null;
 			}
 		});
-
-		// On vérifie que la connexion au réseau est valide
-		requestActivities.execute(Constants.urlRoot + "activiesManager.php?typeActivies=lister&token="	+ Constants.user.getToken());
-
+		
+		//On vérifie que la connexion au réseau est valide
+    	requestActivities.execute(Constants.urlRoot+"activiesManager.php?typeActivies=lister&token="+Constants.user.getToken());
 	}
 
 	private void loadReviews() {
@@ -242,7 +235,6 @@ public class LoginActivity extends Activity {
 		});
 
 		// On vérifie que la connexion au réseau est valide
-		Log.d("URL", Constants.urlRoot + "reviewsManager.php?typeReviews=lister&token=" + Constants.user.getToken());
 		requestReviews.execute(Constants.urlRoot + "reviewsManager.php?typeReviews=lister&token=" + Constants.user.getToken());
 
 	}
@@ -284,5 +276,4 @@ public class LoginActivity extends Activity {
 		// Start the activity
 		startActivity(intent);
 	}
-
 }

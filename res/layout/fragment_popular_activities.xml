@@ -3,6 +3,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
-    
+   
+    <TextView
+        android:id="@+id/titlePopularActivities"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/field_vertical_margin"
+        android:background="@color/background_dark_blue"
+        android:gravity="center"
+        android:text="@string/title_popular_activities"
+        android:padding="@dimen/field_vertical_padding"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="@android:color/white" />
 
 </LinearLayout>

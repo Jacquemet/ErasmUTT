@@ -1,26 +1,28 @@
 package fr.utt.erasmutt.sqlite.model;
 
+import java.sql.Blob;
+
 public class Activities {
 	
 	private int idActivity;
 	private String name;
 	private String desciptionActivity;
-	private String pictureActivity;
+	private byte[] pictureActivity;
 	private float averageMark;
 	private String longitude;
 	private String latitude;
 	private String website;
 	private String address;
-	private Boolean focusOn;
-	
+	private Integer focusOn;
+	private String pictureActivityString;
 	public Activities() {
 		super();
 	}
 
 	public Activities(int idActivity, String name,
-			String desciptionActivity, String pictureActivity,
+			String desciptionActivity, byte[] pictureActivity,
 			float averageMark, String longitude, String latitude,
-			String website, Boolean focusOn) {
+			String website, Integer focusOn,String pictureActivityString) {
 		super();
 		this.idActivity = idActivity;
 		this.name = name;
@@ -31,6 +33,7 @@ public class Activities {
 		this.latitude = latitude;
 		this.website = website;
 		this.focusOn = focusOn;
+		this.pictureActivityString=pictureActivityString;
 	}
 
 	public int getIdActivity() {
@@ -57,11 +60,11 @@ public class Activities {
 		this.desciptionActivity = desciptionActivity;
 	}
 
-	public String getPictureActivity() {
+	public byte[] getPictureActivity() {
 		return pictureActivity;
 	}
 
-	public void setPictureActivity(String pictureActivity) {
+	public void setPictureActivity(byte[] pictureActivity) {
 		this.pictureActivity = pictureActivity;
 	}
 
@@ -97,11 +100,11 @@ public class Activities {
 		this.website = website;
 	}
 
-	public Boolean getFocusOn() {
+	public Integer getFocusOn() {
 		return focusOn;
 	}
 
-	public void setFocusOn(Boolean focusOn) {
+	public void setFocusOn(Integer focusOn) {
 		this.focusOn = focusOn;
 	}
 	public String getAddress() {
@@ -111,5 +114,13 @@ public class Activities {
 	public void setAddress(String Address) {
 		this.address = Address;
 	}
+
+	public void setPictureActivityString(String pictureString) {
+		this.pictureActivityString = pictureString;
+	}
+	public String getPictureActivityString() {
+		return pictureActivityString;
+	}
+	
 	
 }

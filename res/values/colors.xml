@@ -4,4 +4,6 @@
     <color name="background_dark_blue">#01546F</color>
     <color name="background_light_blue">#33B5E5</color>
     <color name="transparent_white">#70ffffff</color>
+    <color name="background_grey">#bdc3c7</color>
+    <color name="background_white">#fff</color>
 </resources>
