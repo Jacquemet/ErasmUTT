@@ -28,6 +28,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import fr.utt.erasmutt.fragments.PopularActivitiesFragment;
 import fr.utt.erasmutt.fragments.UserDetailsFragment;
+import fr.utt.erasmutt.fragments.UserReviews;
 import fr.utt.erasmutt.fragments.activities.DetailsActivityFragment;
 import fr.utt.erasmutt.maps.MapActivity;
 import fr.utt.erasmutt.sqlite.DatabaseHelper;
@@ -47,6 +48,7 @@ public class HomeActivity extends FragmentActivity implements OnHeadlineSelected
     
     private UserDetailsFragment userDetailsFrag;
     private PopularActivitiesFragment popularActivities;
+    private UserReviews userReviews;
     private DatabaseHelper db;
     
     @Override
@@ -239,7 +241,7 @@ public class HomeActivity extends FragmentActivity implements OnHeadlineSelected
 			//showFragment(listActivityFragment);
 			break;
 		case 3:
-			
+			showFragment(userReviews);
 			break;	
 
 		default:
@@ -291,7 +293,10 @@ public class HomeActivity extends FragmentActivity implements OnHeadlineSelected
         if (this.popularActivities == null) {
         	this.popularActivities = new PopularActivitiesFragment();
         }
-        
+        this.userReviews = (UserReviews) fm.findFragmentById(R.id.fragment_activity_user_reviews);
+        if (this.userReviews == null) {
+        	this.userReviews = new UserReviews();
+        }
        /* this.listActivityFragment = (ListActivityFragment) fm.findFragmentById(R.id.list_activity_frag);
         if (this.listActivityFragment == null) {
             this.listActivityFragment = new ListActivityFragment();

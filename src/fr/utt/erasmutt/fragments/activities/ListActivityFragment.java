@@ -34,7 +34,6 @@ public class ListActivityFragment extends ListFragment {
 		List<Activities> listActivity;
 		
 		DatabaseHelper db = new DatabaseHelper(getActivity());
-		listActivity = db.getSearchableActivities(bundle.getString("query").toString());
 		if(bundle != null)
 			listActivity = db.getSearchableActivities(bundle.getString("query").toString());
 		else 

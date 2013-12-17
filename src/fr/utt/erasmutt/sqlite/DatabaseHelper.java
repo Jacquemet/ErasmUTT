@@ -196,6 +196,33 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	        db.close();
     }
 
+	 public User getUserById(int id){
+	        // 1. get reference to writable DB
+	        SQLiteDatabase db = this.getReadableDatabase();
+	 
+	        // 1. build the query
+	        String query = "SELECT * FROM users where idUser = " + id;
+	        // 2. get reference to writable DB
+	        Cursor cursor = db.rawQuery(query, null);
+	 
+	        // 3. go over each row, build book and add it to list
+	        User user = null;
+	        if (cursor.moveToFirst()) {
+	            do {
+	            	user = new User();
+	            	user.setIdUser(Integer.parseInt(cursor.getString(0)));
+	            	user.setFirstname(cursor.getString(1));
+	                user.setLastname(cursor.getString(2));
+	                user.setPictureString(cursor.getString(4));
+	                user.setMail(cursor.getString(5));
+	                user.setPicture(cursor.getBlob(6));
+	                
+	            } while (cursor.moveToNext());
+	        }
+
+	        return user;
+ }
+	 
 	 public Boolean isExistUser(int idUser){
 		 
 	        // 1. get reference to readable DB
@@ -330,7 +357,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	                activities.add(act);
 	            } while (cursor.moveToNext());
 	        }
-	        // return books
 	        return activities;
 	    }
 	 	
@@ -532,7 +558,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			        }
 			 
 			    }
-			 
+			
 			 	public Review getReviewById(Integer idReview) {
 	        		  
 			        // 1. build the query
@@ -563,34 +589,67 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			    }
 			 	
 		public List<Review> getReviewsByActivity(int idActivity) {
-			        List<Review> reviews = new LinkedList<Review>();
-			  
-			        // 1. build the query
-			        String query = "SELECT  * FROM review WHERE idActivity = " + idActivity;
-			  
-			        // 2. get reference to writable DB
-			        SQLiteDatabase db = this.getWritableDatabase();
-			        Cursor cursor = db.rawQuery(query, null);
-			  
-			        // 3. go over each row, build book and add it to list
-			        Review rv = null;
-			        if (cursor.moveToFirst()) {
-			            do {
-			            	rv = new Review();
-			            	rv.setIdReview(Integer.parseInt(cursor.getString(0)));
-			            	rv.setIdUser(Integer.parseInt(cursor.getString(1)));
-			            	rv.setIdActivity(Integer.parseInt(cursor.getString(2)));
-			            	rv.setTitle(cursor.getString(3));
-			            	rv.setDescription(cursor.getString(4));
-			            	rv.setMark(Float.parseFloat(cursor.getString(5)));
-			            	rv.setDateTime(cursor.getString(6));
-			            	rv.setLanguage(cursor.getString(7));
-			            	
-			                // Add review to books
-			                reviews.add(rv);
-			            } while (cursor.moveToNext());
-			        }
-			        // return reviews
-			        return reviews;
-			    }
+	        List<Review> reviews = new LinkedList<Review>();
+	  
+	        // 1. build the query
+	        String query = "SELECT  * FROM review WHERE idActivity = " + idActivity;
+	  
+	        // 2. get reference to writable DB
+	        SQLiteDatabase db = this.getWritableDatabase();
+	        Cursor cursor = db.rawQuery(query, null);
+	  
+	        // 3. go over each row, build book and add it to list
+	        Review rv = null;
+	        if (cursor.moveToFirst()) {
+	            do {
+	            	rv = new Review();
+	            	rv.setIdReview(Integer.parseInt(cursor.getString(0)));
+	            	rv.setIdUser(Integer.parseInt(cursor.getString(1)));
+	            	rv.setIdActivity(Integer.parseInt(cursor.getString(2)));
+	            	rv.setTitle(cursor.getString(3));
+	            	rv.setDescription(cursor.getString(4));
+	            	rv.setMark(Float.parseFloat(cursor.getString(5)));
+	            	rv.setDateTime(cursor.getString(6));
+	            	rv.setLanguage(cursor.getString(7));
+	            	
+	                // Add review to books
+	                reviews.add(rv);
+	            } while (cursor.moveToNext());
+	        }
+	        // return reviews
+	        return reviews;
+	    }
+		
+		public List<Review>  getReviewsByUserId(int idUser) {
+	        List<Review> reviews = new LinkedList<Review>();
+	  
+	        // 1. build the query
+	        String query = "SELECT * FROM review WHERE idUser = " + idUser;
+	  
+	        // 2. get reference to writable DB
+	        SQLiteDatabase db = this.getWritableDatabase();
+	        Cursor cursor = db.rawQuery(query, null);
+	  
+	        // 3. go over each row, build book and add it to list
+	        Review rv = null;
+	        if (cursor.moveToFirst()) {
+	            do {
+	            	rv = new Review();
+	            	rv.setIdReview(Integer.parseInt(cursor.getString(0)));
+	            	rv.setIdUser(Integer.parseInt(cursor.getString(1)));
+	            	rv.setIdActivity(Integer.parseInt(cursor.getString(2)));
+	            	rv.setTitle(cursor.getString(3));
+	            	rv.setDescription(cursor.getString(4));
+	            	rv.setMark(Float.parseFloat(cursor.getString(5)));
+	            	rv.setDateTime(cursor.getString(6));
+	            	rv.setLanguage(cursor.getString(7));
+	            	
+	                // Add review to books
+	                reviews.add(rv);
+	            } while (cursor.moveToNext());
+	        }
+
+	        // return reviews
+	        return reviews;
+	    }
 }

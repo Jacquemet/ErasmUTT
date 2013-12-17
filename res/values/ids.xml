@@ -6,4 +6,7 @@
         <item
         type="id"
         name="fragment_popular_activities" />
+        <item
+        type="id"
+        name="fragment_activity_user_reviews" />
 </resources>

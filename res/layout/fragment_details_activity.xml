@@ -159,7 +159,27 @@
 		android:visibility="invisible"
 		android:layout_marginBottom="@dimen/field_vertical_margin"
           />
+         
+ 	    	<View
+    	android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="@color/background_dark_blue" 
+        android:layout_marginTop="4dp"
+        />
 
+          <ListView
+	        android:id="@+id/custom_list_review"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:dividerHeight="1dp"
+	        android:layout_marginBottom="@dimen/field_vertical_margin"
+	        android:listSelector="@drawable/list_selector_flatcolor"
+       		android:layout_marginTop="7dp"
+	       /> 
+         
+ 
 </LinearLayout>
 
+
 </ScrollView>
+

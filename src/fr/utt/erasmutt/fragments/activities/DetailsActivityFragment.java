@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -16,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,6 +28,7 @@ import fr.utt.erasmutt.networkConnection.RetreiveImgTask;
 import fr.utt.erasmutt.sqlite.DatabaseHelper;
 import fr.utt.erasmutt.sqlite.model.Activities;
 import fr.utt.erasmutt.sqlite.model.Review;
+import fr.utt.erasmutt.tools.Utility;
 
 public class DetailsActivityFragment extends Fragment {
 
@@ -57,6 +60,8 @@ public class DetailsActivityFragment extends Fragment {
 	    
 	    private List<Review> listReview;
 	    
+	    private custom_adapter_reviews ca;
+	    private  ListView listViewReviews;
 	    @Override
 	    public View onCreateView(LayoutInflater inflater, ViewGroup container, 
 	        Bundle savedInstanceState) {
@@ -95,7 +100,8 @@ public class DetailsActivityFragment extends Fragment {
 	       
 	    	db = new DatabaseHelper(getActivity());
 	        activityDetails = db.getActivitiesById(position);
-	        
+	        listViewReviews = (ListView) getActivity().findViewById(R.id.custom_list_review);
+	       
 	        imageActivity = (ImageView) getActivity().findViewById(R.id.imageViewAcivityDetails);
 
 	        if(activityDetails.getPictureActivityString()!="" && activityDetails.getPictureActivity()==null){
@@ -195,6 +201,10 @@ public class DetailsActivityFragment extends Fragment {
 	        
 	        
 	        mCurrentPosition = position;
+	        
+	        if(listReview.size()>0){
+	        	addReviews();
+	        }
 	    }
 
 	    @Override
@@ -203,6 +213,12 @@ public class DetailsActivityFragment extends Fragment {
 
 	        // Save the current article selection in case we need to recreate the fragment
 	        outState.putInt(ARG_ID_ACTIVITY, mCurrentPosition);
+	    }
+	    
+	    public void addReviews(){
+	    	ca =  new custom_adapter_reviews(getActivity().getLayoutInflater().getContext(), listReview);
+	    	listViewReviews.setAdapter(ca);
+	    	Utility.setListViewHeightBasedOnChildren(listViewReviews);
 	    }
 	
 }

@@ -24,6 +24,7 @@ import fr.utt.erasmutt.networkConnection.HttpRequest;
 import fr.utt.erasmutt.sqlite.DatabaseHelper;
 import fr.utt.erasmutt.sqlite.model.Activities;
 import fr.utt.erasmutt.sqlite.model.Review;
+import fr.utt.erasmutt.sqlite.model.User;
 
 public class LoginActivity extends Activity {
 
@@ -89,6 +90,22 @@ public class LoginActivity extends Activity {
 					        		db.updateUser(Constants.user);
 					        	}
 								
+								JSONArray jObject = jsonResponse.getJSONArray("listUser");
+						        for (int i = 0; i < jObject.length(); i++) {
+						        	JSONObject menuObject = jObject.getJSONObject(i);
+						        	User u = new User();
+						        	u.setIdUser(Integer.parseInt(menuObject.getString("idUser")));
+						        	u.setFirstname(menuObject.getString("firstname"));
+						        	u.setLastname(menuObject.getString("lastname"));
+						        	u.setMail(menuObject.getString("mail"));
+						        	u.setPictureString(menuObject.getString("pictureUser"));
+						        	
+						        	if(!db.isExistUser(u.getIdUser())) {
+							             db.addUser(u);
+						        	} else {
+						        		db.updateUser(u);
+						        	}
+						        }
 								loadActitivies();
 								
 							} else {
