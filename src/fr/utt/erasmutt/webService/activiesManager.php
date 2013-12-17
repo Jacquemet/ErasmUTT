@@ -7,11 +7,10 @@
     $pass="kevin140289";
     $dbname="mysql:dbname=kevinlarmag;host=mysql51-54.perso";
     
-	$typeActivitiesArray=array("ajouter","modifier","lister");
+	$typeActivitiesArray=array("ajouter","modifier","lister","query");
 	
     try {
         $db = new PDO($dbname, $login, $pass);
-        echo("connexion Ã  la base reussie <br/>");
     } 
     catch (PDOException $e) {
         print "Connexion impossible : " . $e->getMessage() . "<br/>";
@@ -41,8 +40,11 @@
 			if(isset($_GET['website'])&&!empty($_GET['website'])){
 				$website = $_GET['website'];	
 			}
+			if(isset($_GET['address'])&&!empty($_GET['address'])){
+				$address = $_GET['address'];	
+			}
 			if($name!="" && $description!="" && $longitude!="" && $latitude!=""){
-				ajouterActivite($db,$name,$description,$longitude,$latitude,$website);
+				ajouterActivite($db,$name,$description,$longitude,$latitude,$website,$address);
 			}
 			else{
 				$jsonArray["typeActivities"]=$typeActivitiesArray[0];
@@ -67,6 +69,9 @@
 			if(isset($_GET['latitude'])&&!empty($_GET['latitude'])){
 				$latitude = $_GET['latitude'];	
 			}
+			if(isset($_GET['address'])&&!empty($_GET['address'])){
+				$address = $_GET['address'];	
+			}
 			if(isset($_GET['website'])&&!empty($_GET['website'])){
 				$website = $_GET['website'];	
 			}
@@ -78,7 +83,7 @@
 			}
 			
 			if($id!="" && $name!="" && $description!="" && $longitude!="" && $latitude!=""){
-				modifierActivite($db,$id,$name,$description,$longitude,$latitude,$website);
+				modifierActivite($db,$id,$name,$description,$longitude,$latitude,$website,$address);
 			}
 			else{
 				$jsonArray["typeActivities"]=$typeActivitiesArray[1];
@@ -101,13 +106,12 @@
 			}
 			
 		}
-		//rechercher une activite
 		else if($typeActivities == $typeActivitiesArray[3]){
 			if(isset($_GET['token'])&&!empty($_GET['token'])){
 				$token = $_GET['token'];
 				if(isset($_GET['query'])&&!empty($_GET['query'])){
 					$query = $_GET['query'];
-					searchActivite($db,$token,$messageArray);
+					searchActivite($db,$token,$messageArray,$query);
 				}				
 			}
 			else{
@@ -127,12 +131,13 @@
         $stmt->execute(array($name));
 		$res = $stmt->fetch(PDO::FETCH_ASSOC);
 		if($res['nbUser'] ==  0){
-			$statement=$db->prepare("insert into activities (name, descriptionActivity, longitude, latitude,website,averageMark) VALUES (?,?,?,?,?,0)");
+			$statement=$db->prepare("insert into activities (name, descriptionActivity, longitude, latitude,website,averageMark,address) VALUES (?,?,?,?,?,0,?)");
 			$statement->bindParam(1,$name);
 			$statement->bindParam(2,$description);
 			$statement->bindParam(3,$longitude);
 			$statement->bindParam(4,$latitude);
 			$statement->bindParam(5,$website);
+			$statement->bindParam(6,$address);
 			$statement->execute();
 			
 			$jsonArray["typeActivities"]="Ajouter";
@@ -148,9 +153,9 @@
 		echo json_encode ($jsonArray);
 	}
 
-	function modifierActivite($db,$id,$name,$description,$longitude,$latitude,$website){
+	function modifierActivite($db,$id,$name,$description,$longitude,$latitude,$website,$address){
 		$stmt= $db->prepare("SELECT COUNT(idUser) AS nbUser FROM users where token= '$token';");
-        $stmt->execute(array($mail));
+        $stmt->execute(array());
 		$res = $stmt->fetch(PDO::FETCH_ASSOC);
 		$jsonArray["typeActivities"]="modifier";
 		if($res['nbUser'] ==  1){
@@ -162,6 +167,7 @@
 			$jsonArray["longitude"]=$longitude;
 			$jsonArray["latitude"]=$latitude;
 			$jsonArray["website"]=$website;
+			$jsonArray["address"]=$address;
 			$jsonArray["error"]="false";
 		}
 		else{
@@ -174,7 +180,7 @@
 	function listerActivite($db,$token,$messageArray){
 			
 		$stmt= $db->prepare("SELECT COUNT(idUser) AS nbUser FROM users where token= '$token';");
-        $stmt->execute(array($token));
+        $stmt->execute();
 		$res = $stmt->fetch(PDO::FETCH_ASSOC);
 		$jsonArray["typeActivities"]="lister";
 		if($res['nbUser'] ==  1){
@@ -184,14 +190,15 @@
 			$jsonArray["error"]="false";
 			while( $row =$statement->fetch(PDO::FETCH_ASSOC) ) {
 				$messageContent["idActivity"]=$row["idActivity"];
-				$messageContent["name"]=$row["name"];
-				$messageContent["desc"]=$row["descriptionActivity"];
+				$messageContent["name"]=utf8_encode($row["name"]);
+				$messageContent["desc"]=utf8_encode($row["descriptionActivity"]);
 				$messageContent["picture"]=$row["pictureActivity"];
 				$messageContent["averageMark"]=$row["averageMark"];
 				$messageContent["longitude"]=$row["longitude"];
 				$messageContent["latitude"]=$row["latitude"];
 				$messageContent["website"]=$row["website"];
 				$messageContent["focusOn"]=$row["focusOn"];
+				$messageContent["address"]=$row["address"];
 				$messageArray[] = $messageContent;
 			}
 			$jsonArray["listActivities"]=$messageArray;
@@ -204,15 +211,15 @@
 		echo json_encode ($jsonArray);
 	}
 	
-		function searchActivite($db,$token,$messageArray,$query){
+	function searchActivite($db,$token,$messageArray,$query){
 			
 		$stmt= $db->prepare("SELECT COUNT(idUser) AS nbUser FROM users where token= '$token';");
-        $stmt->execute(array($token));
+        $stmt->execute(array());
 		$res = $stmt->fetch(PDO::FETCH_ASSOC);
 		$jsonArray["typeActivities"]="search";
 		if($res['nbUser'] ==  1){
-			$statement=$db->prepare("SELECT * FROM activities where = '*$query*'");
-			$statement->execute($query);
+			$statement=$db->prepare("SELECT * FROM activities where name like '%$query%'");
+			$statement->execute();
 			$jsonArray["message"]="searchOK";
 			$jsonArray["error"]="false";
 			while( $row =$statement->fetch(PDO::FETCH_ASSOC) ) {

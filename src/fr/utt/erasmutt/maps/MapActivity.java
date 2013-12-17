@@ -21,17 +21,20 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -42,6 +45,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
+import fr.utt.erasmutt.Constants;
+import fr.utt.erasmutt.LoginActivity;
 import fr.utt.erasmutt.R;
 import fr.utt.erasmutt.sqlite.DatabaseHelper;
 import fr.utt.erasmutt.sqlite.model.Activities;
@@ -53,12 +58,18 @@ public class MapActivity extends Activity implements LocationListener{
 	Context context;
 	String urlTopass;
 	
+	Bundle bundle;
+	
+	List<Activities> listActivityUser;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_map);
 
 		getActionBar().setDisplayHomeAsUpEnabled(true);
+		
+		bundle = getIntent().getExtras();
 		
         // Getting GoogleMap object from the fragment
 		map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
@@ -86,14 +97,23 @@ public class MapActivity extends Activity implements LocationListener{
         }
 
 	}
-	public void addActivitiesCloseToUser(){
+	public void addActivitiesCloseToUser() {
 		DatabaseHelper db = new DatabaseHelper(getApplicationContext());
-		List<Activities> listActivityUser= db.getAllActivities();
-		for(int i=0 ; i<listActivityUser.size() ; i++) { 
-			String name =listActivityUser.get(i).getName();
-			LatLng position= new LatLng(Double.parseDouble(listActivityUser.get(i).getLatitude()),Double.parseDouble(listActivityUser.get(i).getLongitude()));
-			map.addMarker(new MarkerOptions().position(position).title(name).snippet(listActivityUser.get(i).getDesciptionActivity().substring(0, 15)+" ..."));
+		if(bundle.getBoolean("LoadAll")) {
+			listActivityUser= db.getAllActivities();
+			for(int i=0 ; i<listActivityUser.size() ; i++) { 
+				String name =listActivityUser.get(i).getName();
+				LatLng position= new LatLng(Double.parseDouble(listActivityUser.get(i).getLatitude()),Double.parseDouble(listActivityUser.get(i).getLongitude()));
+				map.addMarker(new MarkerOptions().position(position).title(name).snippet(listActivityUser.get(i).getDesciptionActivity().substring(0, 15)+" ..."));
+			}
+		} else {
+			Activities act = db.getActivitiesById(bundle.getInt("idActivity"));
+			String name = act.getName();
+			LatLng position= new LatLng(Double.parseDouble(act.getLatitude()),Double.parseDouble(act.getLongitude()));
+			map.addMarker(new MarkerOptions().position(position).title(name).snippet(act.getDesciptionActivity().substring(0, 15)+" ..."));
 		}
+		
+
 		map.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
 			@Override
 			public void onInfoWindowClick(Marker marker) {
@@ -134,8 +154,37 @@ public class MapActivity extends Activity implements LocationListener{
 	    case android.R.id.home:
 	        NavUtils.navigateUpFromSameTask(this);
 	        return true;
+	        
+        case R.id.action_settings:
+
+        	return true;
+        case R.id.action_help:
+        	
+        	Intent i = new Intent(Intent.ACTION_VIEW);
+        	i.setData(Uri.parse(Constants.urlHelp));
+        	
+            if (i.resolveActivity(getPackageManager()) != null) {
+            	startActivity(i);
+            } else {
+                Toast.makeText(this, R.string.app_not_available, Toast.LENGTH_LONG).show();
+            }
+        	
+        	return true;	
+        case R.id.action_logout:
+        	DatabaseHelper db = new DatabaseHelper(getApplicationContext());
+        	db.userLogout();
+        	String goodbyeMessage = String.format(getString(R.string.GoodBye), Constants.user.getFirstname());
+        	Constants.user.logout();
+        	Intent  intentLogout = new Intent(getApplicationContext(),LoginActivity.class);
+        	intentLogout.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        	
+        	Toast.makeText(getApplicationContext(), goodbyeMessage, Toast.LENGTH_LONG).show();
+        	startActivity(intentLogout);
+        	
+        	return true;
+        default:
+            return super.onOptionsItemSelected(item);
 	    }
-	    return super.onOptionsItemSelected(item);
 	}
 	
 	@Override

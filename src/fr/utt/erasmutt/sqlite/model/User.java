@@ -5,16 +5,17 @@ public class User {
 	private int idUser;
 	private String firstname;
 	private String lastname;
-	private String picture;
+	private byte[] picture;
 	private String mail;
 	private String token;
+	private String pictureString;
 
     public User() {
 		super();
 	}
 
-    public User(int idUser, String firstname, String lastname, String picture,
-			String mail, String token) {
+    public User(int idUser, String firstname, String lastname, byte[] picture,
+			String mail, String token, String picString) {
 		super();
 		this.idUser = idUser;
 		this.firstname = firstname;
@@ -22,6 +23,7 @@ public class User {
 		this.picture = picture;
 		this.mail = mail;
 		this.token = token;
+		this.pictureString = picString;
 	}
 
 	public String getToken() {
@@ -38,11 +40,11 @@ public class User {
 	public void setIdUser(int idUser) {
 		this.idUser = idUser;
 	}
-	public String getPicture() {
-		return picture;
+	public String getPictureString() {
+		return pictureString;
 	}
-	public void setPicture(String picture) {
-		this.picture = picture;
+	public void setPictureString(String picture) {
+		this.pictureString = picture;
 	}
 	public String getMail() {
         return mail;
@@ -67,10 +69,19 @@ public class User {
     
     public void logout(){
     	idUser=0;
-    	picture="";
+    	pictureString="";
     	firstname="";
     	lastname="";
     	token="";
-    	mail="";    	
+    	mail="";    
+    	picture = null;
     }
+
+	public byte[] getPicture() {
+		return picture;
+	}
+
+	public void setPicture(byte[] picture) {
+		this.picture = picture;
+	}
 }

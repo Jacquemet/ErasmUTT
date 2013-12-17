@@ -4,6 +4,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -21,7 +23,9 @@ import android.widget.Toast;
 import fr.utt.erasmutt.Constants;
 import fr.utt.erasmutt.R;
 import fr.utt.erasmutt.networkConnection.HttpCallback;
+import fr.utt.erasmutt.networkConnection.HttpCallbackByte;
 import fr.utt.erasmutt.networkConnection.HttpRequest;
+import fr.utt.erasmutt.networkConnection.RetreiveImgTask;
 import fr.utt.erasmutt.sqlite.DatabaseHelper;
 
 public class UserDetailsFragment extends Fragment {
@@ -35,6 +39,8 @@ public class UserDetailsFragment extends Fragment {
 	ImageView imgEdit = null;
 	ProgressBar progBar = null;
 	
+	ImageView imgProfil = null;
+	
 	DatabaseHelper db;
 	
 	private HttpRequest requestSetUser = null;
@@ -44,6 +50,28 @@ public class UserDetailsFragment extends Fragment {
 		ScrollView sv = (ScrollView) inflater.inflate(R.layout.fragment_user_details, container, false);
 		
 		db = new DatabaseHelper(getActivity());
+		
+		imgProfil =  (ImageView) sv.findViewById(R.id.imageViewProfil);
+		
+		if(!Constants.user.getPictureString().equals("") && Constants.user.getPicture()==null){
+       	 
+        	 new RetreiveImgTask(new HttpCallbackByte() {
+					@Override
+					public Object call(byte[] imgbyte) {
+						
+						Bitmap b = BitmapFactory.decodeByteArray( imgbyte,  0,imgbyte.length);
+						imgProfil.setImageBitmap(Bitmap.createScaledBitmap(b, 200, 200, false));
+						Constants.user.setPicture(imgbyte);
+						db.updateUser(Constants.user);
+						
+						return null;
+					}
+				}).execute(Constants.user.getPictureString()); 	
+         }
+         else if(Constants.user.getPicture()!=null && !Constants.user.getPictureString().equals("")){
+       	  Bitmap b = BitmapFactory.decodeByteArray(Constants.user.getPicture(), 0, Constants.user.getPicture().length);
+       	  imgProfil.setImageBitmap(Bitmap.createScaledBitmap(b, 200, 200, false));
+         }
 		
 		mail = (EditText) sv.findViewById(R.id.editTextDescAccount_mail);
 		firstname = (EditText) sv.findViewById(R.id.editTextDescAccount_firstname);

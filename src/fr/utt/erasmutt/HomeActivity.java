@@ -1,5 +1,7 @@
 package fr.utt.erasmutt;
 
+import java.util.List;
+
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
@@ -29,6 +31,7 @@ import fr.utt.erasmutt.fragments.UserDetailsFragment;
 import fr.utt.erasmutt.fragments.activities.DetailsActivityFragment;
 import fr.utt.erasmutt.maps.MapActivity;
 import fr.utt.erasmutt.sqlite.DatabaseHelper;
+import fr.utt.erasmutt.sqlite.model.Activities;
 
 public class HomeActivity extends FragmentActivity implements OnHeadlineSelectedListener{
 
@@ -172,6 +175,7 @@ public class HomeActivity extends FragmentActivity implements OnHeadlineSelected
         
         case R.id.action_location:
 			Intent intent = new Intent(getApplicationContext(), MapActivity.class); 
+			intent.putExtra("LoadAll",true);
             startActivity(intent);
             return true;
         

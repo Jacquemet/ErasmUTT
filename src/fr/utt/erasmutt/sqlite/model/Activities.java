@@ -1,6 +1,5 @@
 package fr.utt.erasmutt.sqlite.model;
 
-import java.sql.Blob;
 
 public class Activities {
 	

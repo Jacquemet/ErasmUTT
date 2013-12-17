@@ -80,6 +80,7 @@ public class LoginActivity extends Activity {
 								Constants.user.setToken(jsonResponse.getString("token"));
 								Constants.user.setLastname(jsonResponse.getString("lastname"));
 								Constants.user.setMail(jsonResponse.getString("mail"));
+								Constants.user.setPictureString(jsonResponse.getString("pictureUser"));
 								
 								//TODO : Vérifier que le User n'existe pas déjà 
 								if(!db.isExistUser(Constants.user.getIdUser())) {

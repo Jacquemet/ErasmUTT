@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+	android:layout_margin="@dimen/field_vertical_margin" >
+
+<LinearLayout 
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:layout_margin="@dimen/field_vertical_margin"
     android:orientation="vertical" >
 
@@ -13,7 +19,8 @@
         android:gravity="center"
         android:padding="@dimen/field_vertical_padding"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textColor="@android:color/white" />
+        android:textColor="@android:color/white"
+        android:visibility="invisible" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -37,13 +44,30 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/labelAddressActivity"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-
+                android:textAppearance="?android:attr/textAppearanceMedium" 
+                android:visibility="invisible"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+            
             <TextView
                 android:id="@+id/valueAddressActivity"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:layout_marginRight="@dimen/field_vertical_margin" />
+            
+            <ImageButton
+		        android:id="@+id/imageButtonLocation"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:src="@drawable/ic_action_place_blue"
+		        android:background="@android:color/transparent"
+		        android:visibility="invisible"
+		         />
+            
+                </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 
@@ -53,7 +77,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/field_vertical_margin"
         android:text="@string/labelDescriptionActivity"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:textAppearance="?android:attr/textAppearanceMedium" 
+        android:visibility="invisible"/>
 
     <TextView
         android:id="@+id/valueDescription"
@@ -74,7 +99,8 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/field_vertical_margin"
             android:text="@string/labelWebsite"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:visibility="invisible" />
 
         <TextView
             android:id="@+id/linkWebsite"
@@ -83,6 +109,7 @@
             android:layout_marginLeft="@dimen/field_vertical_margin"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@color/background_light_blue" />
+
     </LinearLayout>
 
     <LinearLayout
@@ -96,7 +123,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/labelRating"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:visibility="invisible" />
 
         <RatingBar
             android:id="@+id/averageRatingBarActivity"
@@ -107,8 +135,8 @@
             android:layout_marginRight="@dimen/field_vertical_margin"
             android:isIndicator="true"
             android:numStars="5"
-            android:rating="3.7"
-            android:stepSize="0.5" />
+            android:stepSize="0.5" 
+            android:visibility="invisible"/>
 
         <TextView
             android:id="@+id/labelNumberReview"
@@ -116,5 +144,22 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium" />
     </LinearLayout>
+    
+         <Button
+         android:id="@+id/writeReview"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:text="@string/textWriteReview"
+         android:layout_gravity="right"
+         android:textAlignment="center"
+         android:paddingRight="@dimen/field_vertical_padding"
+         android:paddingLeft="@dimen/field_vertical_padding"
+         android:textColor="@android:color/white"
+		android:background="@color/background_dark_blue"
+		android:visibility="invisible"
+		android:layout_marginBottom="@dimen/field_vertical_margin"
+          />
 
 </LinearLayout>
+
+</ScrollView>

@@ -1,11 +1,11 @@
-<?php
+ï»¿<?php
 	//Changement de zone pour la date
 	date_default_timezone_set('Europe/Paris');
 
-	//connection à la BD
-    $login="**";
-    $pass="**";
-    $dbname="mysql:dbname=***;host=***";
+	//connection Ã  la BD
+    $login="kevinlarmag";
+    $pass="kevin140289";
+    $dbname="mysql:dbname=kevinlarmag;host=mysql51-54.perso";
     
 	$typeConnexionArray=array("ajouter","modifier","connecter");
 	
@@ -13,7 +13,7 @@
 	
     try {
         $db = new PDO($dbname, $login, $pass);
-        //echo("connexion à la base reussie <br/>");
+        //echo("connexion Ã  la base reussie <br/>");
     } 
     catch (PDOException $e) {
        // print "Connexion impossible : " . $e->getMessage() . "<br/>";
@@ -161,7 +161,7 @@
 		echo json_encode ($jsonArray);
 	}
 	
-	function seConnecter($db,$mail,$firstname,$lastname,$jsonArray){
+	function seConnecter($db,$mail,$firstname,$lastname,$picture,$jsonArray){
 			
 			$token = uniqid();
 			$datenow = date("Y-m-d H:i:s");
@@ -173,13 +173,14 @@
 			$jsonArray["mail"]=$mail;
 			$jsonArray["firstname"]=$firstname;
 			$jsonArray["lastname"]=$lastname;
-			$jsonArray["error"]="false";			
+			$jsonArray["error"]="false";
+			$jsonArray["pictureUser"] = $picture;			
 			return $jsonArray;
 	}
 
 
 	function connexionUtilisateur($db,$password,$mail){
-		$statementConnexion=$db->prepare("SELECT COUNT(idUser) AS nbUser, idUser,firstname, banned, BannedDate, nbTentative, lastname, mail as login,password as pass FROM users where mail = ?;");
+		$statementConnexion=$db->prepare("SELECT COUNT(idUser) AS nbUser,idUser, firstname, banned, BannedDate, nbTentative, lastname, mail as login,password as pass, pictureUser FROM users where mail = ?;");
         $statementConnexion->execute(array($mail));    
         $res = $statementConnexion->fetch(PDO::FETCH_ASSOC);
 		$jsonArray["typeConnexion"]="Connecter";
@@ -187,14 +188,14 @@
         if($res['nbUser'] ==  1){
         	//si il n'est pas banni
         	if($res['banned'] !=  1){
-        		//si nb tentative+1 est inférieur à 5?
+        		//si nb tentative+1 est infÃ©rieur Ã  5?
 				if(($res['nbTentative']+1) < 5 ) {
 					if(md5($password.md5(SALT)) == $res['pass']){
 						$jsonArray["idUser"]=$res['idUser'];
-						$jsonArray=seConnecter($db,$mail,$res['firstname'],$res['lastname'],$jsonArray);
+						$jsonArray=seConnecter($db,$mail,$res['firstname'],$res['lastname'],$res['pictureUser'],$jsonArray);
 					}
 					else {
-						//Incrémente le nombre de tentative
+						//IncrÃ©mente le nombre de tentative
 						$req=$db->prepare("update users set nbTentative =nbTentative+1 where mail = ?;");
 						$req->execute(array($mail));
 						$jsonArray["message"]="il n y a pas d utilisateurs avec ce couple login mot de passe";
@@ -207,7 +208,7 @@
 					$req=$db->prepare("update users set BannedDate ='".$date."', nbTentative = 0,banned=1 where mail = ?;");
 					$req->execute(array($mail));
 
-                    $jsonArray["message"]="Vous etes banni pour une durée de 5 minutes après avoir essaye de vous connecter 5 fois sans trouver le bon mot de passe";
+                    $jsonArray["message"]="Vous etes banni pour une durÃ©e de 5 minutes aprÃ¨s avoir essaye de vous connecter 5 fois sans trouver le bon mot de passe";
 					$jsonArray["error"]="true";
 
 				}
@@ -217,7 +218,7 @@
 				$duree = mktime() - $res['BannedDate'] ;
 				//si encore banni
 				if( $duree<300 ) {
-					$jsonArray["message"]='Vous êtes actuellement banni pour une durée de 5 minutes. Merci de réessayer ultérieurement ! il vous reste environ : '.floor(5-($duree/60)) .' min';
+					$jsonArray["message"]='Vous Ãªtes actuellement banni pour une durÃ©e de 5 minutes. Merci de rÃ©essayer ultÃ©rieurement ! il vous reste environ : '.floor(5-($duree/60)) .' min';
 					$jsonArray["error"]="true";
 				}
 				else{
@@ -238,13 +239,12 @@
 			}
 		}
 		else {
-			//Incrémente le nombre de tentative
+			//IncrÃ©mente le nombre de tentative
 			$jsonArray["message"]="utilisateurs n existe pas";
 			$jsonArray["error"]="true";
 
 		}
 		echo json_encode ($jsonArray);
 	}
-
-        
+		
 ?>

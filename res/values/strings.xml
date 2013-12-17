@@ -71,6 +71,7 @@
 	<string name="labelDescriptionActivity">Description : </string>
 	<string name="labelWebsite">Website : </string>
 	<string name="labelRating">Average mark : </string>
+	<string name="textWriteReview">Write a Review </string>
 	
 	<plurals name="labelNumberReview">
         <item quantity="zero">%1$s reviews</item>

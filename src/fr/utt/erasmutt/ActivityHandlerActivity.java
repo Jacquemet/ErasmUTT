@@ -1,12 +1,17 @@
 package fr.utt.erasmutt;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.Toast;
 import fr.utt.erasmutt.fragments.activities.DetailsActivityFragment;
 import fr.utt.erasmutt.fragments.activities.ListActivityFragment;
 import fr.utt.erasmutt.networkConnection.HttpRequest;
+import fr.utt.erasmutt.sqlite.DatabaseHelper;
 
 public class ActivityHandlerActivity extends FragmentActivity implements OnHeadlineSelectedListener{
 
@@ -16,6 +21,8 @@ public class ActivityHandlerActivity extends FragmentActivity implements OnHeadl
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+   	 	// Capture the article fragment from the activity layout
 		setContentView(R.layout.activity_activity_handler);
 		
 		getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -51,6 +58,43 @@ public class ActivityHandlerActivity extends FragmentActivity implements OnHeadl
 		return true;
 	}
 	
+	@Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action buttons
+        switch(item.getItemId()) {
+        
+        case R.id.action_settings:
+
+        	return true;
+        case R.id.action_help:
+        	
+        	Intent i = new Intent(Intent.ACTION_VIEW);
+        	i.setData(Uri.parse(Constants.urlHelp));
+        	
+            if (i.resolveActivity(getPackageManager()) != null) {
+            	startActivity(i);
+            } else {
+                Toast.makeText(this, R.string.app_not_available, Toast.LENGTH_LONG).show();
+            }
+        	
+        	return true;	
+        case R.id.action_logout:
+        	DatabaseHelper db = new DatabaseHelper(getApplicationContext());
+        	db.userLogout();
+        	String goodbyeMessage = String.format(getString(R.string.GoodBye), Constants.user.getFirstname());
+        	Constants.user.logout();
+        	Intent  intentLogout = new Intent(getApplicationContext(),LoginActivity.class);
+        	intentLogout.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        	
+        	Toast.makeText(getApplicationContext(), goodbyeMessage, Toast.LENGTH_LONG).show();
+        	startActivity(intentLogout);
+        	
+        	return true;
+        default:
+            return super.onOptionsItemSelected(item);
+        }
+    }
+	
 	
 	//Lorsque l'on sélectionne un élément on charge le détails de l'activité dans le Frame ou on actualise le contenu du fragment
 	@Override
@@ -62,6 +106,7 @@ public class ActivityHandlerActivity extends FragmentActivity implements OnHeadl
 
         //Si le détail de l'activité est présent alors on est dans un affichage tablette
         if (articleFrag != null) {
+            
             // Call a method in the ArticleFragment to update its content
             articleFrag.updateArticleView(position);
 

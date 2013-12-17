@@ -11,7 +11,7 @@
 	
     try {
         $db = new PDO($dbname, $login, $pass);
-        echo("connexion à la base reussie <br/>");
+       
     } 
     catch (PDOException $e) {
         print "Connexion impossible : " . $e->getMessage() . "<br/>";

@@ -1,5 +1,7 @@
 package fr.utt.erasmutt.fragments.activities;
 
+import java.util.List;
+
 import android.app.SearchManager;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -11,15 +13,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import fr.utt.erasmutt.R;
+import fr.utt.erasmutt.maps.MapActivity;
 import fr.utt.erasmutt.networkConnection.HttpCallbackByte;
 import fr.utt.erasmutt.networkConnection.RetreiveImgTask;
 import fr.utt.erasmutt.sqlite.DatabaseHelper;
 import fr.utt.erasmutt.sqlite.model.Activities;
+import fr.utt.erasmutt.sqlite.model.Review;
 
 public class DetailsActivityFragment extends Fragment {
 
@@ -32,13 +38,25 @@ public class DetailsActivityFragment extends Fragment {
 	    
 	    private ImageView imageActivity;
 	    private TextView titleActivity;
+	    
+	    private TextView textAddress;
 	    private TextView valueAddress;
+	    private ImageButton imageButtonLocation;
+	    
+	    private TextView textDescription;
 	    private TextView valueDescription;
+	    
+	    private TextView textLink;
 	    private TextView linkWebsite;
+	    
+	    private TextView textRating;
 	    private RatingBar averageRatingBarActivity;
 	    private TextView labelNumberReview;
 	    
-
+	    private Button writeReview;
+	    
+	    private List<Review> listReview;
+	    
 	    @Override
 	    public View onCreateView(LayoutInflater inflater, ViewGroup container, 
 	        Bundle savedInstanceState) {
@@ -105,12 +123,35 @@ public class DetailsActivityFragment extends Fragment {
 	        
 	        titleActivity = (TextView) getActivity().findViewById(R.id.titleActivityDetails);
 	        titleActivity.setText(activityDetails.getName());
+	        titleActivity.setVisibility(View.VISIBLE);
 
+	        textAddress = (TextView) getActivity().findViewById(R.id.labelAddressActivity);
+	        textAddress.setVisibility(View.VISIBLE);
+	        
 	        valueAddress = (TextView) getActivity().findViewById(R.id.valueAddressActivity);
 	        valueAddress.setText(activityDetails.getAddress());
 	        
+	        imageButtonLocation = (ImageButton) getActivity().findViewById(R.id.imageButtonLocation);
+	        imageButtonLocation.setVisibility(View.VISIBLE);
+	        imageButtonLocation.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					Intent intent = new Intent(getActivity().getApplicationContext(), MapActivity.class); 
+					intent.putExtra("LoadAll",false);
+					intent.putExtra("idActivity", activityDetails.getIdActivity());
+		            startActivity(intent);
+				}
+			});
+	        
+	        textDescription = (TextView) getActivity().findViewById(R.id.labelDescription);
+	        textDescription.setVisibility(View.VISIBLE);
+	        
 	        valueDescription = (TextView) getActivity().findViewById(R.id.valueDescription);
 	        valueDescription.setText(activityDetails.getDesciptionActivity());	   
+	        
+	        textLink = (TextView) getActivity().findViewById(R.id.labelWebsite);
+	        textLink.setVisibility(View.VISIBLE);
 	        
 	        linkWebsite = (TextView) getActivity().findViewById(R.id.linkWebsite);
 	        linkWebsite.setText(activityDetails.getWebsite());	
@@ -131,16 +172,27 @@ public class DetailsActivityFragment extends Fragment {
 				}
 			});
 	        
+	        textRating = (TextView) getActivity().findViewById(R.id.labelRating);
+	        textRating.setVisibility(View.VISIBLE);
+	        
 	        averageRatingBarActivity =  (RatingBar) getActivity().findViewById(R.id.averageRatingBarActivity);
 	        averageRatingBarActivity.setRating(activityDetails.getAverageMark());
+	        averageRatingBarActivity.setVisibility(View.VISIBLE);
+	        
+	        
+	        listReview = db.getReviewsByActivity(activityDetails.getIdActivity());
 	        
 	        labelNumberReview =  (TextView) getActivity().findViewById(R.id.labelNumberReview);
 	        
 	        //We use a plurals string with a number of reviews in parameter
 	        Resources res = getResources();
-	        String numberOfReviews = res.getQuantityString(R.plurals.labelNumberReview, 0);
-	        String messageReviews = String.format(numberOfReviews, String.valueOf(0));
+	        String numberOfReviews = res.getQuantityString(R.plurals.labelNumberReview, listReview.size());
+	        String messageReviews = String.format(numberOfReviews, String.valueOf(listReview.size()));
 	        labelNumberReview.setText(messageReviews);
+	        
+	        writeReview = (Button) getActivity().findViewById(R.id.writeReview);
+	        writeReview.setVisibility(View.VISIBLE);
+	        
 	        
 	        mCurrentPosition = position;
 	    }

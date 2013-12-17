@@ -36,7 +36,10 @@ public class ListActivityFragment extends ListFragment {
 		List<Activities> listActivity;
 		
 		DatabaseHelper db = new DatabaseHelper(getActivity());
-		listActivity = db.getSearchableActivities(bundle.getString("query").toString());
+		if(bundle != null)
+			listActivity = db.getSearchableActivities(bundle.getString("query").toString());
+		else 
+			listActivity = db.getSearchableActivities("t");
 		
 		if (listActivity.size() == 0) {
 			AlertDialog.Builder boite;
@@ -110,20 +113,23 @@ public class ListActivityFragment extends ListFragment {
 		super.onResume();
 		//Title ActionBar update with the query
 		Bundle bundle = getArguments();
-		getActivity().getActionBar().setTitle(getResources().getString(R.string.title_activity_activity_handler) +" "+ bundle.getString("query").toString());
-
+		if(bundle != null)
+			getActivity().getActionBar().setTitle(getResources().getString(R.string.title_activity_activity_handler) +" "+ bundle.getString("query").toString());
+		else
+			getActivity().getActionBar().setTitle(getResources().getString(R.string.title_activity_activity_handler) +" "+ "FUCK ME");
 	}
 	
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		//Get the id of the selected Element
 		TextView tv = (TextView) v.findViewById(R.id.idActivities);
+
+		// Set the item as checked to be highlighted when in two-pane layout
+		l.setItemChecked(position, true);
 		
 		// Notify the parent activity of selected item
 		mCallback.onArticleSelected(Integer.parseInt(tv.getText().toString()));
-		
-		// Set the item as checked to be highlighted when in two-pane layout
-		getListView().setItemChecked(position, true);
+
 	}
 
 }

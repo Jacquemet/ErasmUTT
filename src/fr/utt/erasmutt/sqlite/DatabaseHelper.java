@@ -93,9 +93,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         		  "firstname TEXT,"+
         		  "lastname TEXT,"+
         		  "password TEXT,"+
-        		  "pictureUser TEXT,"+
+        		  "pictureUserString TEXT,"+
         		  "mail TEXT,"+
-        		  "token TEXT)";
+        		  "token TEXT," +
+        		  "pictureUser BLOB)";
         
         String CREATE_USERSGROUPS_TABLE ="CREATE TABLE usersgroups("+
         		  "idUser INTEGER,"+
@@ -161,8 +162,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put("firstname", user.getFirstname()); 
         values.put("lastname", user.getLastname()); 
         values.put("mail", user.getMail()); 
+        values.put("pictureUserString", user.getPictureString());
         values.put("token", user.getToken()); 
- 
+        values.put("pictureUser", user.getPicture());
+        
         // 3. insert
         db.insert("users", // table
                 null, //nullColumnHack
@@ -183,6 +186,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	        values.put("lastname", user.getLastname()); 
 	        values.put("mail", user.getMail()); 
 	        values.put("token", user.getToken());
+	        values.put("pictureUserString", user.getPictureString());
+	        values.put("pictureUser", user.getPicture());
 	 
 	        // 3. insert
 	        db.update("users", values, "idUser = ? ", new String[] {String.valueOf(user.getIdUser())});
@@ -557,11 +562,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			        return rv;
 			    }
 			 	
-			 	public List<Review> getReviewsByActivity(int idActivity) {
+		public List<Review> getReviewsByActivity(int idActivity) {
 			        List<Review> reviews = new LinkedList<Review>();
 			  
 			        // 1. build the query
-			        String query = "SELECT  * FROM review WHERE idActivty = " + idActivity;
+			        String query = "SELECT  * FROM review WHERE idActivity = " + idActivity;
 			  
 			        // 2. get reference to writable DB
 			        SQLiteDatabase db = this.getWritableDatabase();

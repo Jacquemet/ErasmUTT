@@ -47,7 +47,7 @@
 
     <string name="title_create_new_account">Creer un compte</string>
     <string name="hello">Bonjour %1$s!</string>
-    <string name="desc_account">Votre compte</string>
+    <string name="desc_account">Gestion de votre compte</string>
     <string name="textLabel_mail">Votre adresse E-mail : </string>
     <string name="textLabel_password">Votre mot de passe : </string>
     <string name="textButton_signIn">Se connecter</string>
@@ -68,6 +68,7 @@
 	<string name="labelDescriptionActivity">Description : </string>
 	<string name="labelWebsite">Site Web : </string>
 	<string name="labelRating">Note moyenne : </string>
+	<string name="textWriteReview">Écrire un avis</string>
 	
 	<plurals name="labelNumberReview">
         <item quantity="one">%1$s avis</item>

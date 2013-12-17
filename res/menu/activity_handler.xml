@@ -1,11 +1,4 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
-
-    
-    <item android:id="@+id/action_location"
-        android:icon="@drawable/ic_action_place"
-        android:title="@string/action_location"
-        android:showAsAction="ifRoom|withText"
-        />
     
     <item
         android:id="@+id/action_settings"
