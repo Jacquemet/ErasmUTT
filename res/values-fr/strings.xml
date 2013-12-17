@@ -75,6 +75,12 @@
         <item quantity="other">%1$s avis</item>
     </plurals>
 	
+	<!-- Activity Details -->
+	
+	<string name="hintResume">Resumé</string>
+	<string name="hintComment">Ajouter un commentaire </string>
+	<string name="labelYourRating">Ajouter une note :  </string>
+	
     <!-- Autres -->
 
     <string name="app_not_available">Désolé, il n\'y a aucun navigateur internet de disponible.</string>

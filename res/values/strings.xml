@@ -79,6 +79,12 @@
         <item quantity="other">%1$s reviews</item>
     </plurals>
 	
+	<!-- Activity Details -->
+	
+	<string name="hintResume">Resume</string>
+	<string name="hintComment">Add a comment </string>
+	<string name="labelYourRating">Add a mark :  </string>
+	
 	<!-- Other -->
 	
 	<string name="app_not_available">Sorry, there\'s no web browser available</string>
