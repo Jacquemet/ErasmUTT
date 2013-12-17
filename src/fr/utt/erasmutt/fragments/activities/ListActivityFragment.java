@@ -1,7 +1,5 @@
 package fr.utt.erasmutt.fragments.activities;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import android.app.Activity;
@@ -13,7 +11,6 @@ import android.support.v4.app.ListFragment;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
-import android.widget.TextView;
 import fr.utt.erasmutt.HomeActivity;
 import fr.utt.erasmutt.OnHeadlineSelectedListener;
 import fr.utt.erasmutt.R;
@@ -26,20 +23,23 @@ public class ListActivityFragment extends ListFragment {
 
 	// This is the Adapter being used to display the list's data
 	SimpleAdapter mAdapter;
+	custom_adapter ca;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
+		
 		//TODO :  Bug à résoudre dans un affcihage tablette
 		Bundle bundle = getArguments();
 		List<Activities> listActivity;
 		
 		DatabaseHelper db = new DatabaseHelper(getActivity());
+		listActivity = db.getSearchableActivities(bundle.getString("query").toString());
 		if(bundle != null)
 			listActivity = db.getSearchableActivities(bundle.getString("query").toString());
 		else 
 			listActivity = db.getSearchableActivities("t");
+	
 		
 		if (listActivity.size() == 0) {
 			AlertDialog.Builder boite;
@@ -57,27 +57,11 @@ public class ListActivityFragment extends ListFragment {
 					});
 			boite.show();
 		} else {
+					
+			//ListView lv1 = (ListView)getActivity().getLayoutInflater().inflate(R.layout.fragment_list_activity, null).findViewById(R.id.custom_list);
 			
-			// Each row in the list stores id activity and name_acticity
-			List<HashMap<String, String>> aList = new ArrayList<HashMap<String, String>>();
-
-			for (int i = 0; i < listActivity.size(); i++) {
-				HashMap<String, String> hm = new HashMap<String, String>();
-				hm.put("idActivity",String.valueOf(listActivity.get(i).getIdActivity()));
-				hm.put("nameActivity", listActivity.get(i).getName());
-				aList.add(hm);
-			}
-
-			// For the simple adapter, specify which columns go into which views
-			String[] fromColumns = {"idActivity","nameActivity"};
-			int[] toViews = { R.id.idActivities, R.id.nameListActivities}; 
-
-			// Create an adapter with the require parameters 
-			mAdapter = new SimpleAdapter(getActivity(), aList, R.layout.fragment_list_activity, fromColumns, toViews);
-
-			// Create an array adapter for the list view
-			setListAdapter(mAdapter);
-
+			ca =  new custom_adapter(getActivity().getLayoutInflater().getContext(), listActivity);
+	        setListAdapter(ca);
 		}
 
 	}
@@ -117,19 +101,13 @@ public class ListActivityFragment extends ListFragment {
 			getActivity().getActionBar().setTitle(getResources().getString(R.string.title_activity_activity_handler) +" "+ bundle.getString("query").toString());
 		else
 			getActivity().getActionBar().setTitle(getResources().getString(R.string.title_activity_activity_handler) +" "+ "FUCK ME");
+
 	}
 	
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
-		//Get the id of the selected Element
-		TextView tv = (TextView) v.findViewById(R.id.idActivities);
-
-		// Set the item as checked to be highlighted when in two-pane layout
-		l.setItemChecked(position, true);
-		
-		// Notify the parent activity of selected item
-		mCallback.onArticleSelected(Integer.parseInt(tv.getText().toString()));
-
+		mCallback.onArticleSelected(ca.getItem(position).getIdActivity());
+		getListView().setItemChecked(position, true);
 	}
 
 }

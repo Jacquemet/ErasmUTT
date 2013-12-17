@@ -40,10 +40,12 @@ public class PopularActivitiesFragment extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+    	
     	indice =0;
     	db= new DatabaseHelper(getActivity());
     	LinearLayout ll = (LinearLayout) inflater.inflate(R.layout.fragment_popular_activities, container, false);
     	ll.setBackgroundColor(getResources().getColor(R.color.background_grey));
+    	
     	
     	act = db.getFocusOnActivities();
 		  
@@ -115,6 +117,8 @@ public class PopularActivitiesFragment extends Fragment{
 			 ratingBar.setStepSize(0.5f);
 			 ratingBar.setNumStars(5);
 			 ratingBar.setRating(act.get(j).getAverageMark());
+			 Log.v(act.get(j).getName(),String.valueOf(act.get(j).getAverageMark()));
+			 
 			 ratingBar.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 			 
 			 linearVer.addView(ratingBar);
@@ -162,5 +166,7 @@ public class PopularActivitiesFragment extends Fragment{
 			throw new ClassCastException(activity.toString()+ " must implement OnHeadlineSelectedListener");
 		}
 	}
+	
+	
     
 }
