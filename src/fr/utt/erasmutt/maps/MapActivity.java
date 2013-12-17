@@ -21,17 +21,20 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -42,30 +45,38 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
+import fr.utt.erasmutt.Constants;
+import fr.utt.erasmutt.LoginActivity;
 import fr.utt.erasmutt.R;
 import fr.utt.erasmutt.sqlite.DatabaseHelper;
 import fr.utt.erasmutt.sqlite.model.Activities;
 
 public class MapActivity extends Activity implements LocationListener{
-	LatLng myPosition;
-	GoogleMap map;
-	Polyline line;
-	Context context;
-	String urlTopass;
-	
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_map);
+        LatLng myPosition;
+        GoogleMap map;
+        Polyline line;
+        Context context;
+        String urlTopass;
+        
+        Bundle bundle;
+        
+        List<Activities> listActivityUser;
+        
+        @Override
+        protected void onCreate(Bundle savedInstanceState) {
+                super.onCreate(savedInstanceState);
+                setContentView(R.layout.activity_map);
 
-		getActionBar().setDisplayHomeAsUpEnabled(true);
-		
+                getActionBar().setDisplayHomeAsUpEnabled(true);
+                
+                bundle = getIntent().getExtras();
+                
         // Getting GoogleMap object from the fragment
-		map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
+                map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
 
         // Enabling MyLocation Layer of Google Map
-		map.setMyLocationEnabled(true);
-	
+                map.setMyLocationEnabled(true);
+        
         // Getting LocationManager object from System Service LOCATION_SERVICE
         LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
@@ -80,68 +91,106 @@ public class MapActivity extends Activity implements LocationListener{
         //Location location = map.getMyLocation();
         context = this;
         if(location!=null){
-	        onLocationChanged(location);
-	         addActivitiesCloseToUser();
-	         
+         onLocationChanged(location);
+         addActivitiesCloseToUser();
+        
         }
 
-	}
-	public void addActivitiesCloseToUser(){
-		DatabaseHelper db = new DatabaseHelper(getApplicationContext());
-		List<Activities> listActivityUser= db.getAllActivities();
-		for(int i=0 ; i<listActivityUser.size() ; i++) { 
-			String name =listActivityUser.get(i).getName();
-			LatLng position= new LatLng(Double.parseDouble(listActivityUser.get(i).getLatitude()),Double.parseDouble(listActivityUser.get(i).getLongitude()));
-			map.addMarker(new MarkerOptions().position(position).title(name).snippet(listActivityUser.get(i).getDesciptionActivity().substring(0, 15)+" ..."));
-		}
-		map.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
-			@Override
-			public void onInfoWindowClick(Marker marker) {
-				AlertDialog.Builder boite;
-	             boite = new AlertDialog.Builder(context);
-	             boite.setTitle(R.string.searchRoute);
-	             boite.setMessage(getString(R.string.searchRouteDescription)+" "+ marker.getTitle());
-	             urlTopass = makeURL(myPosition.latitude,
-			                myPosition.longitude, marker.getPosition().latitude,
-			                marker.getPosition().longitude);
-	             boite.setPositiveButton(R.string.query_hint, new DialogInterface.OnClickListener() {
-	                 public void onClick(DialogInterface dialog, int which) { 
-	 			        new connectAsyncTask(urlTopass).execute(); 
-	                 } 
-	             });
-	             boite.setNegativeButton(R.string.cancel_label, new DialogInterface.OnClickListener() {
-	                 public void onClick(DialogInterface dialog, int which) { 
-	 			        dialog.dismiss();
-	                 } 
-	             });
-	             boite.show(); 
-			}
-		});
-	}
-	
+        }
+        public void addActivitiesCloseToUser() {
+                DatabaseHelper db = new DatabaseHelper(getApplicationContext());
+                if(bundle.getBoolean("LoadAll")) {
+                        listActivityUser= db.getAllActivities();
+                        for(int i=0 ; i<listActivityUser.size() ; i++) {
+                                String name =listActivityUser.get(i).getName();
+                                LatLng position= new LatLng(Double.parseDouble(listActivityUser.get(i).getLatitude()),Double.parseDouble(listActivityUser.get(i).getLongitude()));
+                                map.addMarker(new MarkerOptions().position(position).title(name).snippet(listActivityUser.get(i).getDesciptionActivity().substring(0, 15)+" ..."));
+                        }
+                } else {
+                        Activities act = db.getActivitiesById(bundle.getInt("idActivity"));
+                        String name = act.getName();
+                        LatLng position= new LatLng(Double.parseDouble(act.getLatitude()),Double.parseDouble(act.getLongitude()));
+                        map.addMarker(new MarkerOptions().position(position).title(name).snippet(act.getDesciptionActivity().substring(0, 15)+" ..."));
+                }
+                
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.map, menu);
-		return true;
-	}
+                map.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+                        @Override
+                        public void onInfoWindowClick(Marker marker) {
+                                AlertDialog.Builder boite;
+         boite = new AlertDialog.Builder(context);
+         boite.setTitle(R.string.searchRoute);
+         boite.setMessage(getString(R.string.searchRouteDescription)+" "+ marker.getTitle());
+         urlTopass = makeURL(myPosition.latitude,
+                         myPosition.longitude, marker.getPosition().latitude,
+                         marker.getPosition().longitude);
+         boite.setPositiveButton(R.string.query_hint, new DialogInterface.OnClickListener() {
+         public void onClick(DialogInterface dialog, int which) {
+                                  new connectAsyncTask(urlTopass).execute();
+         }
+         });
+         boite.setNegativeButton(R.string.cancel_label, new DialogInterface.OnClickListener() {
+         public void onClick(DialogInterface dialog, int which) {
+                                  dialog.dismiss();
+         }
+         });
+         boite.show();
+                        }
+                });
+        }
+        
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-	    switch (item.getItemId()) {
-	    // Respond to the action bar's Up/Home button
-	    case android.R.id.home:
-	        NavUtils.navigateUpFromSameTask(this);
-	        return true;
-	    }
-	    return super.onOptionsItemSelected(item);
-	}
-	
-	@Override
-	public void onLocationChanged(Location location) {
-		// TODO Auto-generated method stub		
-		// Getting latitude of the current location
+        @Override
+        public boolean onCreateOptionsMenu(Menu menu) {
+                // Inflate the menu; this adds items to the action bar if it is present.
+                getMenuInflater().inflate(R.menu.map, menu);
+                return true;
+        }
+
+        @Override
+        public boolean onOptionsItemSelected(MenuItem item) {
+         switch (item.getItemId()) {
+         // Respond to the action bar's Up/Home button
+         case android.R.id.home:
+         NavUtils.navigateUpFromSameTask(this);
+         return true;
+        
+        case R.id.action_settings:
+
+                return true;
+        case R.id.action_help:
+                
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(Constants.urlHelp));
+                
+            if (i.resolveActivity(getPackageManager()) != null) {
+                    startActivity(i);
+            } else {
+                Toast.makeText(this, R.string.app_not_available, Toast.LENGTH_LONG).show();
+            }
+                
+                return true;        
+        case R.id.action_logout:
+                DatabaseHelper db = new DatabaseHelper(getApplicationContext());
+                db.userLogout();
+                String goodbyeMessage = String.format(getString(R.string.GoodBye), Constants.user.getFirstname());
+                Constants.user.logout();
+                Intent intentLogout = new Intent(getApplicationContext(),LoginActivity.class);
+                intentLogout.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                
+                Toast.makeText(getApplicationContext(), goodbyeMessage, Toast.LENGTH_LONG).show();
+                startActivity(intentLogout);
+                
+                return true;
+        default:
+            return super.onOptionsItemSelected(item);
+         }
+        }
+        
+        @Override
+        public void onLocationChanged(Location location) {
+                // TODO Auto-generated method stub                
+                // Getting latitude of the current location
         double latitude = location.getLatitude();
 
         // Getting longitude of the current location
@@ -153,62 +202,62 @@ public class MapActivity extends Activity implements LocationListener{
          
          map.moveCamera(CameraUpdateFactory.newLatLngZoom(myPosition, 4));
          //map.addMarker(new MarkerOptions().position(myPosition).title("me"));
-	}
+        }
 
-	@Override
-	public void onProviderDisabled(String provider) {
-		// TODO Auto-generated method stub
-		
-	}
+        @Override
+        public void onProviderDisabled(String provider) {
+                // TODO Auto-generated method stub
+                
+        }
 
-	@Override
-	public void onProviderEnabled(String provider) {
-		// TODO Auto-generated method stub
-		
-	}
+        @Override
+        public void onProviderEnabled(String provider) {
+                // TODO Auto-generated method stub
+                
+        }
 
-	@Override
-	public void onStatusChanged(String provider, int status, Bundle extras) {
-		// TODO Auto-generated method stub
-		
-	}
-	
-	
-	private class connectAsyncTask extends AsyncTask<Void, Void, String> {
-	    private ProgressDialog progressDialog;
-	    String url;
+        @Override
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+                // TODO Auto-generated method stub
+                
+        }
+        
+        
+        private class connectAsyncTask extends AsyncTask<Void, Void, String> {
+         private ProgressDialog progressDialog;
+         String url;
 
-	    connectAsyncTask(String urlPass) {
-	        url = urlPass;
-	    }
+         connectAsyncTask(String urlPass) {
+         url = urlPass;
+         }
 
-	    @Override
-	    protected void onPreExecute() {
-	        // TODO Auto-generated method stub
-	        super.onPreExecute();
-	        progressDialog = new ProgressDialog(context);
-	        progressDialog.setMessage(getString(R.string.fetching_route));
-	        progressDialog.setIndeterminate(true);
-	        progressDialog.show();
-	    }
+         @Override
+         protected void onPreExecute() {
+         // TODO Auto-generated method stub
+         super.onPreExecute();
+         progressDialog = new ProgressDialog(context);
+         progressDialog.setMessage(getString(R.string.fetching_route));
+         progressDialog.setIndeterminate(true);
+         progressDialog.show();
+         }
 
-	    @Override
-	    protected String doInBackground(Void... params) {
-	        JSONParser jParser = new JSONParser();
-	        String json = jParser.getJSONFromUrl(url);
-	        return json;
-	    }
+         @Override
+         protected String doInBackground(Void... params) {
+         JSONParser jParser = new JSONParser();
+         String json = jParser.getJSONFromUrl(url);
+         return json;
+         }
 
-	    @Override
-	    protected void onPostExecute(String result) {
-	        super.onPostExecute(result);
-	        progressDialog.dismiss();
-	        if (result != null) {
-	            drawPath(result);
-	        }
-	    }
-	}
-	public String makeURL(double sourcelat, double sourcelog, double destlat,
+         @Override
+         protected void onPostExecute(String result) {
+         super.onPostExecute(result);
+         progressDialog.dismiss();
+         if (result != null) {
+         drawPath(result);
+         }
+         }
+        }
+        public String makeURL(double sourcelat, double sourcelog, double destlat,
             double destlog) {
         StringBuilder urlString = new StringBuilder();
         urlString.append("http://maps.googleapis.com/maps/api/directions/json");
@@ -335,10 +384,8 @@ public class MapActivity extends Activity implements LocationListener{
 
         return poly;
     }
-	
-	
-	
+        
+        
+        
 }
-
-
 
