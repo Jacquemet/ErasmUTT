@@ -29,6 +29,7 @@ import fr.utt.erasmutt.sqlite.DatabaseHelper;
 import fr.utt.erasmutt.sqlite.model.Activities;
 import fr.utt.erasmutt.sqlite.model.Review;
 import fr.utt.erasmutt.tools.Utility;
+import fr.utt.erasmutt.tools.custom_adapter_reviews;
 
 public class DetailsActivityFragment extends Fragment {
 

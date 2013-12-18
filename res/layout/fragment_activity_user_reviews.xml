@@ -15,20 +15,27 @@
         android:layout_height="wrap_content"
         android:background="@color/background_dark_blue"
         android:gravity="center"
-        android:layout_margin="@dimen/field_vertical_margin"
         android:text="@string/title_reviews_users"
         android:padding="@dimen/field_vertical_padding"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="@android:color/white" />
 
+		<TextView
+		    android:id="@+id/anyReviews"
+		    android:layout_width="187dp"
+		    android:layout_height="30dp"
+		    android:layout_margin="50dp"
+		    android:gravity="center"
+		    android:text="@string/any_reviews_users" />
+		
     	<ListView
 	        android:id="@+id/custom_list_reviewuser"
 	        android:layout_width="fill_parent"
 	        android:layout_height="wrap_content"
 	        android:dividerHeight="1dp"
-	        android:layout_marginBottom="@dimen/field_vertical_margin"
 	        android:listSelector="@drawable/list_selector_flatcolor"
        		android:layout_marginTop="7dp"
+       		android:padding="2dp"
 	       />
 	
 </LinearLayout>

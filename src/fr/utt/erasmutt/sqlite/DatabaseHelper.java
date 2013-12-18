@@ -196,6 +196,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	        db.close();
     }
 
+	 public void updateImageUser(User user){
+	        // 1. get reference to writable DB
+	        SQLiteDatabase db = this.getWritableDatabase();
+	        ContentValues values = new ContentValues();
+	       
+	        values.put("pictureUser", user.getPicture());
+	        // 3. insert
+	        db.update("users", values, "idUser = ? ", new String[] {String.valueOf(user.getIdUser())});
+	 
+	        // 4. close
+	        db.close();
+	    }
+	 
 	 public User getUserById(int id){
 	        // 1. get reference to writable DB
 	        SQLiteDatabase db = this.getReadableDatabase();

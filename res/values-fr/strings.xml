@@ -71,7 +71,8 @@
 	<string name="textWriteReview">Écrire un avis</string>
 	<string name="reviews">Avis </string>
 	 <string name="title_reviews_users">Vos avis</string>
-	 
+	 <string name="any_reviews_users">Aucun avis</string>
+	  
 	<plurals name="labelNumberReview">
         <item quantity="one">%1$s avis</item>
         <item quantity="other">%1$s avis</item>

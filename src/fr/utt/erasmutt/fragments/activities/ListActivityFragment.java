@@ -16,6 +16,7 @@ import fr.utt.erasmutt.OnHeadlineSelectedListener;
 import fr.utt.erasmutt.R;
 import fr.utt.erasmutt.sqlite.DatabaseHelper;
 import fr.utt.erasmutt.sqlite.model.Activities;
+import fr.utt.erasmutt.tools.custom_adapter;
 
 public class ListActivityFragment extends ListFragment {
 

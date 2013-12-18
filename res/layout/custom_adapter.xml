@@ -12,8 +12,7 @@
 	    <ImageView
 	        android:id="@+id/thumbImage"
 	        android:layout_width="70dp"
-	        android:layout_height="70dp"
-	        android:background="@drawable/logo_erasmutt" />
+	        android:layout_height="70dp" />
 	</LinearLayout>
  	<LinearLayout 
  	    android:layout_width="fill_parent"
