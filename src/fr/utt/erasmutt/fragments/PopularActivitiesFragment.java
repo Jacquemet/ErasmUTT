@@ -48,7 +48,7 @@ public class PopularActivitiesFragment extends Fragment{
     	
     	
     	act = db.getFocusOnActivities();
-		  
+		  //TODO: Problème dépasse le tableau !
 		  for(int i=0; i<act.size();i++){
 		
 	          if(act.get(i).getPictureActivityString()!=""&& act.get(i).getPictureActivity()==null){

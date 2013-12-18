@@ -77,11 +77,19 @@
         <item quantity="one">%1$s avis</item>
         <item quantity="other">%1$s avis</item>
     </plurals>
+    
 	<!-- Activity Details -->
 	
 	<string name="hintResume">Resumé</string>
 	<string name="hintComment">Ajouter un commentaire </string>
 	<string name="labelYourRating">Ajouter une note :  </string>
+	
+	<!-- Review Details -->
+	
+	<string name="hintResume">Resumé</string>
+	<string name="hintComment">Ajouter un commentaire </string>
+	<string name="labelYourRating">Ajouter une note :  </string>
+	<string name="reviewPublished">Votre Avis a été publié.</string>
 	
     <!-- Autres -->
 

@@ -7,7 +7,7 @@
     $pass="kevin140289";
     $dbname="mysql:dbname=kevinlarmag;host=mysql51-54.perso";
     
-	$typeActivitiesArray=array("ajouter","modifier","lister","query");
+	$typeActivitiesArray=array("ajouter","modifier","lister","query","markUpdate");
 	
     try {
         $db = new PDO($dbname, $login, $pass);
@@ -121,6 +121,22 @@
 				echo json_encode ($jsonArray);
 			}
 			
+		} else if($typeActivities == $typeActivitiesArray[4]){
+			if(isset($_GET['token'])&&!empty($_GET['token'])){
+				$token = $_GET['token'];
+				
+				if(isset($_GET['id'])&&!empty($_GET['id'])){
+					$id = $_GET['id'];	
+					updateMarkActivity($db,$token,$id);
+				}
+				
+			}
+			else{
+				$jsonArray["typeActivities"]=$typeActivitiesArray[4];
+				$jsonArray["error"]="true";
+				$jsonArray["message"]="erreur";
+				echo json_encode ($jsonArray);
+			}		
 		}
 		
 	}
@@ -244,5 +260,27 @@
 		echo json_encode ($jsonArray);
 	}
 
+	function updateMarkActivity($db,$token,$id){
+		$stmt= $db->prepare("SELECT COUNT(idUser) AS nbUser FROM users where token= '$token';");
+        $stmt->execute(array());
+		$res = $stmt->fetch(PDO::FETCH_ASSOC);
+		$jsonArray["typeActivities"]="markUpdate";
+		if($res['nbUser'] ==  1){
+			$statement2=$db->prepare("SELECT AVG(mark) as mark FROM review WHERE idActivity = $id;");
+			$statement2->execute(array());
+			$mark = $statement2->fetch(PDO::FETCH_ASSOC);
+			$statement=$db->prepare("UPDATE activities SET averageMark = ? WHERE idActivity = ?;");
+			$statement->execute(array($mark,$id));
+			$jsonArray["mark"] = $mark['mark'];
+			$jsonArray["message"]="modification reussis";
+			$jsonArray["error"]="false";
+		}
+		else{
+			$jsonArray["message"]="Probleme token or mail";
+			$jsonArray["error"]="true";
+		}
+		echo json_encode ($jsonArray);
+	}
+	
         
 ?>

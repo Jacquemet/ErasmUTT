@@ -1,13 +1,11 @@
 ![ERASMUTT](http://img51.imageshack.us/img51/7995/mque.png)
 
 
-----  ------------  ------------
 
 Présentation de l'application
 ------------
 
-ErasmUTT est une application Android destinée aux étudiants voyageant à l'étranger. Elle permet entre autres de consulter un ensemble d'activités dans le monde entier, de consulter et d'ajouter des commentaires, mais aussi de géolocaliser les activités sur une carte.
-----  ------------  ------------
+ErasmUTT est une application Android destinée aux étudiants voyageant à l'étranger. Elle permet entre autres de consulter un ensemble d'activités disponibles dans le monde entier, de consulter et d'ajouter des commentaires, mais aussi de géolocaliser les activités sur une carte.
 
 Use Cases
 ------------
@@ -56,7 +54,6 @@ Carrie regarde d’autres activités dans l’application ErasmUTT. Elle recherche “v
 John est un modérateur. Il se connecte à l’application ErasmUTT et clique sur « Les avis signalés en attentes ». Dans cette liste, le modérateur a accès à l’avis signalé par Carrie, au nom de l’auteur de l’activité qui lui correspond. Il a également la possibilité de supprimer le commentaire ou de le laisser. Cet avis étant écrit en langage SMS et contenant des insultes, John décide de le supprimer.
 
 
-----  ------------  ------------
 
 Contribuer
 ------------
@@ -81,7 +78,6 @@ Vous pouvez contribuer facilement au projet en suivant les étapes suivantes :
 
 
 
-----  ------------  ------------
 
 Rapporter un bogue ou proposer une nouvelle fonctionnalité
 ------------

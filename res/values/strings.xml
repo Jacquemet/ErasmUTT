@@ -84,6 +84,13 @@
 	<string name="hintResume">Resume</string>
 	<string name="hintComment">Add a comment </string>
 	<string name="labelYourRating">Add a mark :  </string>
+	
+	<!-- New Review Details -->
+	
+	<string name="hintResume">Resume</string>
+	<string name="hintComment">Add a comment </string>
+	<string name="labelYourRating">Add a mark :  </string>
+	<string name="reviewPublished">Your review has been published.</string>
 
     <!-- Other -->
 

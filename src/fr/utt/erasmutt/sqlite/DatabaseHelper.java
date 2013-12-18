@@ -495,6 +495,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		        // return act
 		        return activities;
 		    }
+		 	
+		 	
+			 public Boolean updateAverageMarkActivity(int idActivity){
+				 
+			        // 1. get reference to readable DB
+			        SQLiteDatabase db = this.getReadableDatabase();
+			 
+			        // 1. build the query
+			        String query = "UPDATE activities set averageMark = (SELECT AVG(mark) FROM review where idActivity = " + idActivity+") WHERE idActivity = "+idActivity;
+			 
+			        db.execSQL(query);
+			        
+					return true;
+			 }
+		 	
 //---------------------------------------------------------------------
 			 
 		    /**

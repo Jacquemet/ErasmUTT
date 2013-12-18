@@ -93,7 +93,12 @@
 			$statement->bindParam(5,$mark);
 			$statement->bindParam(6,$date);
 			$statement->bindParam(7,$language);
-			$statement->execute();
+			$statement->execute();			
+
+			$stat=$db->prepare("select idReview from review where idUser = $idUser and idActivity = $idActivity and date = '$date';");
+			$stat->execute(array());
+			$result = $stat->fetch(PDO::FETCH_ASSOC);
+			$jsonArray["idReview"] = $result["idReview"];
 			
 			$jsonArray["typeReviews"]="Ajouter";
 			$jsonArray["message"]="Ajout reussis";

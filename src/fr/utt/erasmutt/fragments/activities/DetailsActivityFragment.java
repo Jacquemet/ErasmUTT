@@ -9,7 +9,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -63,6 +62,9 @@ public class DetailsActivityFragment extends Fragment {
 	    
 	    private custom_adapter_reviews ca;
 	    private  ListView listViewReviews;
+
+		private DialogNewReview newDialog ;
+
 	    @Override
 	    public View onCreateView(LayoutInflater inflater, ViewGroup container, 
 	        Bundle savedInstanceState) {
@@ -73,6 +75,8 @@ public class DetailsActivityFragment extends Fragment {
 	        if (savedInstanceState != null) {
 	            mCurrentPosition = savedInstanceState.getInt(ARG_ID_ACTIVITY);
 	        }
+
+	        newDialog = new DialogNewReview(getActivity(), mCurrentPosition);
 
 	        // Inflate the layout for this fragment
 	        return inflater.inflate(R.layout.fragment_details_activity, container, false);
@@ -93,6 +97,8 @@ public class DetailsActivityFragment extends Fragment {
 	        } else if (mCurrentPosition != -1) {
 	            // Set article based on saved instance state defined during onCreateView
 	            updateArticleView(mCurrentPosition);
+	            //Set the id to the future Review
+	            newDialog.setIdActivity(mCurrentPosition);
 	        }
 	    }
 
@@ -200,9 +206,18 @@ public class DetailsActivityFragment extends Fragment {
 	        writeReview = (Button) getActivity().findViewById(R.id.writeReview);
 	        writeReview.setVisibility(View.VISIBLE);
 	        
+	        newDialog.setIdActivity(position);
 	        
 	        mCurrentPosition = position;
 	        
+	        writeReview.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+				    newDialog.show();
+				}
+			});
+
 	        if(listReview.size()>0){
 	        	addReviews();
 	        }
