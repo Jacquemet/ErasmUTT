@@ -33,7 +33,7 @@
     </string-array>
 
     <!-- Map -->
-    <string name="fetching_route"> Calcul de votre itineraire, Veuillez patienter ...</string>
+    <string name="fetching_route"> Calcul de votre itineraire, Veuillez patienter &#8230;</string>
     <string name="searchRoute">Chercher un itineraire ?</string>
     <string name="searchRouteDescription">Voulez vous chercher un itineraire depuis votre position actuelle vers : </string>
     

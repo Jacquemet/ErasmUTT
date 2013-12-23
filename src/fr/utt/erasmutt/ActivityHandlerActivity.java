@@ -13,6 +13,12 @@ import fr.utt.erasmutt.fragments.activities.ListActivityFragment;
 import fr.utt.erasmutt.networkConnection.HttpRequest;
 import fr.utt.erasmutt.sqlite.DatabaseHelper;
 
+/**
+ * This Activity show a list of interest point and show the details of it
+ * This Activity manage a frame when the user is using a smartphone and also manage 2 fragments when the user is using a tablet
+ * @author Thibault Jacquemet & Kévin Larue
+ *
+ */
 public class ActivityHandlerActivity extends FragmentActivity implements OnHeadlineSelectedListener{
 
 	HttpRequest requestSearch;
@@ -99,19 +105,19 @@ public class ActivityHandlerActivity extends FragmentActivity implements OnHeadl
 	//Lorsque l'on sélectionne un élément on charge le détails de l'activité dans le Frame ou on actualise le contenu du fragment
 	@Override
 	public void onArticleSelected(int position) {
-	       // The user selected the headline of an article from the HeadlinesFragment
+	    // The user selected the headline of an article from the HeadlinesFragment
 
         // Capture the article fragment from the activity layout
         DetailsActivityFragment articleFrag = (DetailsActivityFragment) getSupportFragmentManager().findFragmentById(R.id.details_activity_frag);
 
-        //Si le détail de l'activité est présent alors on est dans un affichage tablette
+        //If the detail fragment is here, we are using a tablet with 2 fragments
         if (articleFrag != null) {
             
             // Call a method in the ArticleFragment to update its content
             articleFrag.updateArticleView(position);
 
         }
-        //Sinon on est dans un affichage smartphone avec un framelayout
+        //Else we are using a smartphone with 1 frameLayout
         else {
 
             // Create fragment and give it an argument for the selected article

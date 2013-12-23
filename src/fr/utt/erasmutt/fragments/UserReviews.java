@@ -2,30 +2,22 @@ package fr.utt.erasmutt.fragments;
 
 import java.util.List;
 
-import fr.utt.erasmutt.Constants;
-import fr.utt.erasmutt.R;
-import fr.utt.erasmutt.R.id;
-import fr.utt.erasmutt.sqlite.DatabaseHelper;
-import fr.utt.erasmutt.sqlite.model.Review;
-import fr.utt.erasmutt.tools.Utility;
-import fr.utt.erasmutt.tools.custom_adapter_reviews;
-import fr.utt.erasmutt.tools.custom_adapter_reviews_user;
 import android.os.Bundle;
-import android.app.Activity;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.ListFragment;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import fr.utt.erasmutt.Constants;
+import fr.utt.erasmutt.R;
+import fr.utt.erasmutt.sqlite.DatabaseHelper;
+import fr.utt.erasmutt.sqlite.model.Review;
+import fr.utt.erasmutt.tools.CustomAdapterReviewsUser;
 
 public class UserReviews extends Fragment {
 	private List<Review> listReview;
-    private custom_adapter_reviews_user ca;
+    private CustomAdapterReviewsUser ca;
     private DatabaseHelper db;
     private  ListView listViewReviews;
     
@@ -41,7 +33,6 @@ public class UserReviews extends Fragment {
     
     @Override
     public void onStart() {
-    	// TODO Auto-generated method stub
     	super.onStart();
     	
     	listReview=db.getReviewsByUserId(Constants.user.getIdUser());
@@ -50,7 +41,7 @@ public class UserReviews extends Fragment {
 		if(listReview.size()>0){
 			listViewReviews = (ListView)getActivity().findViewById(R.id.custom_list_reviewuser);
 			
-			ca =  new custom_adapter_reviews_user(getActivity().getLayoutInflater().getContext(), listReview);
+			ca =  new CustomAdapterReviewsUser(getActivity().getLayoutInflater().getContext(), listReview);
 			listViewReviews.setAdapter(ca);
 			anyReview.setVisibility(View.GONE);
 		}

@@ -29,7 +29,7 @@ public class PopularActivitiesFragment extends Fragment{
 
 	DatabaseHelper db;
 	Bitmap bitmap;
-	ImageView[] photo = new ImageView[4];
+	ImageView[] photo;
 	Integer indice =0;
 	List <Activities> act;
 	LinearLayout linearHor; 
@@ -48,10 +48,12 @@ public class PopularActivitiesFragment extends Fragment{
     	
     	
     	act = db.getFocusOnActivities();
+    	photo = new ImageView[act.size()];
+    	
 		  //TODO: Problème dépasse le tableau !
 		  for(int i=0; i<act.size();i++){
 		
-	          if(act.get(i).getPictureActivityString()!=""&& act.get(i).getPictureActivity()==null){
+	          if(!act.get(i).getPictureActivityString().equals("") && act.get(i).getPictureActivity()==null){
 	        	 
 	        	 photo[i] = new ImageView(getActivity());
 	        	 
@@ -77,6 +79,8 @@ public class PopularActivitiesFragment extends Fragment{
 	        	  Bitmap b = BitmapFactory.decodeByteArray( act.get(i).getPictureActivity(),  0,act.get(i).getPictureActivity().length);
 				  photo[indice].setImageBitmap(Bitmap.createScaledBitmap(b, 300, 300, false));
 	        	  indice++;
+	          }else {
+	        	  //TODO : pas d'image ds BDD
 	          }
 	          
 	          

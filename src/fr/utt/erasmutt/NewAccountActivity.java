@@ -35,6 +35,7 @@ public class NewAccountActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_new_account);
 		
+		//Instantiation of all the graphic elements
 		mail = (EditText) findViewById(R.id.editTextCreateNewAccount_mail);
 		password = (EditText) findViewById(R.id.editTextCreateNewAccount_password);
 		repeatPassword = (EditText) findViewById(R.id.editTextCreateNewAccount_repeatPassword);
@@ -43,6 +44,7 @@ public class NewAccountActivity extends Activity {
 		buttonSubmit = (Button) findViewById(R.id.buttonCreateNewAccount_submit);
 		buttonCancel = (Button) findViewById(R.id.buttonCreateNewAccount_cancel);
 		
+		// Put the fullscreen mode
 		getActionBar().hide();
 		
 		buttonSubmit.setOnClickListener(new OnClickListener() {
@@ -56,7 +58,6 @@ public class NewAccountActivity extends Activity {
 						public Object call(JSONObject jsonResponse) {
 	
 							try {
-								//TODO : Exploiter les données reçues
 								if (!jsonResponse.getBoolean("error")) {
 									
 									//Clear NewAccountActivity from the back stack and launch the current task of LoginActivity 
@@ -76,10 +77,11 @@ public class NewAccountActivity extends Activity {
 						}
 					});
 					
-					//On vérifie que la connexion au réseau est valide
+					//We check if there a valid network connexion (WIFI or 3G)
 			        ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 			        NetworkInfo activeInfo = connMgr.getActiveNetworkInfo();
 			        
+			        //If it is we execute the request
 			        if (activeInfo != null && activeInfo.isConnected()) {
 			        	requestAddUser.execute(Constants.urlRoot+"connexion.php?typeConnexion=ajouter&mail="+mail.getText().toString()+"&password="+password.getText().toString()+"&firstname="+firstname.getText().toString()+"&lastname="+lastname.getText().toString());
 			        }else {

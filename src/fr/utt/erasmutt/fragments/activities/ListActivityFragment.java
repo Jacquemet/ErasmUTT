@@ -18,7 +18,7 @@ import fr.utt.erasmutt.OnHeadlineSelectedListener;
 import fr.utt.erasmutt.R;
 import fr.utt.erasmutt.sqlite.DatabaseHelper;
 import fr.utt.erasmutt.sqlite.model.Activities;
-import fr.utt.erasmutt.tools.custom_adapter;
+import fr.utt.erasmutt.tools.CustomAdapter;
 
 public class ListActivityFragment extends ListFragment {
 
@@ -26,7 +26,7 @@ public class ListActivityFragment extends ListFragment {
 
 	// This is the Adapter being used to display the list's data
 	SimpleAdapter mAdapter;
-	custom_adapter ca;
+	CustomAdapter ca;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -62,7 +62,7 @@ public class ListActivityFragment extends ListFragment {
 					
 			//ListView lv1 = (ListView)getActivity().getLayoutInflater().inflate(R.layout.fragment_list_activity, null).findViewById(R.id.custom_list);
 			
-			ca =  new custom_adapter(getActivity().getLayoutInflater().getContext(), listActivity);
+			ca =  new CustomAdapter(getActivity().getLayoutInflater().getContext(), listActivity);
 	        setListAdapter(ca);
 		}
 
@@ -102,7 +102,7 @@ public class ListActivityFragment extends ListFragment {
 		if(bundle != null)
 			getActivity().getActionBar().setTitle(getResources().getString(R.string.title_activity_activity_handler) +" "+ bundle.getString("query").toString());
 		else
-			getActivity().getActionBar().setTitle(getResources().getString(R.string.title_activity_activity_handler) +" "+ "FUCK ME");
+			getActivity().getActionBar().setTitle(getResources().getString(R.string.title_activity_activity_handler) +" "+ "t");
 
 	}
 	

@@ -15,12 +15,12 @@ import fr.utt.erasmutt.networkConnection.ImageDownloaderTaskList;
 import fr.utt.erasmutt.sqlite.DatabaseHelper;
 import fr.utt.erasmutt.sqlite.model.Review;
 
-public class custom_adapter_reviews_user extends  ArrayAdapter<Review>{
+public class CustomAdapterReviews extends  ArrayAdapter<Review>{
 	private List<Review> listData;
     private LayoutInflater layoutInflater;
     private DatabaseHelper db;
-    
-    public custom_adapter_reviews_user(Context context,
+	
+	public CustomAdapterReviews(Context context,
 			List<Review> listReviews) {
 		 super(context, 0, listReviews);
 		this.listData = listReviews;
@@ -44,14 +44,14 @@ public class custom_adapter_reviews_user extends  ArrayAdapter<Review>{
 	public View getView(int position, View convertView, ViewGroup parent) {
 		ViewHolder holder;
         if (convertView == null) {
-            convertView = layoutInflater.inflate(R.layout.custom_list_reviews_user, null);
+            convertView = layoutInflater.inflate(R.layout.custom_list_reviews, null);
             holder = new ViewHolder();
-            holder.title = (TextView) convertView.findViewById(R.id.nameReviewUser);
-            holder.desc = (TextView) convertView.findViewById(R.id.descReviewUser);
-            holder.nameActivity = (TextView) convertView.findViewById(R.id.nameActivity);
-            holder.date = (TextView) convertView.findViewById(R.id.dateReviewUser);
-            holder.ratingBar = (RatingBar) convertView.findViewById(R.id.ratingBarReviewUser);
-            holder.imageView = (ImageView) convertView.findViewById(R.id.thumbImageActivity);
+            holder.title = (TextView) convertView.findViewById(R.id.titleReview);
+            holder.desc = (TextView) convertView.findViewById(R.id.descReview);
+            holder.name = (TextView) convertView.findViewById(R.id.nameUserReview);
+            holder.date = (TextView) convertView.findViewById(R.id.dateReview);
+            holder.ratingBar = (RatingBar) convertView.findViewById(R.id.ratingBarReview);
+            holder.imageView = (ImageView) convertView.findViewById(R.id.thumbImageUser);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -61,12 +61,14 @@ public class custom_adapter_reviews_user extends  ArrayAdapter<Review>{
         holder.title.setText(newsItem.getTitle());
         holder.desc.setText(newsItem.getDescription());
         holder.date.setText(newsItem.getDateTime());
-        holder.nameActivity.setText(db.getActivitiesById(newsItem.getIdActivity()).getName());
+        holder.name.setText(db.getUserById(newsItem.getIdUser()).getFirstname());
         holder.ratingBar.setRating(newsItem.getMark());
         
        if (holder.imageView != null) {
-            new ImageDownloaderTaskList(holder.imageView).execute(db.getActivitiesById(newsItem.getIdActivity()).getPictureActivityString());
+            new ImageDownloaderTaskList(holder.imageView).execute(db.getUserById(newsItem.getIdUser()).getPictureString());
         }
+       
+       
  
         return convertView;
 	}
@@ -75,10 +77,9 @@ public class custom_adapter_reviews_user extends  ArrayAdapter<Review>{
     public static class ViewHolder {
         TextView title;
         TextView desc;
-        TextView nameActivity;
+        TextView name;
         TextView date;        
         RatingBar ratingBar;
         ImageView imageView;
     }
 }
-

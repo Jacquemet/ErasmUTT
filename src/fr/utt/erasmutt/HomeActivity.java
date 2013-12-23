@@ -1,7 +1,5 @@
 package fr.utt.erasmutt;
 
-import java.util.List;
-
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
@@ -32,7 +30,6 @@ import fr.utt.erasmutt.fragments.UserReviews;
 import fr.utt.erasmutt.fragments.activities.DetailsActivityFragment;
 import fr.utt.erasmutt.maps.MapActivity;
 import fr.utt.erasmutt.sqlite.DatabaseHelper;
-import fr.utt.erasmutt.sqlite.model.Activities;
 
 public class HomeActivity extends FragmentActivity implements OnHeadlineSelectedListener{
 
@@ -44,8 +41,6 @@ public class HomeActivity extends FragmentActivity implements OnHeadlineSelected
     private CharSequence mTitle;
     private String[] mTitles;
     
-    private int fragmentPosition = 0;
-    
     private UserDetailsFragment userDetailsFrag;
     private PopularActivitiesFragment popularActivities;
     private UserReviews userReviews;
@@ -55,9 +50,12 @@ public class HomeActivity extends FragmentActivity implements OnHeadlineSelected
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        //Create the database
         db = new DatabaseHelper(getApplicationContext());
+        //Get the drawer title
         mTitle = mDrawerTitle = getTitle();
         mTitles = getResources().getStringArray(R.array.text_menu_array);
+
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
 
@@ -109,16 +107,8 @@ public class HomeActivity extends FragmentActivity implements OnHeadlineSelected
         final MenuItem searchItem = menu.findItem(R.id.action_search);
         SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
         
+        //Set a Hint
         searchView.setQueryHint(getString(R.string.query_hint));
-        //TODO:Configure the search info and add any event listeners 
-        /** BULLSHIT Doc :  
-         * https://developer.android.com/guide/topics/ui/actionbar.html#ActionView
-         * https://developer.android.com/reference/android/widget/SearchView.html
-         * https://developer.android.com/guide/topics/search/search-dialog.html#SearchableConfiguration
-         * https://developer.android.com/training/search/setup.html#create-sa
-         * https://developer.android.com/guide/topics/search/searchable-config.html
-         * https://developer.android.com/guide/topics/search/index.html
-         */
         
         //Transparent white HintTextColor 
         int searchPlateId = searchView.getContext().getResources().getIdentifier("android:id/search_plate", null, null);
@@ -139,7 +129,7 @@ public class HomeActivity extends FragmentActivity implements OnHeadlineSelected
 			
 			@Override
 			public boolean onQueryTextSubmit(String query) {
-				//On ferme la barre de recherhce et on lance l'activité qui affiche le résultat
+				// We close the SearchView and we launch the result activity
 				searchItem.collapseActionView();
 				Intent intent = new Intent(getApplicationContext(), ActivityHandlerActivity.class);
 				intent.putExtra("query", query);
@@ -149,7 +139,6 @@ public class HomeActivity extends FragmentActivity implements OnHeadlineSelected
 			
 			@Override
 			public boolean onQueryTextChange(String newText) {
-				// TODO Auto-generated method stub
 				return false;
 			}
 		});
@@ -197,12 +186,15 @@ public class HomeActivity extends FragmentActivity implements OnHeadlineSelected
         	
         	return true;	
         case R.id.action_logout:
+        	
+        	//Logout Action
         	db.userLogout();
         	String goodbyeMessage = String.format(getString(R.string.GoodBye), Constants.user.getFirstname());
         	Constants.user.logout();
+        	
+        	//Back to the LoginActivity
         	Intent  intentLogout = new Intent(getApplicationContext(),LoginActivity.class);
         	intentLogout.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        	
         	Toast.makeText(getApplicationContext(), goodbyeMessage, Toast.LENGTH_LONG).show();
         	startActivity(intentLogout);
         	
@@ -222,20 +214,14 @@ public class HomeActivity extends FragmentActivity implements OnHeadlineSelected
 
     private void selectItem(int position) {
         // update the main content by replacing fragments
-    	//TODO : À changer pour switcher avec des fragments multiple
     	setupFragments();
-    	
-    	//Save the selected position
-    	fragmentPosition = position;
     	
     	switch (position) {
 		case 0:
 			showFragment(popularActivities);
 			break;
 		case 1:
-			//TODO : Check if the fragment is active
 				showFragment(userDetailsFrag);
-				
 			break;
 		case 2:
 			//showFragment(listActivityFragment);
@@ -248,13 +234,16 @@ public class HomeActivity extends FragmentActivity implements OnHeadlineSelected
 			break;
 		}
     	
+    	//Change the Title, set the item to checked and close the drawer
         mDrawerList.setItemChecked(position, true);
         setTitle(mTitles[position]);
         mDrawerLayout.closeDrawer(mDrawerList);
     }
 
     
-    
+    /**
+     * Change the title of the Drawer ActionBar
+     */
     @Override
     public void setTitle(CharSequence title) {
     	mTitle = title;
@@ -297,11 +286,6 @@ public class HomeActivity extends FragmentActivity implements OnHeadlineSelected
         if (this.userReviews == null) {
         	this.userReviews = new UserReviews();
         }
-       /* this.listActivityFragment = (ListActivityFragment) fm.findFragmentById(R.id.list_activity_frag);
-        if (this.listActivityFragment == null) {
-            this.listActivityFragment = new ListActivityFragment();
-        }*/
-
     }
     
     //Show fragment in parameters

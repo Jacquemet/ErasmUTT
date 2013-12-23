@@ -5,7 +5,6 @@ import java.util.List;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,19 +14,18 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import fr.utt.erasmutt.R;
 import fr.utt.erasmutt.networkConnection.HttpCallbackByte;
-import fr.utt.erasmutt.networkConnection.ImageDownloaderTaskList;
 import fr.utt.erasmutt.networkConnection.RetreiveImgTask;
 import fr.utt.erasmutt.sqlite.DatabaseHelper;
 import fr.utt.erasmutt.sqlite.model.Activities;
 
-public class custom_adapter extends  ArrayAdapter<Activities> {
+public class CustomAdapter extends  ArrayAdapter<Activities> {
 	private List<Activities> listData;
 	 
     private LayoutInflater layoutInflater;
     private DatabaseHelper db;
     private Activities newsItem;
     private ViewHolder holder;
-	public custom_adapter(Context context,
+	public CustomAdapter(Context context,
 			List<Activities> listActivity) {
 		 super(context, 0, listActivity);
 		this.listData = listActivity;

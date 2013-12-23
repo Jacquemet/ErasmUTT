@@ -60,21 +60,21 @@ Contribuer
 
 Vous pouvez contribuer facilement au projet en suivant les étapes suivantes :
 
- 1. [Fork it](https://github.com/Jacquemet/ErasmUTT/fork)
+ 1. [Fork du projet](https://github.com/Jacquemet/ErasmUTT/fork)
 
- 2. Create your feature branch 
+ 2. Créez votre branche dédiée à la fonctionnalité :
 
         git checkout -b my-new-feature
 
- 3. Commit yout changes :
+ 3. Commit de vos changements :
 
         git commit -am 'Addes some feature'
 
- 4. Push to the branch :
+ 4. Push sur la branche :
 
         git push origin my-new-feature
 
- 5. Create new [Pull Request](https://help.github.com/articles/using-pull-requests)
+ 5. Créez une nouvelle [requête Pull](https://help.github.com/articles/using-pull-requests)
 
 
 

@@ -46,13 +46,15 @@ public class LoginActivity extends Activity {
 	private	DatabaseHelper db;
 	
 	private Activities afu;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
-
+		// Put fullscreen mode
 		getActionBar().hide();
 
+		//Instantiation of all the graphic elements
 		textViewLogin = (TextView) findViewById(R.id.textView_mail);
 		textViewPassword = (TextView) findViewById(R.id.textView_password);
 		login = (EditText) findViewById(R.id.editText_mail);
@@ -60,7 +62,8 @@ public class LoginActivity extends Activity {
 		buttonSignIn = (Button) findViewById(R.id.button_signIn);
 		buttonNewAccount = (Button) findViewById(R.id.button_createAccount);
 		progBar = (ProgressBar) findViewById(R.id.progressBar);
-
+		
+		//Create the DB Helper
         db = new DatabaseHelper(this);
         
 		buttonSignIn.setOnClickListener(new OnClickListener() {
@@ -74,8 +77,9 @@ public class LoginActivity extends Activity {
 					public Object call(JSONObject jsonResponse) {
 
 						try {
-							//TODO : Exploiter les données reçues
+							//If the connexion is successful
 							if (!jsonResponse.getBoolean("error")) {
+								//Setup the current user in a Constant
 								Constants.user.setIdUser(Integer.parseInt(jsonResponse.getString("idUser")));
 								Constants.user.setFirstname(jsonResponse.getString("firstname"));
 								Constants.user.setToken(jsonResponse.getString("token"));
@@ -83,7 +87,7 @@ public class LoginActivity extends Activity {
 								Constants.user.setMail(jsonResponse.getString("mail"));
 								Constants.user.setPictureString(jsonResponse.getString("pictureUser"));
 								
-								//TODO : Vérifier que le User n'existe pas déjà 
+								//We create the user in the local Db if not already the case 
 								if(!db.isExistUser(Constants.user.getIdUser())) {
 						             db.addUser(Constants.user);
 					        	} else {
@@ -106,6 +110,8 @@ public class LoginActivity extends Activity {
 						        		db.updateUser(u);
 						        	}
 						        }
+						        
+						        //Load the Activities stored on the server in the local DB
 								loadActitivies();
 								
 							} else {
@@ -121,22 +127,26 @@ public class LoginActivity extends Activity {
 					}
 				});
 				
-				//On vérifie que la connexion au réseau est valide
+				//We check if there a valid network connexion (WIFI or 3G)
 		        ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 		        NetworkInfo activeInfo = connMgr.getActiveNetworkInfo();
 		        
+		        //If it is we execute the request
 		        if (activeInfo != null && activeInfo.isConnected()) {
 		        	startLoading();
 		        	final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 		        	imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+		        	//Execute the first request which try to connect the user with the login/password filled
 		        	request.execute(Constants.urlRoot+"connexion.php?typeConnexion=connecter&mail="+login.getText().toString()+"&password="+password.getText().toString());
-		        }else {
+		        }
+		        // Else we show an error with a Toast
+		        else {
 		        	Toast.makeText(getApplicationContext(), R.string.network_disabled, Toast.LENGTH_LONG).show();
 		        }
 			}
 		});
 
-        // Action sur le bouton de création d'un nouveau compte
+        // New account Action
 		buttonNewAccount.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -146,6 +156,9 @@ public class LoginActivity extends Activity {
 		});
 	}
 	
+	/**
+	 * Load the Activities stored on the server in the local DB
+	 */
 	private void loadActitivies(){
 		requestActivities = new HttpRequest(new HttpCallback() {
 			
@@ -153,11 +166,12 @@ public class LoginActivity extends Activity {
 			public Object call(JSONObject jsonResponse) {
 
 				try {
-					//TODO : Exploiter les données reçues
+					//If the request is successful
 					if (!jsonResponse.getBoolean("error")) {
 
 						JSONArray jObject = jsonResponse.getJSONArray("listActivities");
-
+						
+						//For each reviews we create a Object Activities and we add or update it into the DB
 				        for (int i = 0; i < jObject.length(); i++) {
 
 				        	JSONObject menuObject = jObject.getJSONObject(i);
@@ -176,14 +190,16 @@ public class LoginActivity extends Activity {
 				             afu.setPictureActivity(null);
 				            				           
 				             afu.setAddress(menuObject.getString("address"));
-				        	
-				        	if(!db.isExistActivity(Integer.parseInt(menuObject.getString("idActivity")))) {
+
+				             if(!db.isExistActivity(Integer.parseInt(menuObject.getString("idActivity")))) {
 					             db.addActivity(afu);
 				        	} else {
 				        		db.updateActivity(afu);
 				        	}
 				            
 				        }
+				        
+				        //Load the Reviews stored on the server in the local DB
 						loadReviews();
 					}
 				} catch (JSONException e) {
@@ -195,10 +211,12 @@ public class LoginActivity extends Activity {
 			}
 		});
 		
-		//On vérifie que la connexion au réseau est valide
     	requestActivities.execute(Constants.urlRoot+"activiesManager.php?typeActivies=lister&token="+Constants.user.getToken());
 	}
 
+	/**
+	 * Load the Reviews stored on the server in the local DB
+	 */
 	private void loadReviews() {
 		requestReviews = new HttpRequest(new HttpCallback() {
 
@@ -208,11 +226,11 @@ public class LoginActivity extends Activity {
 				try {
 
 					JSONArray jObject = jsonResponse.getJSONArray("listReviews");
-
+					
+					//For each reviews we create a Object Review and we add or update it into the DB
 					for (int i = 0; i < jObject.length(); i++) {
 
 						JSONObject menuObject = jObject.getJSONObject(i);
-
 						Review rv = new Review();
 						rv.setIdReview(Integer.parseInt(menuObject.getString("idReview")));
 						rv.setIdUser(Integer.parseInt(menuObject.getString("idUser")));
@@ -222,7 +240,7 @@ public class LoginActivity extends Activity {
 						rv.setMark(Float.parseFloat(menuObject.getString("mark")));
 						rv.setDateTime(menuObject.getString("date"));
 						rv.setLanguage(menuObject.getString("language"));
-
+						
 						if (!db.isExistReview(Integer.parseInt(menuObject.getString("idReview")))) {
 							db.addReview(rv);
 						} else {
@@ -231,6 +249,7 @@ public class LoginActivity extends Activity {
 						
 					}
 					
+					//When the DB is filled with the required data we launch the next Activity
 					launchHome();
 
 				} catch (JSONException e) {
@@ -242,11 +261,15 @@ public class LoginActivity extends Activity {
 			}
 		});
 
-		// On vérifie que la connexion au réseau est valide
 		requestReviews.execute(Constants.urlRoot + "reviewsManager.php?typeReviews=lister&token=" + Constants.user.getToken());
 
 	}
 
+	
+	/**
+	 * Show the progressBar and hide the other elements
+	 * Called when we launch a connexion with the server
+	 */
 	private void startLoading() {
 		progBar.setVisibility(View.VISIBLE);
 
@@ -258,6 +281,10 @@ public class LoginActivity extends Activity {
 		textViewPassword.setVisibility(View.INVISIBLE);
 	}
 
+	/**
+	 * Hide the progressBar and show the other elements
+	 * Called when the connexion with the server is succeed or failed
+	 */
 	private void endLoading() {
 		progBar.setVisibility(View.INVISIBLE);
 
@@ -270,9 +297,9 @@ public class LoginActivity extends Activity {
 
 	}
 	
+	//Method which launch the HomeActivity and clear the Back Satck
 	private void launchHome() {
-		// Create an Intent which clear the back stack
-		// and launch the home activity
+		// Create an Intent which clear the back stack and launch the home activity
 		Intent intent = new Intent(getApplicationContext(),HomeActivity.class);
 		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 

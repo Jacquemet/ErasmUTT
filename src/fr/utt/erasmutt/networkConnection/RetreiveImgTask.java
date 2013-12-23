@@ -12,8 +12,6 @@ import android.util.Log;
 
 public class RetreiveImgTask extends AsyncTask<String, Void, byte[]> {
 
-    private Exception exception;
-
     HttpCallbackByte callback;
 
     public RetreiveImgTask(HttpCallbackByte Callback) {
@@ -24,7 +22,6 @@ public class RetreiveImgTask extends AsyncTask<String, Void, byte[]> {
         try {
             return getLogoImage(params[0]);
         } catch (Exception e) {
-            this.exception = e;
             Log.e("Error in RetreiveImgTask", e.getMessage());
             return null;
         }

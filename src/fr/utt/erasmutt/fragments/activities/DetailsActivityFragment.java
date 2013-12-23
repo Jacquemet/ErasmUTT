@@ -28,7 +28,7 @@ import fr.utt.erasmutt.sqlite.DatabaseHelper;
 import fr.utt.erasmutt.sqlite.model.Activities;
 import fr.utt.erasmutt.sqlite.model.Review;
 import fr.utt.erasmutt.tools.Utility;
-import fr.utt.erasmutt.tools.custom_adapter_reviews;
+import fr.utt.erasmutt.tools.CustomAdapterReviews;
 
 public class DetailsActivityFragment extends Fragment {
 
@@ -60,7 +60,7 @@ public class DetailsActivityFragment extends Fragment {
 	    
 	    private List<Review> listReview;
 	    
-	    private custom_adapter_reviews ca;
+	    private CustomAdapterReviews ca;
 	    private  ListView listViewReviews;
 
 		private DialogNewReview newDialog ;
@@ -232,7 +232,7 @@ public class DetailsActivityFragment extends Fragment {
 	    }
 	    
 	    public void addReviews(){
-	    	ca =  new custom_adapter_reviews(getActivity().getLayoutInflater().getContext(), listReview);
+	    	ca =  new CustomAdapterReviews(getActivity().getLayoutInflater().getContext(), listReview);
 	    	listViewReviews.setAdapter(ca);
 	    	Utility.setListViewHeightBasedOnChildren(listViewReviews);
 	    }

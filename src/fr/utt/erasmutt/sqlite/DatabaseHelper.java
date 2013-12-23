@@ -17,9 +17,6 @@ import android.util.Log;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
-	 // Logcat tag
-    private static final String LOG = "DatabaseHelper";
- 
     // Database Version
     private static final int DATABASE_VERSION = 1;
  
@@ -42,7 +39,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		// SQL statement to create book table
 		dropTables(db);
         String CREATE_ACTIVITIES_TABLE = "CREATE TABLE activities ( " +
-                "idActivity INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "idActivity INTEGER PRIMARY KEY, " +
                 "name TEXT, "+
                 "descriptionActivity TEXT, "+
                 "pictureActivity BLOB, "+
@@ -55,7 +52,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "pictureActivityString TEXT)";
        
         String CREATE_GROUPS_TABLE="CREATE TABLE groups("+
-        		  "idGroup INTEGER PRIMARY KEY AUTOINCREMENT,"+
+        		  "idGroup INTEGER PRIMARY KEY,"+
         		  "name TEXT,"+
         		  "descriptionGroup TEXT,"+
         		  "pictureGroup TEXT)";
@@ -69,7 +66,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         
         
         String CREATE_MESSAGES_TABLE = "CREATE TABLE messages ("+
-				"idMessage INTEGER PRIMARY KEY AUTOINCREMENT,"+
+				"idMessage INTEGER PRIMARY KEY,"+
 				"idUserSender INTEGER,"+
 				"idUserReceiver INTEGER,"+
 				"message TEXT,"+
@@ -79,7 +76,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
        		    "FOREIGN KEY (idUserReceiver) REFERENCES users(idUser))";
         
         String CREATE_REVIEW_TABLE ="CREATE TABLE review ("+
-        		"idReview INTEGER PRIMARY KEY AUTOINCREMENT,"+
+        		"idReview INTEGER PRIMARY KEY,"+
         		"idUser INTEGER,"+
         		"idActivity INTEGER,"+
         		"title TEXT,"+
@@ -89,7 +86,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         		"language TEXT)";
         
         String CREATE_USERS_TABLE = "CREATE TABLE users ("+
-        		  "idUser INTEGER PRIMARY KEY AUTOINCREMENT,"+
+        		  "idUser INTEGER PRIMARY KEY,"+
         		  "firstname TEXT,"+
         		  "lastname TEXT,"+
         		  "password TEXT,"+
@@ -284,6 +281,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	 
 	        // 2. create ContentValues to add key "column"/value
 	        ContentValues values = new ContentValues();
+	        values.put("idActivity", activity.getIdActivity());
 	        values.put("name", activity.getName()); 
 	        values.put("descriptionActivity", activity.getDesciptionActivity()); 
 	        values.put("pictureActivity", activity.getPictureActivity()); 
