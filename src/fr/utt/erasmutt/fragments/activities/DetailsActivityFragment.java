@@ -13,6 +13,9 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -72,6 +75,8 @@ public class DetailsActivityFragment extends Fragment {
 	    public View onCreateView(LayoutInflater inflater, ViewGroup container, 
 	        Bundle savedInstanceState) {
 
+	    	setHasOptionsMenu(true);
+	    	
 	        // If activity recreated (such as from screen rotate), restore
 	        // the previous article selection set by onSaveInstanceState().
 	        // This is primarily necessary when in the two-pane layout.
@@ -229,6 +234,34 @@ public class DetailsActivityFragment extends Fragment {
 	        }
 	    }
 
+	    //Add the Share feature
+		@Override
+		public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+			super.onCreateOptionsMenu(menu, inflater);
+			menu.findItem(R.id.action_share).setVisible(true);
+		}
+		
+		@Override
+	    public boolean onOptionsItemSelected(MenuItem item) {
+	        // Handle action buttons
+	        switch(item.getItemId()) {
+	        
+	        case R.id.action_share:
+	        	Intent intent = new Intent(android.content.Intent.ACTION_SEND);
+	        	intent.setType("text/plain");
+	        	intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+
+	        	// Add data to the intent, the receiving app will decide what to do with it.
+	        	intent.putExtra(Intent.EXTRA_SUBJECT, getActivity().getResources().getString(R.string.app_name));
+	        	intent.putExtra(Intent.EXTRA_TEXT, "I've just visited "+activityDetails.getName()+" ("+activityDetails.getWebsite()+") with the ErasmUTT android's app");
+	        	startActivity(Intent.createChooser(intent, getActivity().getResources().getString(R.string.sharing_choice)));
+	        	
+	        	return true;
+	        default:
+	            return super.onOptionsItemSelected(item);
+	        }
+	    }
+	    
 	    @Override
 	    public void onSaveInstanceState(Bundle outState) {
 	        super.onSaveInstanceState(outState);

@@ -111,6 +111,8 @@ public class MapActivity extends Activity implements LocationListener{
                         String name = act.getName();
                         LatLng position= new LatLng(Double.parseDouble(act.getLatitude()),Double.parseDouble(act.getLongitude()));
                         map.addMarker(new MarkerOptions().position(position).title(name).snippet(act.getDesciptionActivity().substring(0, 15)+" ..."));
+                        
+                        map.moveCamera(CameraUpdateFactory.newLatLngZoom(position, 14));
                 }
                 
 
@@ -155,9 +157,6 @@ public class MapActivity extends Activity implements LocationListener{
          NavUtils.navigateUpFromSameTask(this);
          return true;
         
-        case R.id.action_settings:
-
-                return true;
         case R.id.action_help:
                 
                 Intent i = new Intent(Intent.ACTION_VIEW);
@@ -189,8 +188,7 @@ public class MapActivity extends Activity implements LocationListener{
         
         @Override
         public void onLocationChanged(Location location) {
-                // TODO Auto-generated method stub                
-                // Getting latitude of the current location
+        // Getting latitude of the current location
         double latitude = location.getLatitude();
 
         // Getting longitude of the current location
@@ -200,62 +198,56 @@ public class MapActivity extends Activity implements LocationListener{
 
          myPosition = new LatLng(latitude, longitude);
          
-         map.moveCamera(CameraUpdateFactory.newLatLngZoom(myPosition, 4));
-         //map.addMarker(new MarkerOptions().position(myPosition).title("me"));
+         map.moveCamera(CameraUpdateFactory.newLatLngZoom(myPosition, 14));
         }
 
         @Override
         public void onProviderDisabled(String provider) {
-                // TODO Auto-generated method stub
                 
         }
 
         @Override
         public void onProviderEnabled(String provider) {
-                // TODO Auto-generated method stub
                 
         }
 
         @Override
         public void onStatusChanged(String provider, int status, Bundle extras) {
-                // TODO Auto-generated method stub
                 
         }
         
-        
         private class connectAsyncTask extends AsyncTask<Void, Void, String> {
-         private ProgressDialog progressDialog;
-         String url;
-
-         connectAsyncTask(String urlPass) {
-         url = urlPass;
-         }
-
-         @Override
-         protected void onPreExecute() {
-         // TODO Auto-generated method stub
-         super.onPreExecute();
-         progressDialog = new ProgressDialog(context);
-         progressDialog.setMessage(getString(R.string.fetching_route));
-         progressDialog.setIndeterminate(true);
-         progressDialog.show();
-         }
-
-         @Override
-         protected String doInBackground(Void... params) {
-         JSONParser jParser = new JSONParser();
-         String json = jParser.getJSONFromUrl(url);
-         return json;
-         }
-
-         @Override
-         protected void onPostExecute(String result) {
-         super.onPostExecute(result);
-         progressDialog.dismiss();
-         if (result != null) {
-         drawPath(result);
-         }
-         }
+	         private ProgressDialog progressDialog;
+	         String url;
+	
+	         connectAsyncTask(String urlPass) {
+	         url = urlPass;
+	         }
+	
+	         @Override
+	         protected void onPreExecute() {
+	         super.onPreExecute();
+		         progressDialog = new ProgressDialog(context);
+		         progressDialog.setMessage(getString(R.string.fetching_route));
+		         progressDialog.setIndeterminate(true);
+		         progressDialog.show();
+	         }
+	
+	         @Override
+	         protected String doInBackground(Void... params) {
+		         JSONParser jParser = new JSONParser();
+		         String json = jParser.getJSONFromUrl(url);
+		         return json;
+	         }
+	
+	         @Override
+	         protected void onPostExecute(String result) {
+		         super.onPostExecute(result);
+		         progressDialog.dismiss();
+		         if (result != null) {
+		        	 drawPath(result);
+		         }
+		    }
         }
         public String makeURL(double sourcelat, double sourcelog, double destlat,
             double destlog) {
@@ -384,8 +376,6 @@ public class MapActivity extends Activity implements LocationListener{
 
         return poly;
     }
-        
-        
         
 }
 

@@ -23,6 +23,8 @@ public class ActivityHandlerActivity extends FragmentActivity implements OnHeadl
 
 	HttpRequest requestSearch;
 	String[] titleActivity;
+	DetailsActivityFragment articleFrag; 
+	Menu menu;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +63,7 @@ public class ActivityHandlerActivity extends FragmentActivity implements OnHeadl
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.activity_handler, menu);
+		this.menu = menu;
 		return true;
 	}
 	
@@ -69,9 +72,6 @@ public class ActivityHandlerActivity extends FragmentActivity implements OnHeadl
         // Handle action buttons
         switch(item.getItemId()) {
         
-        case R.id.action_settings:
-
-        	return true;
         case R.id.action_help:
         	
         	Intent i = new Intent(Intent.ACTION_VIEW);
@@ -101,14 +101,13 @@ public class ActivityHandlerActivity extends FragmentActivity implements OnHeadl
         }
     }
 	
-	
 	//Lorsque l'on sélectionne un élément on charge le détails de l'activité dans le Frame ou on actualise le contenu du fragment
 	@Override
 	public void onArticleSelected(int position) {
 	    // The user selected the headline of an article from the HeadlinesFragment
 
         // Capture the article fragment from the activity layout
-        DetailsActivityFragment articleFrag = (DetailsActivityFragment) getSupportFragmentManager().findFragmentById(R.id.details_activity_frag);
+        articleFrag = (DetailsActivityFragment) getSupportFragmentManager().findFragmentById(R.id.details_activity_frag);
 
         //If the detail fragment is here, we are using a tablet with 2 fragments
         if (articleFrag != null) {

@@ -10,7 +10,7 @@
     <string name="title_activity_map">Nearby</string>
     <string name="title_activity_activity_handler">Search for : </string>
     <string name="title_activity_user_desc">My Account</string>
-
+	<string name="title_popular_activities">Popular activities</string>
     <!-- Menu Titles -->
 
     <string name="action_settings">Settings</string>
@@ -18,7 +18,7 @@
     <string name="action_help">Help</string>
     <string name="action_logout">Sign out</string>
     <string name="action_search">Search</string>
-    <string name="title_popular_activities">Popular activities</string>
+    <string name="action_share">Share</string>
     <!-- Navigation Drawer Menu -->
 
     <string name="drawer_open">Open navigation drawer</string>
@@ -101,6 +101,6 @@
     <string name="cancel_label">Cancel</string>
     <string name="query_hint">Search</string>
     <string name="title_activity_user_reviews">UserReviews</string>
-    <string name="hello_world">Hello world!</string>
+    <string name="sharing_choice">How do you want to share?</string>
 
 </resources>

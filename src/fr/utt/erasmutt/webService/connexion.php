@@ -59,7 +59,7 @@
 			}
 			else{
 				$jsonArray["typeConnexion"]=$typeConnexionArray[0];
-				$jsonArray["message"]="erreur";
+				$jsonArray["message"]="erreur lors de l'appel au serveur";
 				echo json_encode ($jsonArray);
 			}
 		}
@@ -86,7 +86,7 @@
 			}
 			else{
 				$jsonArray["typeConnexion"]=$typeConnexionArray[1];
-				$jsonArray["message"]="erreur";
+				$jsonArray["message"]="erreur lors de l'appel au serveur";
 				echo json_encode ($jsonArray);
 			}
 			
@@ -106,7 +106,7 @@
 			else{
 				$jsonArray["typeConnexion"]=$typeConnexionArray[2];
 				$jsonArray["error"]="true";
-				$jsonArray["message"]="erreur";
+				$jsonArray["message"]="erreur lors de l'appel au serveur";
 				echo json_encode ($jsonArray);
 			}
 			
@@ -208,7 +208,7 @@
 					$req=$db->prepare("update users set BannedDate ='".$date."', nbTentative = 0,banned=1 where mail = ?;");
 					$req->execute(array($mail));
 
-                    $jsonArray["message"]="Vous etes banni pour une durée de 5 minutes après avoir essaye de vous connecter 5 fois sans trouver le bon mot de passe";
+                    $jsonArray["message"]="Vous etes banni pour une durée de 5 minutes après avoir effectue 5 tentatives ";
 					$jsonArray["error"]="true";
 
 				}

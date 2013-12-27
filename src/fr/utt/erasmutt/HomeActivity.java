@@ -153,8 +153,8 @@ public class HomeActivity extends FragmentActivity implements OnHeadlineSelected
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         // If the nav drawer is open, hide action items related to the content view
-        boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
-        menu.findItem(R.id.action_settings).setVisible(!drawerOpen);
+        //boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
+        //menu.findItem(R.id.action_settings).setVisible(!drawerOpen);
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -174,9 +174,6 @@ public class HomeActivity extends FragmentActivity implements OnHeadlineSelected
             startActivity(intent);
             return true;
         
-        case R.id.action_settings:
-
-        	return true;
         case R.id.action_help:
         	
         	Intent i = new Intent(Intent.ACTION_VIEW);
@@ -228,6 +225,7 @@ public class HomeActivity extends FragmentActivity implements OnHeadlineSelected
 				showFragment(userDetailsFrag);
 			break;
 		case 2:
+			Toast.makeText(getApplicationContext(),"Comming Soon...", Toast.LENGTH_LONG).show();
 			//showFragment(listActivityFragment);
 			break;
 		case 3:
