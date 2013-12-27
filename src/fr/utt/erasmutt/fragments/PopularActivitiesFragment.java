@@ -8,7 +8,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,7 +23,11 @@ import fr.utt.erasmutt.networkConnection.HttpCallbackByte;
 import fr.utt.erasmutt.networkConnection.RetreiveImgTask;
 import fr.utt.erasmutt.sqlite.DatabaseHelper;
 import fr.utt.erasmutt.sqlite.model.Activities;
-
+/**
+ * This fragment show the popular Activities
+ * @author Thibault Jacquemet & Kévin Larue
+ *
+ */
 public class PopularActivitiesFragment extends Fragment{
 
 	DatabaseHelper db;
@@ -45,14 +48,15 @@ public class PopularActivitiesFragment extends Fragment{
     	db= new DatabaseHelper(getActivity());
     	LinearLayout ll = (LinearLayout) inflater.inflate(R.layout.fragment_popular_activities, container, false);
     	ll.setBackgroundColor(getResources().getColor(R.color.background_grey));
-    	
-    	
+    	//init photos arrays
+    	photo=null;
+    	//get main activities
     	act = db.getFocusOnActivities();
     	photo = new ImageView[act.size()];
     	
 		  //TODO: Problème dépasse le tableau !
 		  for(int i=0; i<act.size();i++){
-		
+			  //if not picture in the local database but in the server database 
 	          if(!act.get(i).getPictureActivityString().equals("") && act.get(i).getPictureActivity()==null){
 	        	 
 	        	 photo[i] = new ImageView(getActivity());
@@ -60,8 +64,6 @@ public class PopularActivitiesFragment extends Fragment{
 	         	 new RetreiveImgTask(new HttpCallbackByte() {
 						@Override
 						public Object call(byte[] imgbyte) {
-							// TODO Auto-generated method stub
-							Log.v("call ", "callback done");
 							
 							Bitmap b = BitmapFactory.decodeByteArray( imgbyte,  0,imgbyte.length);
 							photo[indice].setImageBitmap(Bitmap.createScaledBitmap(b, 300, 300, false));
@@ -73,14 +75,19 @@ public class PopularActivitiesFragment extends Fragment{
 						}
 					}).execute(act.get(i).getPictureActivityString()); 	
 	          }
+	        //if picture in the local database 
 	          else if(act.get(i).getPictureActivity()!=null){
-	        	  Log.v(" Loading Image ", "--Charger image depuis la bd--");
 	        	  photo[i] = new ImageView(getActivity());
 	        	  Bitmap b = BitmapFactory.decodeByteArray( act.get(i).getPictureActivity(),  0,act.get(i).getPictureActivity().length);
 				  photo[indice].setImageBitmap(Bitmap.createScaledBitmap(b, 300, 300, false));
 	        	  indice++;
-	          }else {
-	        	  //TODO : pas d'image ds BDD
+	        	  
+	          }
+	        //if no picture for this activity
+	          else {
+	        	  Bitmap icon = BitmapFactory.decodeResource(getActivity().getResources(),R.drawable.ic_action_help);
+	        	  photo[indice].setImageBitmap(Bitmap.createScaledBitmap(icon, 300, 300, false));
+	        	  indice++;
 	          }
 	          
 	          
@@ -121,7 +128,6 @@ public class PopularActivitiesFragment extends Fragment{
 			 ratingBar.setStepSize(0.5f);
 			 ratingBar.setNumStars(5);
 			 ratingBar.setRating(act.get(j).getAverageMark());
-			 Log.v(act.get(j).getName(),String.valueOf(act.get(j).getAverageMark()));
 			 
 			 ratingBar.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 			 
@@ -143,8 +149,6 @@ public class PopularActivitiesFragment extends Fragment{
 				
 				@Override
 				public void onClick(View v) {
-					// TODO Auto-generated method stub
-					//Toast.makeText(getActivity(), "test "+v.getTag() , Toast.LENGTH_LONG).show();
 					selectedActivityCallback.onArticleSelected(Integer.valueOf(v.getTag().toString()));
 				}
 			});

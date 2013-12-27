@@ -27,7 +27,12 @@ import fr.utt.erasmutt.networkConnection.HttpCallbackByte;
 import fr.utt.erasmutt.networkConnection.HttpRequest;
 import fr.utt.erasmutt.networkConnection.RetreiveImgTask;
 import fr.utt.erasmutt.sqlite.DatabaseHelper;
-
+/**
+ * This fragment show the details of the user
+ * We can edit us profile
+ * @author Thibault Jacquemet & Kévin Larue
+ *
+ */
 public class UserDetailsFragment extends Fragment {
 
 	EditText mail = null;

@@ -176,6 +176,17 @@
 	        android:listSelector="@drawable/list_selector_flatcolor"
        		android:layout_marginTop="7dp"
 	       /> 
+	       
+	       <Button
+                android:id="@+id/buttonMoreReviews"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:layout_margin="@dimen/field_vertical_margin"
+                android:layout_weight="1"
+                android:background="@color/background_dark_blue"
+                android:text="@string/moreReviews"
+                android:textColor="@android:color/white" />
+          
          
  
 </LinearLayout>

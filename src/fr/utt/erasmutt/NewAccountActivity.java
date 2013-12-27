@@ -16,7 +16,11 @@ import android.widget.EditText;
 import android.widget.Toast;
 import fr.utt.erasmutt.networkConnection.HttpCallback;
 import fr.utt.erasmutt.networkConnection.HttpRequest;
-
+/**
+ * This activity allow to create an account
+ * @author Thibault Jacquemet & Kévin Larue
+ *
+ */
 public class NewAccountActivity extends Activity {
 
 	EditText mail = null;

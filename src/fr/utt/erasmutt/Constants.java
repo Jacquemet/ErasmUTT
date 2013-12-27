@@ -5,7 +5,11 @@ import java.util.List;
 
 import fr.utt.erasmutt.sqlite.model.Activities;
 import fr.utt.erasmutt.sqlite.model.User;
-
+/**
+ * Constant class
+ * @author Thibault Jacquemet & Kévin Larue
+ *
+ */
 public class Constants {
 
 	public final static String urlRoot = "http://www.ws.kevin-larue.fr/";

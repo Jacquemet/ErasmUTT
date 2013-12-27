@@ -30,7 +30,11 @@ import fr.utt.erasmutt.fragments.UserReviews;
 import fr.utt.erasmutt.fragments.activities.DetailsActivityFragment;
 import fr.utt.erasmutt.maps.MapActivity;
 import fr.utt.erasmutt.sqlite.DatabaseHelper;
-
+/**
+ * This Activity is the main activity which manage the drawable and display the good fragment
+ * @author Thibault Jacquemet & Kévin Larue
+ *
+ */
 public class HomeActivity extends FragmentActivity implements OnHeadlineSelectedListener{
 
 	private DrawerLayout mDrawerLayout;

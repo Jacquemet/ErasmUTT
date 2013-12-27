@@ -25,7 +25,12 @@ import fr.utt.erasmutt.sqlite.DatabaseHelper;
 import fr.utt.erasmutt.sqlite.model.Activities;
 import fr.utt.erasmutt.sqlite.model.Review;
 import fr.utt.erasmutt.sqlite.model.User;
-
+/**
+ * This activity it's the first activity that this application show
+ * We can log in or create account on this activity 
+ * @author Thibault Jacquemet & Kévin Larue
+ *
+ */
 public class LoginActivity extends Activity {
 
 	TextView textViewLogin = null;

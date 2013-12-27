@@ -71,6 +71,7 @@
     <string name="reviews">Reviews </string>
     <string name="title_reviews_users">Your reviews</string>
     <string name="any_reviews_users">Any reviews</string>
+    <string name="moreReviews">More reviews</string>
 
     <plurals name="labelNumberReview">
         <item quantity="zero">%1$s reviews</item>

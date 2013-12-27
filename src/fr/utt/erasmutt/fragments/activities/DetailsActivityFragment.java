@@ -2,7 +2,10 @@ package fr.utt.erasmutt.fragments.activities;
 
 import java.util.List;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.SearchManager;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -27,7 +30,6 @@ import fr.utt.erasmutt.networkConnection.RetreiveImgTask;
 import fr.utt.erasmutt.sqlite.DatabaseHelper;
 import fr.utt.erasmutt.sqlite.model.Activities;
 import fr.utt.erasmutt.sqlite.model.Review;
-import fr.utt.erasmutt.tools.Utility;
 import fr.utt.erasmutt.tools.CustomAdapterReviews;
 
 public class DetailsActivityFragment extends Fragment {
@@ -64,6 +66,7 @@ public class DetailsActivityFragment extends Fragment {
 	    private  ListView listViewReviews;
 
 		private DialogNewReview newDialog ;
+		private Button buttonMoreReviews;
 
 	    @Override
 	    public View onCreateView(LayoutInflater inflater, ViewGroup container, 
@@ -146,6 +149,7 @@ public class DetailsActivityFragment extends Fragment {
 	        
 	        imageButtonLocation = (ImageButton) getActivity().findViewById(R.id.imageButtonLocation);
 	        imageButtonLocation.setVisibility(View.VISIBLE);
+	        
 	        imageButtonLocation.setOnClickListener(new OnClickListener() {
 				
 				@Override
@@ -217,7 +221,9 @@ public class DetailsActivityFragment extends Fragment {
 				    newDialog.show();
 				}
 			});
-
+	        buttonMoreReviews = (Button) getActivity().findViewById(R.id.buttonMoreReviews);
+	        buttonMoreReviews.setVisibility(View.GONE);
+	        
 	        if(listReview.size()>0){
 	        	addReviews();
 	        }
@@ -234,7 +240,44 @@ public class DetailsActivityFragment extends Fragment {
 	    public void addReviews(){
 	    	ca =  new CustomAdapterReviews(getActivity().getLayoutInflater().getContext(), listReview);
 	    	listViewReviews.setAdapter(ca);
-	    	Utility.setListViewHeightBasedOnChildren(listViewReviews);
+	    	ViewGroup.LayoutParams params = listViewReviews.getLayoutParams();
+	    	int taille=0;
+	    	if(listReview.size()<4){
+	    		taille = 300*listReview.size();
+	    	}
+	    	else{
+	    		taille = 900;
+	    		buttonMoreReviews.setVisibility(View.VISIBLE);
+	    		buttonMoreReviews.setOnClickListener(new OnClickListener() {
+					
+					@Override
+					public void onClick(View v) {
+						AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+						builder.setTitle(getString(R.string.reviews));
+
+						ListView modeList = new ListView(getActivity());
+						modeList.setAdapter(ca);
+
+						builder.setView(modeList);
+						
+						builder.setPositiveButton(getString(R.string.cancel_label),
+	                        new DialogInterface.OnClickListener() {
+	
+	                            @Override
+	                            public void onClick(DialogInterface dialog,
+	                                    int which) {
+	                                dialog.cancel();
+	                            }
+	                        });
+						final Dialog dialog = builder.create();
+						dialog.show();
+					}
+				});
+	    	}
+	        
+	    	params.height = taille;
+	        listViewReviews.setLayoutParams(params);
+	        listViewReviews.requestLayout();
 	    }
 	
 }
