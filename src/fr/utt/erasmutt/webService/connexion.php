@@ -3,13 +3,13 @@
 	date_default_timezone_set('Europe/Paris');
 
 	//connection à la BD
-    $login="kevinlarmag";
-    $pass="kevin140289";
-    $dbname="mysql:dbname=kevinlarmag;host=mysql51-54.perso";
+    $login="**";
+    $pass="**";
+    $dbname="mysql:dbname=**;host=**";
     
 	$typeConnexionArray=array("ajouter","modifier","connecter");
 	
-	define("SALT", "b2J78Bji36");
+	define("SALT", "**");
 	
     try {
         $db = new PDO($dbname, $login, $pass);
