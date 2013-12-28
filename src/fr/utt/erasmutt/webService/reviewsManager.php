@@ -3,9 +3,9 @@
 	date_default_timezone_set('Europe/Paris');
 
 	//connection Ã  la BD
-    $login="kevinlarmag";
-    $pass="kevin140289";
-    $dbname="mysql:dbname=kevinlarmag;host=mysql51-54.perso";
+    $login="**";
+    $pass="**";
+    $dbname="mysql:dbname=**;host=**";
     
 	$typeReviewsArray=array("ajouter","lister");
 	
@@ -23,7 +23,7 @@
 	
 	if(isset($_GET['typeReviews'])&&!empty($_GET['typeReviews'])){
 		$typeReviews = $_GET['typeReviews'];
-		//Ajouter une activité
+		//Ajouter une activitï¿½
 		if($typeReviews == $typeReviewsArray[0]){
 			if(isset($_GET['token'])&&!empty($_GET['token'])){
 				$token = $_GET['token'];
