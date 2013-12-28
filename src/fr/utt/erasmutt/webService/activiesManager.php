@@ -3,9 +3,9 @@
 	date_default_timezone_set('Europe/Paris');
 
 	//connection Ã  la BD
-    $login="kevinlarmag";
-    $pass="kevin140289";
-    $dbname="mysql:dbname=kevinlarmag;host=mysql51-54.perso";
+    $login="**";
+    $pass="**";
+    $dbname="mysql:dbname=**;host=**";
     
 	$typeActivitiesArray=array("ajouter","modifier","lister","query","markUpdate");
 	
