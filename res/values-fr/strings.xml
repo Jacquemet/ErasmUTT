@@ -63,6 +63,10 @@
     <string name="setAccountNOK">Erreur lors de la modification de votre compte</string>
 	<string name="searchEmpty">Pas de resultat pour cette recherche</string>
     <string name="GoodBye">À bientôt %1$s!</string>
+     <string name="tailleMdp">8 caratères minimum</string>
+     <string name="textMajMdp">une majuscule minimum</string>
+     <string name="textTitleNeedMdp"> Le mot de passe a besoin de :</string>
+     <string name="password_error">Mot de passe trop simple</string>
     	<!-- Activity Details -->
 	
 	<string name="labelAddressActivity">Adresse : </string>

@@ -60,7 +60,12 @@
     <string name="searchEmpty">No result for this search</string>
     <string name="createAccountOK">Your account has been created</string>
     <string name="setAccountOK">Your account has been modified</string>
+    <string name="tailleMdp">8 characters at least</string>
+    <string name="textMajMdp">1 uppercase character at least</string>
+    <string name="textTitleNeedMdp">Password need to :</string>
+    <string name="password_error">Password too easy</string>
 
+    
     <!-- Activity Details -->
 
     <string name="labelAddressActivity">Address : </string>
