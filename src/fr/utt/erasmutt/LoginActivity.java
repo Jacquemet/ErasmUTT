@@ -120,7 +120,7 @@ public class LoginActivity extends Activity {
 								loadActitivies();
 								
 							} else {
-								Toast.makeText(getApplicationContext(), R.string.invalid_password, Toast.LENGTH_LONG).show();
+								Toast.makeText(getApplicationContext(), jsonResponse.getString("message"), Toast.LENGTH_LONG).show();
 								endLoading();
 							}
 						} catch (JSONException e) {

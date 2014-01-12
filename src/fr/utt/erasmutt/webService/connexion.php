@@ -3,13 +3,13 @@
 	date_default_timezone_set('Europe/Paris');
 
 	//connection à la BD
-    $login="**";
-    $pass="**";
-    $dbname="mysql:dbname=**;host=**";
+    $login="***";
+    $pass="***";
+    $dbname="mysql:dbname=***;host=***";
     
 	$typeConnexionArray=array("ajouter","modifier","connecter");
 	
-	define("SALT", "**");
+	define("SALT", "***");
 	
     try {
         $db = new PDO($dbname, $login, $pass);
@@ -59,7 +59,7 @@
 			}
 			else{
 				$jsonArray["typeConnexion"]=$typeConnexionArray[0];
-				$jsonArray["message"]="erreur lors de l'appel au serveur";
+				$jsonArray["message"]="erreur";
 				echo json_encode ($jsonArray);
 			}
 		}
@@ -86,7 +86,7 @@
 			}
 			else{
 				$jsonArray["typeConnexion"]=$typeConnexionArray[1];
-				$jsonArray["message"]="erreur lors de l'appel au serveur";
+				$jsonArray["message"]="erreur";
 				echo json_encode ($jsonArray);
 			}
 			
@@ -106,7 +106,7 @@
 			else{
 				$jsonArray["typeConnexion"]=$typeConnexionArray[2];
 				$jsonArray["error"]="true";
-				$jsonArray["message"]="erreur lors de l'appel au serveur";
+				$jsonArray["message"]="erreur";
 				echo json_encode ($jsonArray);
 			}
 			
@@ -161,7 +161,7 @@
 		echo json_encode ($jsonArray);
 	}
 	
-	function seConnecter($db,$mail,$firstname,$lastname,$picture,$jsonArray){
+	function seConnecter($db,$mail,$firstname,$lastname,$picture,$id,$jsonArray){
 			
 			$token = uniqid();
 			$datenow = date("Y-m-d H:i:s");
@@ -174,10 +174,26 @@
 			$jsonArray["firstname"]=$firstname;
 			$jsonArray["lastname"]=$lastname;
 			$jsonArray["error"]="false";
-			$jsonArray["pictureUser"] = $picture;			
+			$jsonArray["pictureUser"] = $picture;
+			$jsonArray=getAllUser($db,$id,$jsonArray);		
 			return $jsonArray;
 	}
-
+	
+	function getAllUser($db,$idUserConnect,$jsonArray){
+		$req=$db->prepare("Select * from users where idUser!= $idUserConnect;");
+		$req->execute();
+		
+		while( $row =$req->fetch(PDO::FETCH_ASSOC) ) {
+			$messageContent["idUser"]=$row["idUser"];
+			$messageContent["mail"]=$row["mail"];
+			$messageContent["firstname"]=utf8_encode($row["firstname"]);
+			$messageContent["lastname"]=utf8_encode($row["lastname"]);
+			$messageContent["pictureUser"] = $row["pictureUser"];	
+			$messageArray[] = $messageContent;			
+		}			
+		$jsonArray["listUser"]=$messageArray;
+		return $jsonArray;
+	}
 
 	function connexionUtilisateur($db,$password,$mail){
 		$statementConnexion=$db->prepare("SELECT COUNT(idUser) AS nbUser,idUser, firstname, banned, BannedDate, nbTentative, lastname, mail as login,password as pass, pictureUser FROM users where mail = ?;");
@@ -192,13 +208,13 @@
 				if(($res['nbTentative']+1) < 5 ) {
 					if(md5($password.md5(SALT)) == $res['pass']){
 						$jsonArray["idUser"]=$res['idUser'];
-						$jsonArray=seConnecter($db,$mail,$res['firstname'],$res['lastname'],$res['pictureUser'],$jsonArray);
+						$jsonArray=seConnecter($db,$mail,$res['firstname'],$res['lastname'],$res['pictureUser'],$res['idUser'],$jsonArray);
 					}
 					else {
 						//Incrémente le nombre de tentative
 						$req=$db->prepare("update users set nbTentative =nbTentative+1 where mail = ?;");
 						$req->execute(array($mail));
-						$jsonArray["message"]="il n y a pas d utilisateurs avec ce couple login mot de passe";
+						$jsonArray["message"]="Couple login / mot de passe invalide, essayez de nouveau.";
 						$jsonArray["error"]="true";
 					}
 				}			
@@ -208,7 +224,7 @@
 					$req=$db->prepare("update users set BannedDate ='".$date."', nbTentative = 0,banned=1 where mail = ?;");
 					$req->execute(array($mail));
 
-                    $jsonArray["message"]="Vous etes banni pour une durée de 5 minutes après avoir effectue 5 tentatives ";
+                    $jsonArray["message"]="Vous êtes banni pour une durée de 5 minutes après avoir essayé de vous connecter à 5 reprises sans trouver le bon mot de passe";
 					$jsonArray["error"]="true";
 
 				}
@@ -218,7 +234,7 @@
 				$duree = mktime() - $res['BannedDate'] ;
 				//si encore banni
 				if( $duree<300 ) {
-					$jsonArray["message"]='Vous êtes actuellement banni pour une durée de 5 minutes. Merci de réessayer ultérieurement ! il vous reste environ : '.floor(5-($duree/60)) .' min';
+					$jsonArray["message"]='Vous êtes actuellement banni pour une durée de 5 minutes. Votre compte sera de nouveaux disponible dans environ : '.floor(5-($duree/60)) .' min';
 					$jsonArray["error"]="true";
 				}
 				else{
@@ -231,7 +247,7 @@
 					else{
 						$req=$db->prepare("update users set nbTentative = nbTentative+1,banned=0 where mail = ?;");
 						$req->execute(array($mail));
-						$jsonArray["message"]="il n y a pas d utilisateurs avec ce couple login mot de passe";
+						$jsonArray["message"]="Couple login / mot de passe invalide, essayez de nouveau.";
 						$jsonArray["error"]="true";
 					}
 				}
@@ -240,7 +256,7 @@
 		}
 		else {
 			//Incrémente le nombre de tentative
-			$jsonArray["message"]="utilisateurs n existe pas";
+			$jsonArray["message"]="Cet utilisateur n existe pas. Merci de réessayer.";
 			$jsonArray["error"]="true";
 
 		}

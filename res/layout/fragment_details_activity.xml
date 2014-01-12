@@ -160,11 +160,13 @@
 		android:layout_marginBottom="@dimen/field_vertical_margin"
           />
          
- 	    	<View
+ 	   	<View
+ 	   	android:id="@+id/blueSeparator"    
     	android:layout_width="fill_parent"
         android:layout_height="1dp"
         android:background="@color/background_dark_blue" 
         android:layout_marginTop="4dp"
+        android:visibility="invisible"
         />
 
           <ListView
@@ -175,17 +177,19 @@
 	        android:layout_marginBottom="@dimen/field_vertical_margin"
 	        android:listSelector="@drawable/list_selector_flatcolor"
        		android:layout_marginTop="7dp"
+       		android:visibility="invisible"
 	       /> 
 	       
 	       <Button
                 android:id="@+id/buttonMoreReviews"
                 android:layout_width="match_parent"
-                android:layout_height="20dp"
+                android:layout_height="40dp"
                 android:layout_margin="@dimen/field_vertical_margin"
                 android:layout_weight="1"
                 android:background="@color/background_dark_blue"
                 android:text="@string/moreReviews"
-                android:textColor="@android:color/white" />
+                android:textColor="@android:color/white"
+                android:visibility="invisible" />
           
          
  

@@ -70,6 +70,8 @@ public class DetailsActivityFragment extends Fragment {
 
 		private DialogNewReview newDialog ;
 		private Button buttonMoreReviews;
+		
+		private View separator;
 
 	    @Override
 	    public View onCreateView(LayoutInflater inflater, ViewGroup container, 
@@ -115,8 +117,10 @@ public class DetailsActivityFragment extends Fragment {
 	       
 	    	db = new DatabaseHelper(getActivity());
 	        activityDetails = db.getActivitiesById(position);
+	        
 	        listViewReviews = (ListView) getActivity().findViewById(R.id.custom_list_review);
-	       
+	        listViewReviews.setVisibility(View.VISIBLE);
+	        
 	        imageActivity = (ImageView) getActivity().findViewById(R.id.imageViewAcivityDetails);
 
 	        if(activityDetails.getPictureActivityString()!="" && activityDetails.getPictureActivity()==null){
@@ -232,6 +236,9 @@ public class DetailsActivityFragment extends Fragment {
 	        if(listReview.size()>0){
 	        	addReviews();
 	        }
+	        
+	        separator = (View) getActivity().findViewById(R.id.blueSeparator);
+	        separator.setVisibility(View.VISIBLE);
 	    }
 
 	    //Add the Share feature
@@ -286,14 +293,14 @@ public class DetailsActivityFragment extends Fragment {
 					@Override
 					public void onClick(View v) {
 						AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-						builder.setTitle(getString(R.string.reviews));
+						builder.setTitle(getString(R.string.allReviews));
 
 						ListView modeList = new ListView(getActivity());
 						modeList.setAdapter(ca);
 
 						builder.setView(modeList);
 						
-						builder.setPositiveButton(getString(R.string.cancel_label),
+						builder.setPositiveButton(getString(R.string.closeDialog),
 	                        new DialogInterface.OnClickListener() {
 	
 	                            @Override

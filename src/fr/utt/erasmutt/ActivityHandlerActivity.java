@@ -29,7 +29,7 @@ public class ActivityHandlerActivity extends FragmentActivity implements OnHeadl
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+
    	 	// Capture the article fragment from the activity layout
 		setContentView(R.layout.activity_activity_handler);
 		

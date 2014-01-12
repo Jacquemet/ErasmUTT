@@ -53,7 +53,7 @@
     <string name="textLabel_password">Votre mot de passe : </string>
     <string name="textButton_signIn">Se connecter</string>
     <string name="text_createAccount">Créer un compte ErasmUTT</string>
-    <string name="repeatPassword">Repeter votre password</string>
+    <string name="repeatPassword">Repeter votre mot de passe</string>
     <string name="firstname">Votre prenom : </string>
     <string name="lastname">Votre nom :</string>
     <string name="createAccountOK">Votre compte a été créé"</string>
@@ -75,6 +75,7 @@
 	<string name="labelRating">Note moyenne : </string>
 	<string name="textWriteReview">Écrire un avis</string>
 	<string name="reviews">Avis </string>
+	<string name="allReviews">Tous les avis</string>
 	<string name="title_reviews_users">Vos avis</string>
 	<string name="any_reviews_users">Aucun avis</string>
 	<string name="moreReviews">Plus d\'avis</string>
@@ -105,5 +106,6 @@
     <string name="query_hint">Rechercher</string>
     <string name="set_label">Modifier</string>
     <string name="sharing_choice">Comment voulez-vous partager?</string>
+    <string name="closeDialog">Fermer</string>
 
 </resources>

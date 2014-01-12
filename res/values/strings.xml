@@ -74,6 +74,7 @@
     <string name="labelRating">Average mark : </string>
     <string name="textWriteReview">Write a Review </string>
     <string name="reviews">Reviews </string>
+    <string name="allReviews">All Reviews</string>
     <string name="title_reviews_users">Your reviews</string>
     <string name="any_reviews_users">Any reviews</string>
     <string name="moreReviews">More reviews</string>
@@ -107,5 +108,6 @@
     <string name="query_hint">Search</string>
     <string name="title_activity_user_reviews">UserReviews</string>
     <string name="sharing_choice">How do you want to share?</string>
+    <string name="closeDialog">Close</string>
 
 </resources>
