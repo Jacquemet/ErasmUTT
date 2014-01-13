@@ -129,7 +129,7 @@ public class NewAccountActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				if(password.getText().toString().equals(repeatPassword.getText().toString())){
-					if(mdpValide && password.getText().toString().length()>8){
+					if(mdpValide && password.getText().toString().length()>=8){
 						requestAddUser = new HttpRequest(new HttpCallback() {
 							
 							@Override
